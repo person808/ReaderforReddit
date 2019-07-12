@@ -1,6 +1,7 @@
 package com.kainalu.readerforreddit
 
 import com.kainalu.readerforreddit.network.adapters.EditInfoJsonAdapter
+import com.kainalu.readerforreddit.network.adapters.LocalDateTimeJsonAdapter
 import com.kainalu.readerforreddit.network.models.EditInfo
 import com.kainalu.readerforreddit.network.models.Edited
 import com.kainalu.readerforreddit.network.models.NotEdited
@@ -18,14 +19,19 @@ import org.threeten.bp.ZoneId
  */
 class AdapterTest {
 
+    private val epochSeconds = 1538636400000
+    private val localDateTime = LocalDateTime.ofInstant(Instant.ofEpochSecond(epochSeconds), ZoneId.of("UTC"))
+    val moshi = Moshi.Builder()
+        .add(EditInfoJsonAdapter())
+        .add(LocalDateTimeJsonAdapter())
+        .build()
+
     @Test
     fun editInfoAdapterTest() {
-        val moshi = Moshi.Builder().add(EditInfoJsonAdapter()).build()
         val adapter = moshi.adapter(EditInfo::class.java)
 
-        val epochSeconds = 1538636400000
         val jsonEdited = "$epochSeconds"
-        val expectedEdited = Edited(LocalDateTime.ofInstant(Instant.ofEpochSecond(epochSeconds), ZoneId.of("UTC")))
+        val expectedEdited = Edited(localDateTime)
         val resultEdited = adapter.fromJson(jsonEdited)
         assertEquals(expectedEdited, resultEdited)
         assertEquals(jsonEdited, adapter.toJson(resultEdited))
@@ -34,6 +40,15 @@ class AdapterTest {
         val resultNotEdited = adapter.fromJson(jsonNotEdited)
         assertEquals(NotEdited(), resultNotEdited)
         assertEquals(jsonNotEdited, adapter.toJson(resultNotEdited))
+    }
+
+    @Test
+    fun localDateTimeAdapterTest() {
+        val adapter = moshi.adapter(LocalDateTime::class.java)
+        val json = "$epochSeconds"
+        val result = adapter.fromJson(json)
+        assertEquals(localDateTime, result)
+        assertEquals(json, adapter.toJson(result))
     }
 }
 
