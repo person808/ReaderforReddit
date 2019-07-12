@@ -1,7 +1,6 @@
 package com.kainalu.readerforreddit
 
 import android.os.Bundle
-import android.util.Log
 import androidx.appcompat.app.AppCompatActivity
 import com.kainalu.readerforreddit.di.Injector
 import com.kainalu.readerforreddit.network.ApiService
@@ -19,8 +18,8 @@ class MainActivity : AppCompatActivity() {
         Injector.get().inject(this)
         GlobalScope.launch {
             apiService.getSubreddit()
-            val result = apiService.getComments("nba", "c8p4d9")
-            Log.d("WOO", result.toString())
+            //val result = apiService.getComments("nba", "c8p4d9")
+            //Log.d("WOO", result.toString())
         }
     }
 }

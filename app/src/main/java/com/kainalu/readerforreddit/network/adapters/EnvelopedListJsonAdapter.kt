@@ -4,15 +4,15 @@ import com.kainalu.readerforreddit.network.models.Enveloped
 import com.squareup.moshi.*
 import java.lang.reflect.Type
 
-class EnvelopedListJsonAdapter<T>(private val delegate: JsonAdapter<T>): JsonAdapter<List<T>>() {
+class EnvelopedListJsonAdapter(private val delegate: JsonAdapter<Any>) : JsonAdapter<List<Any>>() {
 
-    override fun fromJson(reader: JsonReader): List<T>? {
+    override fun fromJson(reader: JsonReader): List<Any>? {
         return reader.readArrayToList {
             delegate.fromJson(reader)
         }
     }
 
-    override fun toJson(writer: JsonWriter, value: List<T>?) {
+    override fun toJson(writer: JsonWriter, value: List<Any>?) {
         writer.writeArray(value) {
             delegate.toJson(it)
         }
@@ -26,6 +26,7 @@ class EnvelopedListJsonAdapter<T>(private val delegate: JsonAdapter<T>): JsonAda
                 }
                 Types.nextAnnotations(annotations, Enveloped::class.java) ?: return null
                 val itemType = Types.getRawType(Types.collectionElementType(type, List::class.java))
+                // Get instance of EnvelopeJsonAdapter for this type
                 val delegate = moshi.nextAdapter<Any>(this, itemType, annotations)
                 return EnvelopedListJsonAdapter(delegate)
             }
