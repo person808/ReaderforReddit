@@ -12,5 +12,10 @@ enum class DataType(val key: String) {
 
     companion object {
         fun get(key: String): DataType = values().find { it.key == key } ?: UNKNOWN
+        val classMap = mapOf(
+            Listing::class.java to LISTING,
+            Comment::class.java to COMMENT,
+            Link::class.java to LINK
+            ).withDefault { UNKNOWN }
     }
 }

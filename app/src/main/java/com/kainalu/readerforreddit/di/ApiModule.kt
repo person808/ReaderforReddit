@@ -68,6 +68,7 @@ object ApiModule {
     fun moshi(): Moshi {
         return Moshi.Builder()
             .add(EnvelopedListJsonAdapter.FACTORY)
+            .add(EnvelopedItemJsonAdapter.FACTORY)
             .add(EnvelopeJsonAdapter.FACTORY)
             .add(DataTypeJsonAdapter())
             .add(EditInfoJsonAdapter())

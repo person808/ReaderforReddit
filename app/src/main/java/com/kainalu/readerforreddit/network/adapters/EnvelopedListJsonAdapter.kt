@@ -27,7 +27,7 @@ class EnvelopedListJsonAdapter(private val delegate: JsonAdapter<Any>) : JsonAda
                 }
                 Types.nextAnnotations(annotations, Enveloped::class.java) ?: return null
                 val itemType = (type as ParameterizedType).actualTypeArguments[0]
-                // Get instance of EnvelopeJsonAdapter for this type
+                // Get instance of EnvelopedItemJsonAdapter for this type
                 val delegate = moshi.nextAdapter<Any>(this, itemType, annotations)
                 return EnvelopedListJsonAdapter(delegate)
             }
