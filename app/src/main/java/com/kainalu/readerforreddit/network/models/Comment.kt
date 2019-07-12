@@ -13,5 +13,6 @@ data class Comment(
     val edited: EditInfo,
     @Json(name = "created_utc")
     val createdUtc: LocalDateTime,
+    @field:Enveloped
     val replies: Listing<Comment>
 )

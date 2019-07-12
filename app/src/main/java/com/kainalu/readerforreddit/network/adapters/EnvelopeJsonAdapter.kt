@@ -2,6 +2,7 @@ package com.kainalu.readerforreddit.network.adapters
 
 import com.kainalu.readerforreddit.network.models.DataType
 import com.kainalu.readerforreddit.network.models.Envelope
+import com.kainalu.readerforreddit.network.models.Listing
 import com.squareup.moshi.*
 import java.lang.reflect.ParameterizedType
 import java.lang.reflect.Type
@@ -20,6 +21,14 @@ class EnvelopeJsonAdapter(
             moshi.adapter(envelopedType, emptySet(), "data")
 
     override fun fromJson(reader: JsonReader): Envelope<*> {
+
+        // Some endpoints represent an empty Listing as an empty string
+        if (Listing::class.java.isAssignableFrom(Types.getRawType(envelopedType)) &&
+                reader.peek() == JsonReader.Token.STRING) {
+            reader.nextString()
+            return Envelope(kind = DataType.LISTING, data = Listing<Any>(children = emptyList()))
+        }
+
         val path = reader.path
         val properties = reader.readJsonValue() as Map<*, *>? ?: throw JsonDataException("Expected object at $path")
         val kind = properties["kind"] ?: throw JsonDataException("Non-null value 'kind' was null at $path")
