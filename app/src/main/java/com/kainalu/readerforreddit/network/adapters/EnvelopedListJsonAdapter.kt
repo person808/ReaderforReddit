@@ -2,6 +2,7 @@ package com.kainalu.readerforreddit.network.adapters
 
 import com.kainalu.readerforreddit.network.models.Enveloped
 import com.squareup.moshi.*
+import java.lang.reflect.ParameterizedType
 import java.lang.reflect.Type
 
 class EnvelopedListJsonAdapter(private val delegate: JsonAdapter<Any>) : JsonAdapter<List<Any>>() {
@@ -25,7 +26,7 @@ class EnvelopedListJsonAdapter(private val delegate: JsonAdapter<Any>) : JsonAda
                     return null
                 }
                 Types.nextAnnotations(annotations, Enveloped::class.java) ?: return null
-                val itemType = Types.getRawType(Types.collectionElementType(type, List::class.java))
+                val itemType = (type as ParameterizedType).actualTypeArguments[0]
                 // Get instance of EnvelopeJsonAdapter for this type
                 val delegate = moshi.nextAdapter<Any>(this, itemType, annotations)
                 return EnvelopedListJsonAdapter(delegate)
