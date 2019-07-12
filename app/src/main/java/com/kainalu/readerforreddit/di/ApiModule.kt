@@ -28,7 +28,7 @@ object ApiModule {
     fun okhttp(authService: AuthService, sessionManager: SessionManager): OkHttpClient {
         val logger = HttpLoggingInterceptor().apply { level = HttpLoggingInterceptor.Level.BASIC }
 
-        fun getToken(): Token = runBlocking {
+        fun refreshToken(): Token = runBlocking {
             val token = authService.getLoggedOutToken(deviceId = sessionManager.getDeviceId())
             sessionManager.saveToken(token)
             return@runBlocking token
@@ -36,7 +36,7 @@ object ApiModule {
 
         val headersInterceptor = Interceptor { chain ->
             val original = chain.request()
-            val credential = sessionManager.getToken()?.accessToken ?: getToken().accessToken
+            val credential = sessionManager.getToken()?.accessToken ?: refreshToken().accessToken
             val request = original.newBuilder()
                 .addHeader("User-Agent", "unix:MyRedditTestApp:v1.0.0")
                 .addHeader("Authorization", "bearer $credential")
@@ -44,13 +44,12 @@ object ApiModule {
                 .build()
             val response = chain.proceed(request)
 
-            // TODO fix 401 retry
             if (response.code == 401) { // Unauthorized
                 response.close()
-                response.newBuilder()
-                    .addHeader("Authorization", "bearer ${getToken().accessToken}")
+                val newRequest = original.newBuilder()
+                    .addHeader("Authorization", "bearer ${refreshToken().accessToken}")
                     .build()
-                return@Interceptor chain.proceed(response.request)
+                return@Interceptor chain.proceed(newRequest)
             }
 
             response
