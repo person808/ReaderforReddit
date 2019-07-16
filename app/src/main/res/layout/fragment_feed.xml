@@ -3,11 +3,13 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".MainActivity">
+    tools:context=".feed.FeedFragment">
 
-    <fragment
-        android:id="@+id/fragment"
-        android:name="com.kainalu.readerforreddit.feed.FeedFragment"
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/recyclerView"
         android:layout_width="match_parent"
-        android:layout_height="match_parent" />
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        tools:itemCount="25"
+        tools:listitem="@layout/feed_link_item" />
 </FrameLayout>

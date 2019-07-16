@@ -6,16 +6,24 @@ import com.kainalu.readerforreddit.network.models.Link
 import com.kainalu.readerforreddit.network.models.Listing
 import retrofit2.http.GET
 import retrofit2.http.Path
+import retrofit2.http.Query
 
 interface ApiService {
 
     @Enveloped
-    @GET(".")
-    suspend fun getSubreddit(): Listing<Link>
+    @GET("/{sort}")
+    suspend fun getSubreddit(
+        @Path("sort") sort: String,
+        @Query("after") after: String = ""
+    ): Listing<Link>
 
     @Enveloped
-    @GET("/r/{name}/hot")
-    suspend fun getSubreddit(@Path("name") subreddit: String): Listing<Link>
+    @GET("/r/{name}/{sort}")
+    suspend fun getSubreddit(
+        @Path("name") subreddit: String,
+        @Path("sort") sort: String,
+        @Query("after") after: String = ""
+    ): Listing<Link>
 
     @Enveloped
     @GET("/r/{name}/comments/{id}")

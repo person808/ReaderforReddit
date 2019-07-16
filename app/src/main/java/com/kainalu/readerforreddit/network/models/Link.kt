@@ -1,5 +1,6 @@
 package com.kainalu.readerforreddit.network.models
 
+import androidx.recyclerview.widget.DiffUtil
 import com.squareup.moshi.Json
 import com.squareup.moshi.JsonClass
 import org.threeten.bp.LocalDateTime
@@ -21,4 +22,16 @@ data class Link(
     val isSelfPost: Boolean?,
     val selftext: String,
     val url: String
-)
+) {
+    companion object {
+        val DIFF_CALLBACK = object : DiffUtil.ItemCallback<Link>() {
+            override fun areItemsTheSame(oldItem: Link, newItem: Link): Boolean {
+                return oldItem.id == newItem.id
+            }
+
+            override fun areContentsTheSame(oldItem: Link, newItem: Link): Boolean {
+                return oldItem == newItem
+            }
+        }
+    }
+}
