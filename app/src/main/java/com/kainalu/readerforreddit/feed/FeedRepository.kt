@@ -3,8 +3,6 @@ package com.kainalu.readerforreddit.feed
 import com.kainalu.readerforreddit.network.ApiService
 import com.kainalu.readerforreddit.network.models.Link
 import com.kainalu.readerforreddit.network.models.Listing
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.withContext
 import javax.inject.Inject
 
 class FeedRepository @Inject constructor(private val apiService: ApiService) {
@@ -14,12 +12,10 @@ class FeedRepository @Inject constructor(private val apiService: ApiService) {
             throw IllegalArgumentException("Subreddit sort ${sort.name} is invalid for $subreddit")
         }
 
-        return withContext(Dispatchers.IO) {
-            if (subreddit.isNotEmpty()) {
-                apiService.getSubreddit(subreddit, sort.name.toLowerCase(), after)
-            } else {
-                apiService.getSubreddit(sort.name.toLowerCase(), after)
-            }
+        return if (subreddit.isNotEmpty()) {
+            apiService.getSubreddit(subreddit, sort.name.toLowerCase(), after)
+        } else {
+            apiService.getSubreddit(sort.name.toLowerCase(), after)
         }
     }
 }
