@@ -1,6 +1,7 @@
 package com.kainalu.readerforreddit.feed
 
 import androidx.paging.PageKeyedDataSource
+import com.kainalu.readerforreddit.network.Resource
 import com.kainalu.readerforreddit.network.models.Link
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
@@ -17,15 +18,21 @@ class SubredditDataSource(
 
     override fun loadAfter(params: LoadParams<String>, callback: LoadCallback<String, Link>) {
         coroutineScope.launch {
-            val request = repository.getFeed(subreddit, SubredditSort.BEST, params.key)
-            callback.onResult(request.children, request.after)
+            when (val resource = repository.getFeed(subreddit, SubredditSort.BEST, params.key)) {
+                is Resource.Success -> callback.onResult(resource.data.children, resource.data.after)
+            }
         }
     }
 
     override fun loadInitial(params: LoadInitialParams<String>, callback: LoadInitialCallback<String, Link>) {
         coroutineScope.launch {
-            val request = repository.getFeed(subreddit, SubredditSort.BEST)
-            callback.onResult(request.children, request.before, request.after)
+            when (val resource = repository.getFeed(subreddit, SubredditSort.BEST)) {
+                is Resource.Success -> callback.onResult(
+                    resource.data.children,
+                    resource.data.before,
+                    resource.data.after
+                )
+            }
         }
     }
 }
