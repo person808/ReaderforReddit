@@ -16,7 +16,8 @@ class FeedViewModel @Inject constructor(private val feedRepository: FeedReposito
 
     fun getFeed(subreddit: String = ""): LiveData<PagedList<Link>> {
         if (!::feed.isInitialized) {
-            val sourceFactory = SubredditDataSourceFactory(feedRepository, subreddit, SubredditSort.BEST, viewModelScope)
+            val sourceFactory =
+                SubredditDataSourceFactory(feedRepository, subreddit, SubredditSort.BEST, viewModelScope)
             feed = sourceFactory.toLiveData(config = pagingConfig)
         }
         return feed

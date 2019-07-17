@@ -7,7 +7,6 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
-import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.kainalu.readerforreddit.R
@@ -18,7 +17,8 @@ class FeedFragment : Fragment() {
 
     private lateinit var recyclerView: RecyclerView
     private val adapter = LinkPagedAdapter()
-    @Inject lateinit var viewModel: FeedViewModel
+    @Inject
+    lateinit var viewModel: FeedViewModel
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -38,7 +38,7 @@ class FeedFragment : Fragment() {
         recyclerView = view.findViewById<RecyclerView>(R.id.recyclerView).apply {
             adapter = this@FeedFragment.adapter
             layoutManager = LinearLayoutManager(requireContext())
-            addItemDecoration(DividerItemDecoration(requireContext(), DividerItemDecoration.HORIZONTAL))
+            addItemDecoration(MarginItemDecoration(resources.getDimension(R.dimen.recyclerview_item_margin).toInt()))
         }
         viewModel.getFeed().observe(viewLifecycleOwner, Observer { adapter.submitList(it) })
     }
