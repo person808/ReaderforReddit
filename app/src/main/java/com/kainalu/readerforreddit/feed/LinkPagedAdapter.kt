@@ -37,23 +37,31 @@ class LinkPagedAdapter : PagedListAdapter<Link, LinkPagedAdapter.BaseViewHolder>
 
         override fun bindTo(link: Link) {
             super.bindTo(link)
-            if (link.postHint == "image") {
-                imageView.visibility = View.VISIBLE
-                Glide.with(imageView).clear(imageView)
-                Glide.with(imageView)
-                    .load(link.url)
-                    .apply(RequestOptions().override(Target.SIZE_ORIGINAL))
-                    .into(imageView)
-            } else {
-                imageView.visibility = View.GONE
+            Glide.with(imageView).clear(imageView)
+            Glide.with(imageView)
+                .load(link.url)
+                .apply(RequestOptions().override(Target.SIZE_ORIGINAL))
+                .into(imageView)
+        }
+    }
+
+    class SelfTextViewHolder(view: View) : BaseViewHolder(view) {
+        private val selfTextView = view.findViewById<TextView>(R.id.selfTextView)
+
+        override fun bindTo(link: Link) {
+            super.bindTo(link)
+            selfTextView.apply {
+                visibility = if (link.selftext.isEmpty()) View.GONE else View.VISIBLE
+                selfTextView.text = link.selftext
             }
         }
     }
 
     override fun getItemViewType(position: Int): Int {
-        return when(getItem(position)?.postHint) {
+        return when (getItem(position)?.postHint) {
             "image" -> R.layout.feed_link_image_item
-            else -> R.layout.feed_link_image_item
+            "self" -> R.layout.feed_link_self_item
+            else -> R.layout.feed_link_self_item
         }
     }
 
@@ -62,7 +70,8 @@ class LinkPagedAdapter : PagedListAdapter<Link, LinkPagedAdapter.BaseViewHolder>
             .inflate(viewType, parent, false)
         return when (viewType) {
             R.layout.feed_link_image_item -> ImageViewHolder(itemView)
-            else -> BaseViewHolder(itemView)
+            R.layout.feed_link_self_item -> SelfTextViewHolder(itemView)
+            else -> SelfTextViewHolder(itemView)
         }
     }
 
