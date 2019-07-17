@@ -1,5 +1,6 @@
 package com.kainalu.readerforreddit.feed
 
+import android.util.Log
 import com.kainalu.readerforreddit.network.ApiService
 import com.kainalu.readerforreddit.network.Resource
 import com.kainalu.readerforreddit.network.models.Link
@@ -26,7 +27,12 @@ class FeedRepository @Inject constructor(private val apiService: ApiService) {
                 Resource.Error(response.body(), null)
             }
         } catch (e: Exception) {
+            Log.e(TAG, e.message ?: "Unknown error", e)
             Resource.Error(error = e)
         }
+    }
+
+    companion object {
+        private const val TAG = "FeedRepository"
     }
 }

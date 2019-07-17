@@ -11,5 +11,5 @@
         android:layout_height="wrap_content"
         android:orientation="vertical"
         tools:itemCount="25"
-        tools:listitem="@layout/feed_link_item" />
+        tools:listitem="@layout/feed_link_title" />
 </FrameLayout>

@@ -17,6 +17,8 @@ data class Link(
     val thumbnail: String,
     val edited: EditInfo,
     val author: String,
+    @Json(name = "post_hint")
+    val postHint: String?,
     val title: String,
     @Json(name = "is_self")
     val isSelfPost: Boolean?,
