@@ -1,7 +1,6 @@
 package com.kainalu.readerforreddit.feed
 
 import android.annotation.SuppressLint
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -89,9 +88,6 @@ class LinkPagedAdapter : PagedListAdapter<Link, LinkPagedAdapter.BaseViewHolder>
     }
 
     override fun onBindViewHolder(holder: BaseViewHolder, position: Int) {
-        getItem(position)?.let {
-            Log.d("adapter", "bindTo called for viewholder $holder")
-            holder.bindTo(it)
-        }
+        getItem(position)?.let { holder.bindTo(it) }
     }
 }
