@@ -34,12 +34,18 @@ object ApiModule {
             return@runBlocking token
         }
 
-        val headersInterceptor = Interceptor { chain ->
+        // Adds the required headers and the query to receive unescaped json
+        val interceptor = Interceptor { chain ->
             val original = chain.request()
+            val url = original.url.newBuilder()
+                .addQueryParameter("raw_json", "1")
+                .build()
             val credential = sessionManager.getToken()?.accessToken ?: refreshToken().accessToken
+
             val request = original.newBuilder()
                 .addHeader("User-Agent", "unix:MyRedditTestApp:v1.0.0")
                 .addHeader("Authorization", "bearer $credential")
+                .url(url)
                 .method(original.method, original.body)
                 .build()
             val response = chain.proceed(request)
@@ -56,7 +62,7 @@ object ApiModule {
         }
 
         return OkHttpClient.Builder()
-            .addInterceptor(headersInterceptor)
+            .addInterceptor(interceptor)
             .addInterceptor(logger)
             .build()
     }
