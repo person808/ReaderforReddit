@@ -78,6 +78,7 @@ object ApiModule {
             .add(DataTypeJsonAdapter())
             .add(EditInfoJsonAdapter())
             .add(LocalDateTimeJsonAdapter())
+            .add(PreviewInfoJsonAdapter())
             .add(KotlinJsonAdapterFactory())
             .build()
     }

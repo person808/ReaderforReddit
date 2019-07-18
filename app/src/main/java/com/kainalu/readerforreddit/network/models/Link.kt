@@ -19,6 +19,7 @@ data class Link(
     val author: String,
     @Json(name = "post_hint")
     val postHint: String?,
+    val preview: PreviewInfo?,
     val title: String,
     @Json(name = "is_self")
     val isSelfPost: Boolean?,

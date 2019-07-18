@@ -1,11 +1,13 @@
 package com.kainalu.readerforreddit.feed
 
 import android.annotation.SuppressLint
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
+import androidx.core.view.updateLayoutParams
 import androidx.paging.PagedListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.request.RequestOptions
@@ -37,10 +39,22 @@ class LinkPagedAdapter : PagedListAdapter<Link, LinkPagedAdapter.BaseViewHolder>
 
         override fun bindTo(link: Link) {
             super.bindTo(link)
-            GlideApp.with(imageView)
-                .load(link.url)
-                .apply(RequestOptions().override(Target.SIZE_ORIGINAL))
-                .into(imageView)
+            imageView.visibility = if (link.preview == null) View.GONE else View.VISIBLE
+            link.preview?.let { previewInfo ->
+                // Make sure we measure the view's dimensions after layout by using view.post()
+                // Otherwise we might receive a width of 0
+                imageView.post {
+                    // Resize the imageview so that it can fit the whole image while
+                    // maintaining aspect ration
+                    val imageWidthRatio = imageView.width.toDouble() / previewInfo.width
+                    val imageViewHeightPx = previewInfo.height * imageWidthRatio
+                    imageView.updateLayoutParams { height = imageViewHeightPx.toInt() }
+                }
+                GlideApp.with(imageView)
+                    .load(link.url)
+                    .apply(RequestOptions().override(Target.SIZE_ORIGINAL))
+                    .into(imageView)
+            }
         }
     }
 
@@ -75,6 +89,9 @@ class LinkPagedAdapter : PagedListAdapter<Link, LinkPagedAdapter.BaseViewHolder>
     }
 
     override fun onBindViewHolder(holder: BaseViewHolder, position: Int) {
-        getItem(position)?.let { holder.bindTo(it) }
+        getItem(position)?.let {
+            Log.d("adapter", "bindTo called for viewholder $holder")
+            holder.bindTo(it)
+        }
     }
 }
