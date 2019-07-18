@@ -8,9 +8,9 @@ import android.widget.ImageView
 import android.widget.TextView
 import androidx.paging.PagedListAdapter
 import androidx.recyclerview.widget.RecyclerView
-import com.bumptech.glide.Glide
 import com.bumptech.glide.request.RequestOptions
 import com.bumptech.glide.request.target.Target
+import com.kainalu.readerforreddit.GlideApp
 import com.kainalu.readerforreddit.R
 import com.kainalu.readerforreddit.network.models.Link
 import com.kainalu.readerforreddit.util.getPostTime
@@ -37,8 +37,7 @@ class LinkPagedAdapter : PagedListAdapter<Link, LinkPagedAdapter.BaseViewHolder>
 
         override fun bindTo(link: Link) {
             super.bindTo(link)
-            Glide.with(imageView).clear(imageView)
-            Glide.with(imageView)
+            GlideApp.with(imageView)
                 .load(link.url)
                 .apply(RequestOptions().override(Target.SIZE_ORIGINAL))
                 .into(imageView)
