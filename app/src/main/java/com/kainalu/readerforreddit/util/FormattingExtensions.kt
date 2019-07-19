@@ -6,7 +6,7 @@ import org.threeten.bp.LocalDateTime
 import org.threeten.bp.ZoneOffset
 import org.threeten.bp.temporal.ChronoUnit
 
-fun LocalDateTime.getPostTime(context: Context, zoneOffset: ZoneOffset = ZoneOffset.UTC): String {
+inline fun LocalDateTime.getPostTime(context: Context, zoneOffset: ZoneOffset = ZoneOffset.UTC): String {
     val currentTime = LocalDateTime.now(zoneOffset)
     val years = ChronoUnit.YEARS.between(this, currentTime).toInt()
     val months = ChronoUnit.MONTHS.between(this, currentTime).toInt()
@@ -26,5 +26,13 @@ fun LocalDateTime.getPostTime(context: Context, zoneOffset: ZoneOffset = ZoneOff
         context.resources.getQuantityString(R.plurals.minutes_placeholder, minutes, minutes)
     } else {
         context.getString(R.string.just_now)
+    }
+}
+
+fun Int.getFormattedString(): String {
+    return if (this < 1000) {
+        this.toString()
+    } else {
+        "%.1fk".format(this / 1000.0)
     }
 }

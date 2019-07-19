@@ -14,6 +14,7 @@ import com.bumptech.glide.request.target.Target
 import com.kainalu.readerforreddit.GlideApp
 import com.kainalu.readerforreddit.R
 import com.kainalu.readerforreddit.network.models.Link
+import com.kainalu.readerforreddit.util.getFormattedString
 import com.kainalu.readerforreddit.util.getPostTime
 
 class LinkPagedAdapter : PagedListAdapter<Link, LinkPagedAdapter.BaseViewHolder>(Link.DIFF_CALLBACK) {
@@ -33,8 +34,8 @@ class LinkPagedAdapter : PagedListAdapter<Link, LinkPagedAdapter.BaseViewHolder>
                     context.getString(R.string.link_author_subtitle, author, createdUtc.getPostTime(context))
                 @SuppressLint("SetTextI18n")
                 subredditTextView.text = "r/${subreddit}"
-                scoreTextView.text = if (score != null) score.toString() else context.getString(R.string.vote)
-                commentTextView.text = if (numComments != null) numComments.toString() else ""
+                scoreTextView.text = if (score != null) score.getFormattedString() else context.getString(R.string.vote)
+                commentTextView.text = if (numComments != null) numComments.getFormattedString() else ""
             }
         }
     }
