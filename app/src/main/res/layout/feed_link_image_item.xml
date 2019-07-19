@@ -7,16 +7,17 @@
     android:orientation="vertical"
     android:clickable="true"
     android:focusable="true"
+    android:theme="@style/WhiteThemeOverlay"
     android:stateListAnimator="@animator/lift_on_touch"
-    app:cardCornerRadius="0dp">
+    app:cardCornerRadius="0dp"
+    tools:theme="@style/AppTheme">
 
     <ImageView
         android:id="@+id/linkImageView"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:scaleType="fitXY"
-        tools:tint="@color/imageOverlay"
-        tools:srcCompat="@tools:sample/backgrounds/scenic" />
+        tools:layout_height="300dp" />
 
     <!--We need to set a background here so ripple effects work-->
     <LinearLayout

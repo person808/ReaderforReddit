@@ -9,4 +9,7 @@
         <item name="android:colorBackground">@color/colorBackground</item>
     </style>
 
+    <style name="WhiteThemeOverlay" parent="ThemeOverlay.MaterialComponents.Dark">
+        <item name="android:tint">@color/white</item>
+    </style>
 </resources>

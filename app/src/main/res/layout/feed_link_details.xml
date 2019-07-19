@@ -25,6 +25,7 @@
         android:layout_marginStart="@dimen/small_item_margin"
         android:layout_marginEnd="@dimen/small_item_margin"
         android:gravity="center"
+        android:textAppearance="@style/TextAppearance.MaterialComponents.Body2"
         tools:text="2k" />
 
     <ImageButton
@@ -48,6 +49,7 @@
         android:drawablePadding="@dimen/small_item_margin"
         android:focusable="true"
         android:gravity="center"
+        android:textAppearance="@style/TextAppearance.MaterialComponents.Body2"
         app:drawableStartCompat="@drawable/comment"
         tools:text="20" />
 </LinearLayout>

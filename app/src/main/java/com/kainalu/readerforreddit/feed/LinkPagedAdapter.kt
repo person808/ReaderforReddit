@@ -49,24 +49,10 @@ class LinkPagedAdapter : PagedListAdapter<Link, LinkPagedAdapter.BaseViewHolder>
     class ImageViewHolder(view: View) : BaseViewHolder(view) {
         private val imageView = view.findViewById<ImageView>(R.id.linkImageView)
 
-        // TODO fix ripple color (use light ripple)
-        private fun invertColors() {
-            val white = ContextCompat.getColor(context, R.color.white)
-            titleTextView.setTextColor(white)
-            authorTextView.setTextColor(white)
-            subredditTextView.setTextColor(white)
-            scoreTextView.setTextColor(white)
-            commentTextView.setTextColor(white)
-            commentTextView.setDrawableTint(white)
-            upvoteButton.setColorFilter(white, PorterDuff.Mode.SRC_ATOP)
-            downvoteButton.setColorFilter(white, PorterDuff.Mode.SRC_ATOP)
-        }
-
         override fun bindTo(link: Link) {
             super.bindTo(link)
             imageView.visibility = if (link.preview == null) View.GONE else View.VISIBLE
             link.preview?.let { previewInfo ->
-                invertColors()
                 // Make sure we measure the view's dimensions after layout by using view.post()
                 // Otherwise we might receive a width of 0
                 imageView.post {
@@ -82,6 +68,7 @@ class LinkPagedAdapter : PagedListAdapter<Link, LinkPagedAdapter.BaseViewHolder>
                     .into(imageView)
                 // We set the tint here so that gifs are also tinted
                 imageView.setColorFilter(ContextCompat.getColor(context, R.color.imageOverlay), PorterDuff.Mode.SRC_ATOP)
+                commentTextView.setDrawableTint(commentTextView.currentTextColor)
             }
         }
     }

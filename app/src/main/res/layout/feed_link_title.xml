@@ -18,6 +18,7 @@
         android:layout_height="wrap_content"
         android:layout_marginStart="@dimen/card_margin"
         android:layout_marginEnd="@dimen/card_margin"
+        android:textAppearance="@style/TextAppearance.MaterialComponents.Body2"
         tools:text="Posted by person808 6 hours ago" />
 
     <TextView
