@@ -22,14 +22,20 @@ class LinkPagedAdapter : PagedListAdapter<Link, LinkPagedAdapter.BaseViewHolder>
         private val titleTextView = view.findViewById<TextView>(R.id.titleTextView)
         private val authorTextView = view.findViewById<TextView>(R.id.authorTextView)
         private val subredditTextView = view.findViewById<TextView>(R.id.subredditTextView)
+        private val scoreTextView = view.findViewById<TextView>(R.id.scoreTextView)
+        private val commentTextView = view.findViewById<TextView>(R.id.commentTextView)
         protected val context = view.context
 
         open fun bindTo(link: Link) {
-            titleTextView.text = link.title
-            authorTextView.text =
-                context.getString(R.string.link_author_subtitle, link.author, link.createdUtc.getPostTime(context))
-            @SuppressLint("SetTextI18n")
-            subredditTextView.text = "r/${link.subreddit}"
+            with(link) {
+                titleTextView.text = title
+                authorTextView.text =
+                    context.getString(R.string.link_author_subtitle, author, createdUtc.getPostTime(context))
+                @SuppressLint("SetTextI18n")
+                subredditTextView.text = "r/${subreddit}"
+                scoreTextView.text = if (score != null) score.toString() else context.getString(R.string.vote)
+                commentTextView.text = if (numComments != null) numComments.toString() else ""
+            }
         }
     }
 

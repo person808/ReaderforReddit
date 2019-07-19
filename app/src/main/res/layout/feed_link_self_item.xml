@@ -14,8 +14,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical"
-        android:paddingTop="@dimen/card_margin"
-        android:paddingBottom="@dimen/card_margin" >
+        android:paddingTop="@dimen/card_margin" >
 
         <include layout="@layout/feed_link_title" />
 
@@ -29,6 +28,9 @@
             android:layout_marginEnd="@dimen/card_margin"
             android:layout_marginTop="@dimen/body_margin_from_title"
             tools:text="@tools:sample/lorem/random"/>
+
+        <include layout="@layout/feed_link_details" />
+
     </LinearLayout>
 
 </com.google.android.material.card.MaterialCardView>

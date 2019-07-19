@@ -4,4 +4,5 @@
     <dimen name="body_margin_from_title">8dp</dimen>
     <dimen name="recyclerview_item_margin">8dp</dimen>
     <dimen name="card_touch_elevation">8dp</dimen>
+    <dimen name="small_item_margin">4dp</dimen>
 </resources>

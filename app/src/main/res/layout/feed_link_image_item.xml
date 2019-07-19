@@ -34,6 +34,9 @@
                 tools:srcCompat="@tools:sample/backgrounds/scenic" />
 
         </FrameLayout>
+
+        <include layout="@layout/feed_link_details" />
+
     </LinearLayout>
 
 </com.google.android.material.card.MaterialCardView>
