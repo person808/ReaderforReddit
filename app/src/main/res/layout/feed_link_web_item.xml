@@ -1,0 +1,80 @@
+<?xml version="1.0" encoding="utf-8"?>
+<com.google.android.material.card.MaterialCardView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
+    android:clickable="true"
+    android:focusable="true"
+    android:stateListAnimator="@animator/lift_on_touch"
+    app:cardCornerRadius="0dp">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:paddingTop="@dimen/card_margin" >
+
+        <include layout="@layout/feed_link_title" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="32dp"
+            android:layout_marginStart="@dimen/card_margin"
+            android:layout_marginTop="@dimen/feed_details_margin"
+            android:layout_marginEnd="@dimen/card_margin"
+            android:layout_marginBottom="@dimen/feed_details_margin"
+            android:gravity="center_vertical"
+            android:orientation="horizontal">
+
+            <ImageButton
+                android:id="@+id/upvoteButton"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:background="?attr/selectableItemBackgroundBorderless"
+                app:srcCompat="@drawable/arrow_up" />
+
+            <TextView
+                android:id="@+id/scoreTextView"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:layout_marginStart="@dimen/small_item_margin"
+                android:layout_marginEnd="@dimen/small_item_margin"
+                android:gravity="center"
+                android:textAppearance="@style/TextAppearance.MaterialComponents.Body2"
+                tools:text="2k" />
+
+            <ImageButton
+                android:id="@+id/downvoteButton"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:background="?attr/selectableItemBackgroundBorderless"
+                app:srcCompat="@drawable/arrow_down" />
+
+            <TextView
+                android:id="@+id/domainTextView"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:gravity="center"
+                android:textAppearance="@style/TextAppearance.MaterialComponents.Body2"
+                tools:text="espn.com" />
+
+            <TextView
+                android:id="@+id/commentTextView"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:background="?attr/selectableItemBackgroundBorderless"
+                android:clickable="true"
+                android:drawablePadding="@dimen/small_item_margin"
+                android:focusable="true"
+                android:gravity="center"
+                android:textAppearance="@style/TextAppearance.MaterialComponents.Body2"
+                app:drawableStartCompat="@drawable/comment"
+                tools:text="20" />
+        </LinearLayout>
+
+    </LinearLayout>
+
+</com.google.android.material.card.MaterialCardView>

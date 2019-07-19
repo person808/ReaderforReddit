@@ -24,6 +24,7 @@ data class Link(
     @Json(name = "is_self")
     val isSelfPost: Boolean?,
     val selftext: String,
+    val domain: String?,
     val url: String
 ) {
     companion object {

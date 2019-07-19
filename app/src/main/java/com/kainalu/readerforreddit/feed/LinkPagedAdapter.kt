@@ -73,6 +73,15 @@ class LinkPagedAdapter : PagedListAdapter<Link, LinkPagedAdapter.BaseViewHolder>
         }
     }
 
+    class WebLinkViewHolder(view: View) : BaseViewHolder(view) {
+        private val domainTextView = view.findViewById<TextView>(R.id.domainTextView)
+
+        override fun bindTo(link: Link) {
+            super.bindTo(link)
+            domainTextView.text = link.domain
+        }
+    }
+
     class SelfTextViewHolder(view: View) : BaseViewHolder(view) {
         private val selfTextView = view.findViewById<TextView>(R.id.selfTextView)
 
@@ -88,6 +97,7 @@ class LinkPagedAdapter : PagedListAdapter<Link, LinkPagedAdapter.BaseViewHolder>
     override fun getItemViewType(position: Int): Int {
         return when (getItem(position)?.postHint) {
             "image" -> R.layout.feed_link_image_item
+            "link" -> R.layout.feed_link_web_item
             "self" -> R.layout.feed_link_self_item
             else -> R.layout.feed_link_self_item
         }
@@ -98,6 +108,7 @@ class LinkPagedAdapter : PagedListAdapter<Link, LinkPagedAdapter.BaseViewHolder>
             .inflate(viewType, parent, false)
         return when (viewType) {
             R.layout.feed_link_image_item -> ImageViewHolder(itemView)
+            R.layout.feed_link_web_item -> WebLinkViewHolder(itemView)
             R.layout.feed_link_self_item -> SelfTextViewHolder(itemView)
             else -> SelfTextViewHolder(itemView)
         }
