@@ -10,30 +10,28 @@
     android:stateListAnimator="@animator/lift_on_touch"
     app:cardCornerRadius="0dp">
 
-    <LinearLayout
+    <ImageView
+        android:id="@+id/linkImageView"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:scaleType="fitXY"
+        tools:tint="@color/imageOverlay"
+        tools:srcCompat="@tools:sample/backgrounds/scenic" />
+
+    <!--We need to set a background here so ripple effects work-->
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
         android:orientation="vertical"
+        android:background="@android:color/transparent"
         android:paddingTop="@dimen/card_margin" >
 
         <include layout="@layout/feed_link_title" />
 
-        <FrameLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:foreground="?attr/selectableItemBackground"
-            android:clickable="true"
-            android:focusable="true"
-            android:layout_marginTop="@dimen/body_margin_from_title">
-
-            <ImageView
-                android:id="@+id/linkImageView"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:scaleType="fitXY"
-                tools:srcCompat="@tools:sample/backgrounds/scenic" />
-
-        </FrameLayout>
+        <Space
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:layout_weight="1"/>
 
         <include layout="@layout/feed_link_details" />
 

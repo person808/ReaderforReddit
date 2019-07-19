@@ -1,11 +1,14 @@
 package com.kainalu.readerforreddit.feed
 
 import android.annotation.SuppressLint
+import android.graphics.PorterDuff
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.ImageButton
 import android.widget.ImageView
 import android.widget.TextView
+import androidx.core.content.ContextCompat
 import androidx.core.view.updateLayoutParams
 import androidx.paging.PagedListAdapter
 import androidx.recyclerview.widget.RecyclerView
@@ -16,15 +19,18 @@ import com.kainalu.readerforreddit.R
 import com.kainalu.readerforreddit.network.models.Link
 import com.kainalu.readerforreddit.util.getFormattedString
 import com.kainalu.readerforreddit.util.getPostTime
+import com.kainalu.readerforreddit.util.setDrawableTint
 
 class LinkPagedAdapter : PagedListAdapter<Link, LinkPagedAdapter.BaseViewHolder>(Link.DIFF_CALLBACK) {
 
     open class BaseViewHolder(view: View) : RecyclerView.ViewHolder(view) {
-        private val titleTextView = view.findViewById<TextView>(R.id.titleTextView)
-        private val authorTextView = view.findViewById<TextView>(R.id.authorTextView)
-        private val subredditTextView = view.findViewById<TextView>(R.id.subredditTextView)
-        private val scoreTextView = view.findViewById<TextView>(R.id.scoreTextView)
-        private val commentTextView = view.findViewById<TextView>(R.id.commentTextView)
+        protected val titleTextView = view.findViewById<TextView>(R.id.titleTextView)
+        protected val authorTextView = view.findViewById<TextView>(R.id.authorTextView)
+        protected val subredditTextView = view.findViewById<TextView>(R.id.subredditTextView)
+        protected val scoreTextView = view.findViewById<TextView>(R.id.scoreTextView)
+        protected val commentTextView = view.findViewById<TextView>(R.id.commentTextView)
+        protected val upvoteButton = view.findViewById<ImageButton>(R.id.upvoteButton)
+        protected val downvoteButton = view.findViewById<ImageButton>(R.id.downvoteButton)
         protected val context = view.context
 
         open fun bindTo(link: Link) {
@@ -43,10 +49,24 @@ class LinkPagedAdapter : PagedListAdapter<Link, LinkPagedAdapter.BaseViewHolder>
     class ImageViewHolder(view: View) : BaseViewHolder(view) {
         private val imageView = view.findViewById<ImageView>(R.id.linkImageView)
 
+        // TODO fix ripple color (use light ripple)
+        private fun invertColors() {
+            val white = ContextCompat.getColor(context, R.color.white)
+            titleTextView.setTextColor(white)
+            authorTextView.setTextColor(white)
+            subredditTextView.setTextColor(white)
+            scoreTextView.setTextColor(white)
+            commentTextView.setTextColor(white)
+            commentTextView.setDrawableTint(white)
+            upvoteButton.setColorFilter(white, PorterDuff.Mode.SRC_ATOP)
+            downvoteButton.setColorFilter(white, PorterDuff.Mode.SRC_ATOP)
+        }
+
         override fun bindTo(link: Link) {
             super.bindTo(link)
             imageView.visibility = if (link.preview == null) View.GONE else View.VISIBLE
             link.preview?.let { previewInfo ->
+                invertColors()
                 // Make sure we measure the view's dimensions after layout by using view.post()
                 // Otherwise we might receive a width of 0
                 imageView.post {
@@ -60,6 +80,8 @@ class LinkPagedAdapter : PagedListAdapter<Link, LinkPagedAdapter.BaseViewHolder>
                     .load(link.url)
                     .apply(RequestOptions().override(Target.SIZE_ORIGINAL))
                     .into(imageView)
+                // We set the tint here so that gifs are also tinted
+                imageView.setColorFilter(ContextCompat.getColor(context, R.color.imageOverlay), PorterDuff.Mode.SRC_ATOP)
             }
         }
     }
