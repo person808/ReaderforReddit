@@ -1,15 +1,21 @@
 package com.kainalu.readerforreddit.feed
 
 import android.annotation.SuppressLint
+import android.graphics.PorterDuff
+import android.graphics.drawable.Drawable
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageButton
 import android.widget.ImageView
 import android.widget.TextView
-import androidx.core.view.updateLayoutParams
+import androidx.core.graphics.drawable.toBitmap
 import androidx.paging.PagedListAdapter
+import androidx.palette.graphics.Palette
 import androidx.recyclerview.widget.RecyclerView
+import com.bumptech.glide.load.DataSource
+import com.bumptech.glide.load.engine.GlideException
+import com.bumptech.glide.request.RequestListener
 import com.bumptech.glide.request.RequestOptions
 import com.bumptech.glide.request.target.Target
 import com.kainalu.readerforreddit.GlideApp
@@ -46,27 +52,52 @@ class LinkPagedAdapter : PagedListAdapter<Link, LinkPagedAdapter.BaseViewHolder>
 
     class ImageViewHolder(view: View) : BaseViewHolder(view) {
         private val imageView = view.findViewById<ImageView>(R.id.linkImageView)
-        private val scrim = view.findViewById<View>(R.id.scrim)
+        private val infoLayout = view.findViewById<ViewGroup>(R.id.infoLayout)
+        private val requestListener = object : RequestListener<Drawable> {
+            override fun onLoadFailed(
+                e: GlideException?,
+                model: Any?,
+                target: Target<Drawable>?,
+                isFirstResource: Boolean
+            ): Boolean {
+                return false
+            }
+
+            override fun onResourceReady(
+                resource: Drawable?,
+                model: Any?,
+                target: Target<Drawable>?,
+                dataSource: DataSource?,
+                isFirstResource: Boolean
+            ): Boolean {
+                resource?.toBitmap()?.let { bitmap ->
+                    Palette.Builder(bitmap).maximumColorCount(24).generate { palette ->
+                        palette?.mutedSwatch?.let { swatch ->
+                            infoLayout.setBackgroundColor(swatch.rgb)
+                            titleTextView.setTextColor(swatch.titleTextColor)
+                            subredditTextView.setTextColor(swatch.titleTextColor)
+                            authorTextView.setTextColor(swatch.bodyTextColor)
+                            scoreTextView.setTextColor(swatch.bodyTextColor)
+                            commentTextView.setTextColor(swatch.bodyTextColor)
+                            commentTextView.setDrawableTint(swatch.bodyTextColor)
+                            upvoteButton.setColorFilter(swatch.bodyTextColor, PorterDuff.Mode.SRC_ATOP)
+                            downvoteButton.setColorFilter(swatch.bodyTextColor, PorterDuff.Mode.SRC_ATOP)
+                        }
+                    }
+                }
+                return false
+            }
+        }
 
         override fun bindTo(link: Link) {
             super.bindTo(link)
             imageView.visibility = if (link.preview == null) View.GONE else View.VISIBLE
             link.preview?.let { previewInfo ->
-                // Make sure we measure the view's dimensions after layout by using view.post()
-                // Otherwise we might receive a width of 0
-                imageView.post {
-                    // Resize the imageview so that it can fit the whole image while
-                    // maintaining aspect ration
-                    val imageWidthRatio = imageView.width.toDouble() / previewInfo.width
-                    val imageViewHeightPx = previewInfo.height * imageWidthRatio
-                    imageView.updateLayoutParams { height = imageViewHeightPx.toInt() }
-                    scrim.updateLayoutParams { height = imageViewHeightPx.toInt() / 2 }
-                }
                 GlideApp.with(imageView)
                     .load(link.url)
                     .apply(RequestOptions().override(Target.SIZE_ORIGINAL))
+                    .listener(requestListener)
                     .into(imageView)
-                commentTextView.setDrawableTint(commentTextView.currentTextColor)
             }
         }
     }
