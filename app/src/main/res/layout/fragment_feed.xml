@@ -5,11 +5,11 @@
     android:layout_height="match_parent"
     tools:context=".feed.FeedFragment">
 
-    <androidx.recyclerview.widget.RecyclerView
+    <com.airbnb.epoxy.EpoxyRecyclerView
         android:id="@+id/recyclerView"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="match_parent"
         android:orientation="vertical"
         tools:itemCount="25"
-        tools:listitem="@layout/feed_link_title" />
+        tools:listitem="@layout/feed_link_self_item" />
 </FrameLayout>

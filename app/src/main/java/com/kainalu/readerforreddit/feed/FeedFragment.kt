@@ -8,16 +8,15 @@ import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.DividerItemDecoration
-import androidx.recyclerview.widget.LinearLayoutManager
-import androidx.recyclerview.widget.RecyclerView
+import com.airbnb.epoxy.EpoxyRecyclerView
 import com.kainalu.readerforreddit.R
 import com.kainalu.readerforreddit.di.Injector
 import javax.inject.Inject
 
 class FeedFragment : Fragment() {
 
-    private lateinit var recyclerView: RecyclerView
-    private val adapter = LinkPagedAdapter()
+    private lateinit var recyclerView: EpoxyRecyclerView
+    private val controller = LinkController()
     @Inject
     lateinit var viewModel: FeedViewModel
 
@@ -36,11 +35,10 @@ class FeedFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        recyclerView = view.findViewById<RecyclerView>(R.id.recyclerView).apply {
-            adapter = this@FeedFragment.adapter
-            layoutManager = LinearLayoutManager(requireContext())
+        recyclerView = view.findViewById<EpoxyRecyclerView>(R.id.recyclerView).apply {
+            setControllerAndBuildModels(controller)
             addItemDecoration(DividerItemDecoration(context, DividerItemDecoration.VERTICAL))
         }
-        viewModel.getFeed().observe(viewLifecycleOwner, Observer { adapter.submitList(it) })
+        viewModel.getFeed().observe(viewLifecycleOwner, Observer { controller.submitList(it) })
     }
 }

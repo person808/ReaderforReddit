@@ -4,6 +4,10 @@ apply plugin: 'kotlin-android-extensions'
 apply plugin: 'kotlin-kapt'
 apply plugin: "androidx.navigation.safeargs"
 
+kapt {
+    correctErrorTypes true
+}
+
 android {
     compileSdkVersion 29
     compileOptions {
@@ -36,6 +40,7 @@ android {
 
 dependencies {
     def dagger_version = '2.23.2'
+    def epoxy_version = '3.7.0'
     def glide_version = '4.9.0'
     def lifecycle_version = '2.1.0-rc01'
     def moshi_version = '1.8.0'
@@ -54,6 +59,9 @@ dependencies {
     implementation "androidx.navigation:navigation-ui-ktx:$nav_version"
     implementation "androidx.paging:paging-runtime-ktx:2.1.0"
     implementation 'androidx.palette:palette-ktx:1.0.0'
+    implementation "com.airbnb.android:epoxy:$epoxy_version"
+    implementation "com.airbnb.android:epoxy-paging:$epoxy_version"
+    kapt "com.airbnb.android:epoxy-processor:$epoxy_version"
     implementation "com.github.bumptech.glide:glide:$glide_version"
     kapt "com.github.bumptech.glide:compiler:$glide_version"
     implementation 'com.google.android.material:material:1.1.0-alpha08'
