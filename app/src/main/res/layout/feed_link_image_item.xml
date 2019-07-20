@@ -4,10 +4,9 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:orientation="vertical"
     android:clickable="true"
     android:focusable="true"
-    android:theme="@style/WhiteThemeOverlay"
+    android:orientation="vertical"
     android:stateListAnimator="@animator/lift_on_touch"
     app:cardCornerRadius="0dp"
     tools:theme="@style/AppTheme">
@@ -19,18 +18,37 @@
         android:scaleType="fitXY"
         tools:layout_height="300dp" />
 
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical">
+
+        <Space
+            android:layout_width="fill_parent"
+            android:layout_height="0dp"
+            android:layout_weight="1"/>
+
+        <View
+            android:id="@+id/scrim"
+            android:layout_width="fill_parent"
+            android:layout_height="0dp"
+            android:layout_weight="1"
+            android:background="@drawable/scrim" />
+    </LinearLayout>
+
     <!--We need to set a background here so ripple effects work-->
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:orientation="vertical"
         android:background="@android:color/transparent"
-        android:paddingTop="@dimen/card_margin" >
+        android:orientation="vertical"
+        android:paddingTop="@dimen/card_margin"
+        android:theme="@style/WhiteThemeOverlay">
 
         <Space
             android:layout_width="0dp"
             android:layout_height="0dp"
-            android:layout_weight="1"/>
+            android:layout_weight="1" />
 
         <include layout="@layout/feed_link_title" />
 

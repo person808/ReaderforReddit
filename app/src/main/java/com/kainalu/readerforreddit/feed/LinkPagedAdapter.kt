@@ -1,14 +1,12 @@
 package com.kainalu.readerforreddit.feed
 
 import android.annotation.SuppressLint
-import android.graphics.PorterDuff
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageButton
 import android.widget.ImageView
 import android.widget.TextView
-import androidx.core.content.ContextCompat
 import androidx.core.view.updateLayoutParams
 import androidx.paging.PagedListAdapter
 import androidx.recyclerview.widget.RecyclerView
@@ -48,6 +46,7 @@ class LinkPagedAdapter : PagedListAdapter<Link, LinkPagedAdapter.BaseViewHolder>
 
     class ImageViewHolder(view: View) : BaseViewHolder(view) {
         private val imageView = view.findViewById<ImageView>(R.id.linkImageView)
+        private val scrim = view.findViewById<View>(R.id.scrim)
 
         override fun bindTo(link: Link) {
             super.bindTo(link)
@@ -61,13 +60,12 @@ class LinkPagedAdapter : PagedListAdapter<Link, LinkPagedAdapter.BaseViewHolder>
                     val imageWidthRatio = imageView.width.toDouble() / previewInfo.width
                     val imageViewHeightPx = previewInfo.height * imageWidthRatio
                     imageView.updateLayoutParams { height = imageViewHeightPx.toInt() }
+                    scrim.updateLayoutParams { height = imageViewHeightPx.toInt() / 2 }
                 }
                 GlideApp.with(imageView)
                     .load(link.url)
                     .apply(RequestOptions().override(Target.SIZE_ORIGINAL))
                     .into(imageView)
-                // We set the tint here so that gifs are also tinted
-                imageView.setColorFilter(ContextCompat.getColor(context, R.color.imageOverlay), PorterDuff.Mode.SRC_ATOP)
                 commentTextView.setDrawableTint(commentTextView.currentTextColor)
             }
         }
