@@ -1,16 +1,12 @@
 package com.kainalu.readerforreddit.feed
 
-import androidx.arch.core.executor.ArchTaskExecutor
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import androidx.paging.Config
 import androidx.paging.PagedList
 import com.kainalu.readerforreddit.network.models.Link
-import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
-import kotlinx.coroutines.withContext
 import javax.inject.Inject
 
 class FeedViewModel @Inject constructor(private val feedRepository: FeedRepository) : ViewModel() {
@@ -24,36 +20,20 @@ class FeedViewModel @Inject constructor(private val feedRepository: FeedReposito
     private val currentViewState: FeedViewState
         get() = _viewState.value!!
 
-    private val pagingConfig = Config(pageSize = 25, prefetchDistance = 50, enablePlaceholders = false)
-
-    fun init(subreddit: String = ""): LiveData<PagedList<Link>> {
+    fun init(subreddit: String = "") {
         _viewState.value = FeedViewState(
             subreddit = subreddit,
             sort = feedRepository.getDefaultSort(subreddit),
             availableSorts = feedRepository.getAvailableSorts(subreddit)
         )
         initDataSource(subreddit, currentViewState.sort, currentViewState.sortDuration)
-        return feed
     }
 
     private fun initDataSource(subreddit: String, sort: SubredditSort, sortDuration: Duration) {
         _viewState.value = currentViewState.copy(loading = true)
-        val sourceFactory = SubredditDataSourceFactory(
-            feedRepository,
-            subreddit,
-            sort,
-            sortDuration,
-            viewModelScope
-        )
-        viewModelScope.launch {
-            val pagedList = withContext(Dispatchers.IO) {
-                PagedList.Builder(sourceFactory.create(), pagingConfig)
-                    .setFetchExecutor(ArchTaskExecutor.getIOThreadExecutor())
-                    .setNotifyExecutor(ArchTaskExecutor.getMainThreadExecutor())
-                    .build()
-            }
 
-            _feed.value = pagedList
+        viewModelScope.launch {
+            _feed.value = feedRepository.getPagedList(subreddit, sort, sortDuration)
             _viewState.value = currentViewState.copy(loading = false)
         }
     }
