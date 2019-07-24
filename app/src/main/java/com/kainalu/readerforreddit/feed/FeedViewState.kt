@@ -4,5 +4,6 @@ data class FeedViewState(
     val subreddit: String,
     val sort: SubredditSort,
     val sortDuration: Duration = Duration.NONE,
-    val availableSorts: List<SubredditSort>
+    val availableSorts: List<SubredditSort>,
+    val loading: Boolean = false
 )

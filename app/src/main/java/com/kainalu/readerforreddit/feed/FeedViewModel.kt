@@ -10,6 +10,7 @@ import androidx.paging.PagedList
 import com.kainalu.readerforreddit.network.models.Link
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 import javax.inject.Inject
 
 class FeedViewModel @Inject constructor(private val feedRepository: FeedRepository) : ViewModel() {
@@ -23,7 +24,6 @@ class FeedViewModel @Inject constructor(private val feedRepository: FeedReposito
     private val currentViewState: FeedViewState
         get() = _viewState.value!!
 
-    private lateinit var sourceFactory: SubredditDataSourceFactory
     private val pagingConfig = Config(pageSize = 25, prefetchDistance = 50, enablePlaceholders = false)
 
     fun init(subreddit: String = ""): LiveData<PagedList<Link>> {
@@ -37,20 +37,30 @@ class FeedViewModel @Inject constructor(private val feedRepository: FeedReposito
     }
 
     private fun initDataSource(subreddit: String, sort: SubredditSort, sortDuration: Duration) {
-        sourceFactory = SubredditDataSourceFactory(
+        _viewState.value = currentViewState.copy(loading = true)
+        val sourceFactory = SubredditDataSourceFactory(
             feedRepository,
             subreddit,
             sort,
             sortDuration,
             viewModelScope
         )
-        viewModelScope.launch(Dispatchers.IO) {
-            _feed.postValue(
+        viewModelScope.launch {
+            val pagedList = withContext(Dispatchers.IO) {
                 PagedList.Builder(sourceFactory.create(), pagingConfig)
                     .setFetchExecutor(ArchTaskExecutor.getIOThreadExecutor())
                     .setNotifyExecutor(ArchTaskExecutor.getMainThreadExecutor())
                     .build()
-            )
+            }
+
+            _feed.value = pagedList
+            _viewState.value = currentViewState.copy(loading = false)
+        }
+    }
+
+    fun refresh() {
+        with(currentViewState) {
+            initDataSource(subreddit, sort, sortDuration)
         }
     }
 

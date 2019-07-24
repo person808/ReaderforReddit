@@ -106,6 +106,7 @@ class FeedFragment : Fragment() {
             setController(controller)
             addItemDecoration(DividerItemDecoration(context, DividerItemDecoration.VERTICAL))
         }
+        swipeRefreshLayout.setOnRefreshListener { viewModel.refresh() }
         viewModel.init()
         viewModel.feed.observe(viewLifecycleOwner, Observer { controller.submitList(it) })
         viewModel.viewState.observe(viewLifecycleOwner, Observer { render(it) })
@@ -118,5 +119,7 @@ class FeedFragment : Fragment() {
             "${getString(viewState.sort.label)} ${getString(viewState.sortDuration.label)}"
         }
         controller.headerLabel = headerLabel
+
+        swipeRefreshLayout.isRefreshing = viewState.loading
     }
 }
