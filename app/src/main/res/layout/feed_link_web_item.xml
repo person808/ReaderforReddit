@@ -10,71 +10,79 @@
     android:stateListAnimator="@animator/lift_on_touch"
     app:cardCornerRadius="0dp">
 
-    <LinearLayout
+    <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="vertical"
-        android:paddingTop="@dimen/card_margin" >
+        android:layout_height="wrap_content">
 
-        <include layout="@layout/feed_link_title" />
-
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="32dp"
+        <TextView
+            android:id="@+id/subredditTextView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
             android:layout_marginStart="@dimen/card_margin"
-            android:layout_marginTop="@dimen/feed_details_margin"
+            android:layout_marginTop="@dimen/card_margin"
+            android:textAppearance="@style/TextAppearance.MaterialComponents.Subtitle2"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            tools:text="r/pics" />
+
+        <TextView
+            android:id="@+id/authorTextView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textAppearance="@style/TextAppearance.MaterialComponents.Body2"
+            app:layout_constraintStart_toStartOf="@+id/subredditTextView"
+            app:layout_constraintTop_toBottomOf="@+id/subredditTextView"
+            tools:text="Posted by person808 6 hours ago" />
+
+        <TextView
+            android:id="@+id/titleTextView"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/card_margin"
             android:layout_marginEnd="@dimen/card_margin"
-            android:layout_marginBottom="@dimen/feed_details_margin"
-            android:gravity="center_vertical"
-            android:orientation="horizontal">
+            android:layout_marginBottom="@dimen/card_section_margin"
+            android:textAppearance="@style/TextAppearance.MaterialComponents.Headline6"
+            app:layout_constraintBottom_toTopOf="@id/bulletTextView"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/authorTextView"
+            tools:text="This is a really long title that just keeps going forever" />
 
-            <ImageButton
-                android:id="@+id/upvoteButton"
-                android:layout_width="wrap_content"
-                android:layout_height="match_parent"
-                android:background="?attr/selectableItemBackgroundBorderless"
-                app:srcCompat="@drawable/arrow_up" />
+        <TextView
+            android:id="@+id/scoreTextView"
+            android:layout_width="wrap_content"
+            android:layout_height="@dimen/feed_details_height"
+            android:layout_marginStart="@dimen/card_margin"
+            android:gravity="center"
+            android:maxLines="1"
+            android:textAppearance="@style/TextAppearance.MaterialComponents.Body2"
+            app:layout_constraintBaseline_toBaselineOf="@+id/bulletTextView"
+            app:layout_constraintStart_toStartOf="parent"
+            tools:text="2k points" />
 
-            <TextView
-                android:id="@+id/scoreTextView"
-                android:layout_width="wrap_content"
-                android:layout_height="match_parent"
-                android:layout_marginStart="@dimen/small_item_margin"
-                android:layout_marginEnd="@dimen/small_item_margin"
-                android:gravity="center"
-                android:textAppearance="@style/TextAppearance.MaterialComponents.Body2"
-                tools:text="2k" />
+        <TextView
+            android:id="@+id/bulletTextView"
+            style="@style/BulletSeparatorTextView"
+            android:layout_width="wrap_content"
+            android:layout_height="@dimen/feed_details_height"
+            android:layout_marginStart="@dimen/small_item_margin"
+            android:layout_marginBottom="@dimen/small_item_margin"
+            android:gravity="center"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toEndOf="@+id/scoreTextView" />
 
-            <ImageButton
-                android:id="@+id/downvoteButton"
-                android:layout_width="wrap_content"
-                android:layout_height="match_parent"
-                android:background="?attr/selectableItemBackgroundBorderless"
-                app:srcCompat="@drawable/arrow_down" />
+        <TextView
+            android:id="@+id/commentTextView"
+            android:layout_width="wrap_content"
+            android:layout_height="@dimen/feed_details_height"
+            android:layout_marginStart="@dimen/small_item_margin"
+            android:gravity="center"
+            android:maxLines="1"
+            android:textAppearance="@style/TextAppearance.MaterialComponents.Body2"
+            app:layout_constraintBaseline_toBaselineOf="@id/bulletTextView"
+            app:layout_constraintStart_toEndOf="@+id/bulletTextView"
+            tools:text="20 comments" />
 
-            <TextView
-                android:id="@+id/domainTextView"
-                android:layout_width="0dp"
-                android:layout_height="match_parent"
-                android:layout_weight="1"
-                android:gravity="center"
-                android:textAppearance="@style/TextAppearance.MaterialComponents.Body2"
-                tools:text="espn.com" />
 
-            <TextView
-                android:id="@+id/commentTextView"
-                android:layout_width="wrap_content"
-                android:layout_height="match_parent"
-                android:background="?attr/selectableItemBackgroundBorderless"
-                android:clickable="true"
-                android:drawablePadding="@dimen/small_item_margin"
-                android:focusable="true"
-                android:gravity="center"
-                android:textAppearance="@style/TextAppearance.MaterialComponents.Body2"
-                app:drawableStartCompat="@drawable/comment"
-                tools:text="20" />
-        </LinearLayout>
-
-    </LinearLayout>
-
+    </androidx.constraintlayout.widget.ConstraintLayout>
 </com.google.android.material.card.MaterialCardView>

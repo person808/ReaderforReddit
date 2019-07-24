@@ -4,5 +4,5 @@
     <dimen name="card_section_margin">8dp</dimen>
     <dimen name="card_touch_elevation">8dp</dimen>
     <dimen name="small_item_margin">4dp</dimen>
-    <dimen name="feed_details_margin">8dp</dimen>
+    <dimen name="feed_details_height">32dp</dimen>
 </resources>

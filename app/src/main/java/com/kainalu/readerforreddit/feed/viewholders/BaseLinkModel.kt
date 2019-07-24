@@ -1,7 +1,6 @@
 package com.kainalu.readerforreddit.feed.viewholders
 
 import android.annotation.SuppressLint
-import android.widget.ImageButton
 import android.widget.TextView
 import com.airbnb.epoxy.EpoxyAttribute
 import com.airbnb.epoxy.EpoxyModelWithHolder
@@ -38,6 +37,4 @@ abstract class BaseHolder : KotlinEpoxyHolder() {
     val subredditTextView by bind<TextView>(R.id.subredditTextView)
     val scoreTextView by bind<TextView>(R.id.scoreTextView)
     val commentTextView by bind<TextView>(R.id.commentTextView)
-    val upvoteButton by bind<ImageButton>(R.id.upvoteButton)
-    val downvoteButton by bind<ImageButton>(R.id.downvoteButton)
 }
