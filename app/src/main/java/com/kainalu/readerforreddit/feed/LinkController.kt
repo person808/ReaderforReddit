@@ -13,7 +13,13 @@ class LinkController(
     private val headerClickListener: View.OnClickListener
 ) : PagedListEpoxyController<Link>() {
 
-    private var headerLabel = ""
+    var headerLabel = ""
+        set(value) {
+            if (value != field) {
+                field = value
+                requestModelBuild()
+            }
+        }
 
     override fun buildItemModel(currentPosition: Int, item: Link?): EpoxyModel<*> {
         if (item == null) {
@@ -35,10 +41,5 @@ class LinkController(
             id("header")
         }
         super.add(models)
-    }
-
-    fun setHeaderLabel(text: String) {
-        headerLabel = text
-        requestModelBuild()
     }
 }

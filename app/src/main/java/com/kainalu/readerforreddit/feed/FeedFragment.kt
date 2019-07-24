@@ -117,6 +117,6 @@ class FeedFragment : Fragment() {
         } else {
             "${getString(viewState.sort.label)} ${getString(viewState.sortDuration.label)}"
         }
-        controller.setHeaderLabel(headerLabel)
+        controller.headerLabel = headerLabel
     }
 }
