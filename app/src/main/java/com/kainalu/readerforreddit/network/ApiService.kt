@@ -15,6 +15,7 @@ interface ApiService {
     @GET("/{sort}")
     suspend fun getSubreddit(
         @Path("sort") sort: String,
+        @Query("t") sortDuration: String,
         @Query("after") after: String = ""
     ): Response<Listing<Link>>
 
@@ -23,6 +24,7 @@ interface ApiService {
     suspend fun getSubreddit(
         @Path("name") subreddit: String,
         @Path("sort") sort: String,
+        @Query("t") sortDuration: String,
         @Query("after") after: String = ""
     ): Response<Listing<Link>>
 

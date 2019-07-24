@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <item
+        android:id="@+id/best"
+        android:title="@string/best" />
+
+    <item
+        android:id="@+id/hot"
+        android:title="@string/hot" />
+
+    <item
+        android:id="@+id/new_sort"
+        android:title="@string/new_sort" />
+
+    <item
+        android:id="@+id/top"
+        android:title="@string/top">
+        <!-- A empty submenu to be added when the menu is inflated -->
+        <menu></menu>
+    </item>
+
+    <item
+        android:id="@+id/controversial"
+        android:title="@string/controversial">
+        <!-- A empty submenu to be added when the menu is inflated -->
+        <menu></menu>
+    </item>
+
+    <item
+        android:id="@+id/rising"
+        android:title="@string/rising" />
+
+</menu>

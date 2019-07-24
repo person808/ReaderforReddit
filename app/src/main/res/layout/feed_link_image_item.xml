@@ -39,7 +39,7 @@
             android:layout_height="wrap_content"
             android:elevation="4dp"
             android:orientation="vertical"
-            android:paddingTop="@dimen/body_margin_from_title">
+            android:paddingTop="@dimen/card_section_margin">
 
             <include layout="@layout/feed_link_title" />
 

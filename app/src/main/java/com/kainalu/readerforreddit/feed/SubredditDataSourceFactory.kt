@@ -9,13 +9,14 @@ class SubredditDataSourceFactory(
     private val repository: FeedRepository,
     private val subreddit: String,
     private val sort: SubredditSort,
+    private val sortDuration: Duration,
     private val coroutineScope: CoroutineScope
 ) : DataSource.Factory<String, Link>() {
 
     val sourceLiveData = MutableLiveData<SubredditDataSource>()
 
     override fun create(): DataSource<String, Link> {
-        return SubredditDataSource(repository, subreddit, sort, coroutineScope).also {
+        return SubredditDataSource(repository, subreddit, sort, sortDuration, coroutineScope).also {
             sourceLiveData.postValue(it)
         }
     }

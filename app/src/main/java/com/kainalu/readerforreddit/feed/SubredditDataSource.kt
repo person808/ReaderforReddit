@@ -9,7 +9,8 @@ import kotlinx.coroutines.launch
 class SubredditDataSource(
     private val repository: FeedRepository,
     private val subreddit: String,
-    private val sort: SubredditSort,
+    private var sort: SubredditSort,
+    private var sortDuration: Duration,
     private val coroutineScope: CoroutineScope
 ) : PageKeyedDataSource<String, Link>() {
 
@@ -19,7 +20,7 @@ class SubredditDataSource(
 
     override fun loadAfter(params: LoadParams<String>, callback: LoadCallback<String, Link>) {
         coroutineScope.launch {
-            when (val resource = repository.getFeed(subreddit, sort, params.key)) {
+            when (val resource = repository.getFeed(subreddit, sort, sortDuration, params.key)) {
                 is Resource.Success -> callback.onResult(resource.data.children, resource.data.after)
             }
         }
@@ -27,7 +28,7 @@ class SubredditDataSource(
 
     override fun loadInitial(params: LoadInitialParams<String>, callback: LoadInitialCallback<String, Link>) {
         coroutineScope.launch {
-            when (val resource = repository.getFeed(subreddit, sort)) {
+            when (val resource = repository.getFeed(subreddit, sort, sortDuration)) {
                 is Resource.Success -> callback.onResult(
                     resource.data.children,
                     resource.data.before,
