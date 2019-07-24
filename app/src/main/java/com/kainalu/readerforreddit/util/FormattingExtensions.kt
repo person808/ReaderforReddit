@@ -6,7 +6,7 @@ import org.threeten.bp.LocalDateTime
 import org.threeten.bp.ZoneOffset
 import org.threeten.bp.temporal.ChronoUnit
 
-inline fun LocalDateTime.getPostTime(context: Context, zoneOffset: ZoneOffset = ZoneOffset.UTC): String {
+fun LocalDateTime.getPostTime(context: Context, zoneOffset: ZoneOffset = ZoneOffset.UTC): String {
     val currentTime = LocalDateTime.now(zoneOffset)
     val years = ChronoUnit.YEARS.between(this, currentTime).toInt()
     val months = ChronoUnit.MONTHS.between(this, currentTime).toInt()
@@ -14,18 +14,13 @@ inline fun LocalDateTime.getPostTime(context: Context, zoneOffset: ZoneOffset = 
     val hours = ChronoUnit.HOURS.between(this, currentTime).toInt()
     val minutes = ChronoUnit.MINUTES.between(this, currentTime).toInt()
 
-    return if (years > 0) {
-        context.resources.getQuantityString(R.plurals.years_placeholder, years, years)
-    } else if (months > 0) {
-        context.resources.getQuantityString(R.plurals.months_placeholder, months, months)
-    } else if (days > 0) {
-        context.resources.getQuantityString(R.plurals.days_placeholder, days, days)
-    } else if (hours > 0) {
-        context.resources.getQuantityString(R.plurals.hours_placeholder, hours, hours)
-    } else if (minutes >= 1) {
-        context.resources.getQuantityString(R.plurals.minutes_placeholder, minutes, minutes)
-    } else {
-        context.getString(R.string.just_now)
+    return when {
+        years > 0 -> context.resources.getQuantityString(R.plurals.years_placeholder, years, years)
+        months > 0 -> context.resources.getQuantityString(R.plurals.months_placeholder, months, months)
+        days > 0 -> context.resources.getQuantityString(R.plurals.days_placeholder, days, days)
+        hours > 0 -> context.resources.getQuantityString(R.plurals.hours_placeholder, hours, hours)
+        minutes >= 1 -> context.resources.getQuantityString(R.plurals.minutes_placeholder, minutes, minutes)
+        else -> context.getString(R.string.just_now)
     }
 }
 

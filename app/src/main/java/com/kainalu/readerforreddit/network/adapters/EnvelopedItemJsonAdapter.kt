@@ -24,7 +24,7 @@ class EnvelopedItemJsonAdapter(private val delegate: JsonAdapter<Envelope<*>>) :
     }
 
     companion object {
-        private val TAG = "EnvelopedItemAdapter"
+        private const val TAG = "EnvelopedItemAdapter"
         val FACTORY = object : Factory {
             override fun create(type: Type, annotations: MutableSet<out Annotation>, moshi: Moshi): JsonAdapter<*>? {
                 val delegateAnnotations = Types.nextAnnotations(annotations, Enveloped::class.java) ?: return null
