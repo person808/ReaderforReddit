@@ -50,6 +50,6 @@ class FeedViewModel @Inject constructor(private val feedRepository: FeedReposito
         }
 
         _viewState.value = currentViewState.copy(sort = sort, sortDuration = duration)
-        initDataSource(currentViewState.subreddit, sort, duration)
+        refresh()
     }
 }
