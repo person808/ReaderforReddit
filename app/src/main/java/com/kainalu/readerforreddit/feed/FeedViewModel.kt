@@ -33,7 +33,7 @@ class FeedViewModel @Inject constructor(private val feedRepository: FeedReposito
         _viewState.value = currentViewState.copy(loading = true)
 
         viewModelScope.launch {
-            _feed.value = feedRepository.getPagedList(subreddit, sort, sortDuration)
+            _feed.value = feedRepository.getPagedList(subreddit, sort, sortDuration, viewModelScope)
             _viewState.value = currentViewState.copy(loading = false)
         }
     }

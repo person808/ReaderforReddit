@@ -8,8 +8,8 @@ import com.kainalu.readerforreddit.network.ApiService
 import com.kainalu.readerforreddit.network.Resource
 import com.kainalu.readerforreddit.network.models.Link
 import com.kainalu.readerforreddit.network.models.Listing
+import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.coroutineScope
 import kotlinx.coroutines.withContext
 import javax.inject.Inject
 
@@ -45,21 +45,19 @@ class FeedRepository @Inject constructor(private val apiService: ApiService) {
         }
     }
 
-    suspend fun getPagedList(subreddit: String, sort: SubredditSort, sortDuration: Duration): PagedList<Link> =
-        coroutineScope {
+    suspend fun getPagedList(subreddit: String, sort: SubredditSort, sortDuration: Duration, scope: CoroutineScope): PagedList<Link> =
+        withContext(Dispatchers.IO) {
             val sourceFactory = SubredditDataSourceFactory(
                 this@FeedRepository,
                 subreddit,
                 sort,
                 sortDuration,
-                this
+                scope
             )
-            withContext(Dispatchers.IO) {
-                PagedList.Builder(sourceFactory.create(), pagingConfig)
-                    .setFetchExecutor(ArchTaskExecutor.getIOThreadExecutor())
-                    .setNotifyExecutor(ArchTaskExecutor.getMainThreadExecutor())
-                    .build()
-            }
+            PagedList.Builder(sourceFactory.create(), pagingConfig)
+                .setFetchExecutor(ArchTaskExecutor.getIOThreadExecutor())
+                .setNotifyExecutor(ArchTaskExecutor.getMainThreadExecutor())
+                .build()
         }
 
     fun getDefaultSort(subreddit: String): SubredditSort {
