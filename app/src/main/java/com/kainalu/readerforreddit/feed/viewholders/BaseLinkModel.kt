@@ -10,9 +10,10 @@ import com.kainalu.readerforreddit.util.KotlinEpoxyHolder
 import com.kainalu.readerforreddit.util.getFormattedString
 import com.kainalu.readerforreddit.util.getPostTime
 
-abstract class BaseLinkModel<T: BaseHolder> : EpoxyModelWithHolder<T>() {
+abstract class BaseLinkModel<T : BaseHolder> : EpoxyModelWithHolder<T>() {
 
-    @EpoxyAttribute lateinit var link: Link
+    @EpoxyAttribute
+    lateinit var link: Link
 
     override fun bind(holder: T) {
         super.bind(holder)
@@ -22,11 +23,19 @@ abstract class BaseLinkModel<T: BaseHolder> : EpoxyModelWithHolder<T>() {
                 text = context.getString(R.string.link_author_subtitle, author, createdUtc.getPostTime(context))
             }
             with(holder.scoreTextView) {
-                text = score?.getFormattedString() ?: context.getString(R.string.vote)
+                text = if (score == null) {
+                    context.getString(R.string.score_hidden)
+                } else {
+                    context.resources.getQuantityString(R.plurals.points, score, score.getFormattedString())
+                }
             }
             @SuppressLint("SetTextI18n")
             holder.subredditTextView.text = "r/$subreddit"
-            holder.commentTextView.text = numComments?.getFormattedString() ?: ""
+            with(numComments ?: 0) {
+                val context = holder.commentTextView.context
+                holder.commentTextView.text =
+                    context.resources.getQuantityString(R.plurals.comments, this, getFormattedString())
+            }
         }
     }
 }

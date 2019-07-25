@@ -20,9 +20,18 @@
         <item quantity="one">%1$d minute ago</item>
         <item quantity="other">%1$d minutes ago</item>
     </plurals>
+
     <string name="just_now">Just now</string>
     <string name="link_author_subtitle">Posted by %1$s %2$s</string>
-    <string name="vote">Vote</string>
+    <string name="score_hidden">Score hidden</string>
+    <plurals name="comments">
+        <item quantity="one">%1$s comment</item>
+        <item quantity="other">%1$s comments</item>
+    </plurals>
+    <plurals name="points">
+        <item quantity="one">%1$s point</item>
+        <item quantity="other">%1$s points</item>
+    </plurals>
 
     <string name="best">Best</string>
     <string name="hot">Hot</string>
