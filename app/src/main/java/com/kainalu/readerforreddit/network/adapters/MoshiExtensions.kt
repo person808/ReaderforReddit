@@ -47,3 +47,12 @@ inline fun <T> JsonWriter.writeArray(values: List<T>?, body: (value: T) -> Strin
     values?.forEach { value(body(it)) }
     endArray()
 }
+
+fun JsonReader.nextStringOrNull(): String? {
+    return if (peek() == JsonReader.Token.NULL) {
+        nextNull<String?>()
+        null
+    } else {
+        nextString()
+    }
+}

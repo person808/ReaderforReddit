@@ -2,11 +2,16 @@ package com.kainalu.readerforreddit.network.models
 
 import com.squareup.moshi.JsonClass
 
-@JsonClass(generateAdapter = true)
+@JsonClass(generateAdapter = false)
 data class Listing<T>(
-    @field:Enveloped
+    @RedditModel
     val children: List<T>,
     val before: String? = null,
     val after: String? = null
-)
+) {
+    companion object {
+        fun empty(): Listing<Any> = Listing(children = emptyList())
+    }
+}
+
 

@@ -17,6 +17,6 @@ data class Comment(
     override val createdUtc: LocalDateTime,
     val body: String,
     val edited: EditInfo,
-    @field:Enveloped
+    @RedditModel
     val replies: Listing<Comment>
 ) : Votable, Created

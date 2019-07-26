@@ -2,8 +2,7 @@ package com.kainalu.readerforreddit.network.models
 
 import com.squareup.moshi.JsonQualifier
 
-data class Envelope<T>(val kind: DataType, val data: T)
-
 @Retention(AnnotationRetention.RUNTIME)
+@Target(AnnotationTarget.CLASS, AnnotationTarget.FIELD, AnnotationTarget.FUNCTION)
 @JsonQualifier
-annotation class Enveloped
+annotation class RedditModel
