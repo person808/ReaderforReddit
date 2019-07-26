@@ -9,10 +9,14 @@ data class Comment(
     val author: String,
     val id: String,
     val score: Int?,
+    override val ups: Int,
+    override val downs: Int,
+    override val liked: Boolean?,
+    override val created: LocalDateTime,
+    @Json(name = "created_utc")
+    override val createdUtc: LocalDateTime,
     val body: String,
     val edited: EditInfo,
-    @Json(name = "created_utc")
-    val createdUtc: LocalDateTime,
     @field:Enveloped
     val replies: Listing<Comment>
-)
+) : Votable, Created

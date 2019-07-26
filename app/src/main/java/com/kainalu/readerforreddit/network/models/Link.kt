@@ -8,12 +8,16 @@ import org.threeten.bp.LocalDateTime
 @JsonClass(generateAdapter = true)
 data class Link(
     val subreddit: String,
-    val score: Int?,
     @Json(name = "num_comments")
     val numComments: Int?,
     val id: String,
+    override val created: LocalDateTime,
     @Json(name = "created_utc")
-    val createdUtc: LocalDateTime,
+    override val createdUtc: LocalDateTime,
+    override val ups: Int,
+    override val downs: Int,
+    override val liked: Boolean?,
+    val score: Int?,
     val thumbnail: String,
     val edited: EditInfo,
     val author: String,
@@ -26,7 +30,7 @@ data class Link(
     val selftext: String,
     val domain: String?,
     val url: String
-) {
+) : Votable, Created {
     companion object {
         val DIFF_CALLBACK = object : DiffUtil.ItemCallback<Link>() {
             override fun areItemsTheSame(oldItem: Link, newItem: Link): Boolean {
