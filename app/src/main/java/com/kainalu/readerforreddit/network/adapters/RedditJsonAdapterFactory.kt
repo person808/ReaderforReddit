@@ -1,8 +1,10 @@
 package com.kainalu.readerforreddit.network.adapters
 
+import com.kainalu.readerforreddit.network.models.Listing
 import com.kainalu.readerforreddit.network.models.RedditModel
 import com.squareup.moshi.*
 import java.io.IOException
+import java.lang.reflect.ParameterizedType
 import java.lang.reflect.Type
 
 /**
@@ -44,8 +46,7 @@ import java.lang.reflect.Type
 class RedditJsonAdapterFactory constructor(
     private val labelKey: String,
     private val dataKey: String,
-    private val labelToType: MutableMap<String, Type> = mutableMapOf(),
-    private val excludedTypes: MutableSet<Type> = mutableSetOf()
+    private val labelToType: MutableMap<String, Type> = mutableMapOf()
 ) : JsonAdapter.Factory {
 
     /**
@@ -57,30 +58,22 @@ class RedditJsonAdapterFactory constructor(
         if (label in labelToType) {
             throw IllegalArgumentException("Labels must be unique.")
         }
-        if (type in excludedTypes) {
-            throw IllegalArgumentException("Type $type is excluded from this adapter.")
-        }
         labelToType[label] = type
-        return RedditJsonAdapterFactory(labelKey, dataKey, labelToType, excludedTypes)
-    }
-
-    /**
-     * Returns a new factory that will ignore instances of `type`.
-     */
-    fun <T : Any> excludeType(type: Class<T>): RedditJsonAdapterFactory {
-        if (type in labelToType.values) {
-            throw IllegalArgumentException("Type $type has a label associated with it. Either remove the label or don't exclude this type.")
-        }
-        excludedTypes.add(type)
-        return RedditJsonAdapterFactory(labelKey, dataKey, labelToType, excludedTypes)
+        return RedditJsonAdapterFactory(labelKey, dataKey, labelToType)
     }
 
     override fun create(type: Type, annotations: Set<Annotation>, moshi: Moshi): JsonAdapter<*>? {
-        val delegateAnnotations = Types.nextAnnotations(annotations, RedditModel::class.java) ?: return null
 
-        if (Types.getRawType(type) in excludedTypes) {
-            return null
+        // Listings require a special adapter.
+        if (Types.getRawType(type).isAssignableFrom(Listing::class.java)) {
+            val typeArgs = (type as ParameterizedType).actualTypeArguments
+            val listType = Types.newParameterizedType(List::class.java, *typeArgs)
+            val childrenAnnotations = Types.getFieldJsonQualifierAnnotations(Listing::class.java, "children")
+            val childrenDelegete = moshi.adapter<List<Any>>(listType, childrenAnnotations)
+            return ListingJsonAdapter(childrenDelegete)
         }
+
+        val delegateAnnotations = Types.nextAnnotations(annotations, RedditModel::class.java) ?: return null
 
         val typeToAdapter = mutableMapOf<Type, JsonAdapter<Any>>()
         for ((_, dataType) in labelToType) {
@@ -121,7 +114,7 @@ class RedditJsonAdapterFactory constructor(
                 labels.first()
             } else {
                 throw IllegalArgumentException(
-                    "Expected one of ${labelToType.values} but found $value, a"
+                    "Expected one of ${labelToType.values} but found '$value', a"
                             + "$type. Register this subtype."
                 )
             }
@@ -136,7 +129,7 @@ class RedditJsonAdapterFactory constructor(
         private fun getAdapterForLabel(label: String): JsonAdapter<Any> {
             val type = labelToType[label] ?: throw JsonDataException(
                 "Expected one of ${labelToType.keys}"
-                        + " for key '$labelKey' but found $label. Register a subtype for this label."
+                        + " for key '$labelKey' but found '$label'. Register a subtype for this label."
             )
             return typeToAdapter[type] ?: throw IllegalArgumentException("No adapter registered for type $type")
         }

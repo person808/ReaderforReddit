@@ -1,9 +1,10 @@
 package com.kainalu.readerforreddit.network.adapters
 
 import com.kainalu.readerforreddit.network.models.Listing
-import com.squareup.moshi.*
-import java.lang.reflect.ParameterizedType
-import java.lang.reflect.Type
+import com.squareup.moshi.JsonAdapter
+import com.squareup.moshi.JsonDataException
+import com.squareup.moshi.JsonReader
+import com.squareup.moshi.JsonWriter
 
 class ListingJsonAdapter(private val childrenDelegate: JsonAdapter<List<Any>>) : JsonAdapter<Listing<Any>>() {
 
@@ -56,21 +57,6 @@ class ListingJsonAdapter(private val childrenDelegate: JsonAdapter<List<Any>>) :
                 childrenDelegate.toJson(writer, value.children)
                 writer.name("before").value(value.before)
                 writer.name("after").value(value.after)
-            }
-        }
-    }
-
-    companion object {
-        val FACTORY = object : Factory {
-            override fun create(type: Type, annotations: MutableSet<out Annotation>, moshi: Moshi): JsonAdapter<*>? {
-                if (!Types.getRawType(type).isAssignableFrom(Listing::class.java)) {
-                    return null
-                }
-                val typeArgs = (type as ParameterizedType).actualTypeArguments
-                val listType = Types.newParameterizedType(List::class.java, *typeArgs)
-                val childrenAnnotations = Types.getFieldJsonQualifierAnnotations(Listing::class.java, "children")
-                val childrenDelegete = moshi.adapter<List<Any>>(listType, childrenAnnotations)
-                return ListingJsonAdapter(childrenDelegete)
             }
         }
     }

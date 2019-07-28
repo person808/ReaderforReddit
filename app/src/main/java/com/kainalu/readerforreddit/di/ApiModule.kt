@@ -6,7 +6,6 @@ import com.kainalu.readerforreddit.network.SessionManager
 import com.kainalu.readerforreddit.network.adapters.*
 import com.kainalu.readerforreddit.network.models.Comment
 import com.kainalu.readerforreddit.network.models.Link
-import com.kainalu.readerforreddit.network.models.Listing
 import com.kainalu.readerforreddit.network.models.Token
 import com.squareup.moshi.Moshi
 import com.squareup.moshi.kotlin.reflect.KotlinJsonAdapterFactory
@@ -80,9 +79,7 @@ object ApiModule {
                 RedditJsonAdapterFactory.of("kind", "data")
                     .withType(Comment::class.java, "t1")
                     .withType(Link::class.java, "t3")
-                    .excludeType(Listing::class.java)
             )
-            .add(ListingJsonAdapter.FACTORY)
             .add(EditInfoJsonAdapter())
             .add(LocalDateTimeJsonAdapter())
             .add(PreviewInfoJsonAdapter())
