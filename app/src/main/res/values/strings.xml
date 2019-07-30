@@ -33,12 +33,21 @@
         <item quantity="other">%1$s points</item>
     </plurals>
 
+    <plurals name="view_more">
+        <item quantity="one">Load %1$d more reply</item>
+        <item quantity="other">Load %1$d more replies</item>
+    </plurals>
+
+    <string name="children_hidden">%1$d hidden</string>
+
     <string name="best">Best</string>
     <string name="hot">Hot</string>
     <string name="top">Top</string>
     <string name="new_sort">New</string>
     <string name="rising">Rising</string>
     <string name="controversial">Controversial</string>
+    <string name="old">Old</string>
+    <string name="q_and_a">Q&amp;A</string>
 
     <string name="past_hour">Past Hour</string>
     <string name="past_day">Past Day</string>

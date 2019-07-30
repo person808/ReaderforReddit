@@ -6,12 +6,17 @@ import com.airbnb.epoxy.paging.PagedListEpoxyController
 import com.kainalu.readerforreddit.feed.viewholders.ImagePostModel_
 import com.kainalu.readerforreddit.feed.viewholders.SelfPostModel_
 import com.kainalu.readerforreddit.feed.viewholders.WebLinkModel_
-import com.kainalu.readerforreddit.feed.viewholders.sortHeader
 import com.kainalu.readerforreddit.network.models.Link
+import com.kainalu.readerforreddit.ui.sortHeader
 
 class LinkController(
-    private val headerClickListener: View.OnClickListener
+    private val headerClickListener: View.OnClickListener,
+    private val linkClickListener: LinkClickListener
 ) : PagedListEpoxyController<Link>() {
+
+    interface LinkClickListener {
+        fun onLinkClicked(link: Link)
+    }
 
     var headerLabel = ""
         set(value) {
@@ -27,10 +32,22 @@ class LinkController(
         }
 
         return when (item.postHint) {
-            "image" -> ImagePostModel_().link(item).id(item.id)
-            "link" -> WebLinkModel_().link(item).id(item.id)
-            "self" -> SelfPostModel_().link(item).id(item.id)
-            else -> SelfPostModel_().link(item).id(item.id)
+            "image" -> ImagePostModel_()
+                .link(item)
+                .onClick { _ -> linkClickListener.onLinkClicked(item) }
+                .id(item.id)
+            "link" -> WebLinkModel_()
+                .link(item)
+                .onClick { _ -> linkClickListener.onLinkClicked(item) }
+                .id(item.id)
+            "self" -> SelfPostModel_()
+                .link(item)
+                .onClick { _ -> linkClickListener.onLinkClicked(item) }
+                .id(item.id)
+            else -> SelfPostModel_()
+                .link(item)
+                .onClick { _ -> linkClickListener.onLinkClicked(item) }
+                .id(item.id)
         }
     }
 

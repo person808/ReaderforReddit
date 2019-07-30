@@ -5,12 +5,8 @@
     android:id="@+id/linkContainer"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:clickable="true"
-    android:focusable="true"
     android:orientation="vertical"
-    android:stateListAnimator="@animator/lift_on_touch"
-    app:cardCornerRadius="0dp"
-    tools:theme="@style/AppTheme">
+    app:cardCornerRadius="0dp">
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
@@ -21,10 +17,10 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginStart="@dimen/card_margin"
-            android:layout_marginTop="@dimen/card_margin"
             android:layout_marginEnd="@dimen/card_margin"
+            android:layout_marginTop="@dimen/card_margin"
             android:textAppearance="@style/LinkTitleTextAppearance"
-            app:layout_constraintEnd_toStartOf="@+id/materialCardView"
+            app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
             tools:text="16.2k This is a really long title that just keeps going forever" />
@@ -36,10 +32,24 @@
             android:layout_marginStart="@dimen/card_margin"
             android:layout_marginBottom="@dimen/card_section_margin"
             android:textAppearance="@style/TextAppearance.MaterialComponents.Caption"
-            app:layout_constraintBottom_toTopOf="@id/bulletTextView"
+            app:layout_constraintBottom_toTopOf="@id/selfTextView"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/titleTextView"
             tools:text="Posted by person808 6 hours ago" />
+
+        <TextView
+            android:id="@+id/selfTextView"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/card_margin"
+            android:layout_marginEnd="@dimen/card_margin"
+            android:layout_marginBottom="@dimen/small_item_margin"
+            android:ellipsize="end"
+            app:layout_constraintBottom_toTopOf="@+id/bulletTextView"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            tools:text="@tools:sample/lorem/random" />
+
 
         <TextView
             android:id="@+id/subredditTextView"
@@ -77,28 +87,7 @@
             app:layout_constraintStart_toEndOf="@+id/bulletTextView"
             tools:text="20 comments" />
 
-        <com.google.android.material.card.MaterialCardView
-            android:id="@+id/materialCardView"
-            android:layout_width="64dp"
-            android:layout_height="64dp"
-            android:layout_gravity="center"
-            android:layout_marginTop="@dimen/card_margin"
-            android:layout_marginEnd="@dimen/card_margin"
-            android:layout_marginBottom="@dimen/card_margin"
-            android:innerRadius="0dp"
-            android:shape="ring"
-            android:thicknessRatio="1.9"
-            app:cardCornerRadius="40dp"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toTopOf="parent">
-
-            <ImageView
-                android:id="@+id/linkImageView"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:scaleType="centerCrop" />
-        </com.google.android.material.card.MaterialCardView>
 
     </androidx.constraintlayout.widget.ConstraintLayout>
+
 </com.google.android.material.card.MaterialCardView>

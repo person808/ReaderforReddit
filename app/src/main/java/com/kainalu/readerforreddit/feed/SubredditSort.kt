@@ -4,7 +4,7 @@ import androidx.annotation.StringRes
 import com.kainalu.readerforreddit.R
 
 /**
- * Represents different sort types for subreddits
+ * Represents different types for subreddits
  *
  * @param label The string resource used to display this value
  */

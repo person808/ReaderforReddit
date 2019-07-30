@@ -18,5 +18,24 @@ data class Comment(
     val body: String,
     val edited: EditInfo,
     @RedditModel
-    val replies: Listing<Comment>
-) : Votable, Created
+    val replies: Listing<HideableSubmissionItem>,
+    val depth: Int,
+    var collapsed: Boolean,
+    @Transient
+    override var hidden: Boolean = false
+) : Votable, Created, HideableSubmissionItem
+
+fun Comment.countChildren(): Int {
+    return if (replies.children.isEmpty()) {
+        0
+    } else {
+        var total = 0
+        replies.children.forEach {
+            if (it is Comment) {
+                total += it.countChildren()
+            }
+        }
+        total += replies.children.size
+        total
+    }
+}

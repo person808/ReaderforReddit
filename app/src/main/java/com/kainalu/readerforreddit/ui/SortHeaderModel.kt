@@ -1,7 +1,8 @@
-package com.kainalu.readerforreddit.feed.viewholders
+package com.kainalu.readerforreddit.ui
 
 import android.view.View
 import android.widget.TextView
+import androidx.annotation.StringRes
 import com.airbnb.epoxy.EpoxyAttribute
 import com.airbnb.epoxy.EpoxyModelClass
 import com.airbnb.epoxy.EpoxyModelWithHolder
@@ -11,13 +12,19 @@ import com.kainalu.readerforreddit.util.KotlinEpoxyHolder
 @EpoxyModelClass(layout = R.layout.sort_header)
 abstract class SortHeaderModel : EpoxyModelWithHolder<Holder>() {
 
-    @EpoxyAttribute lateinit var label: String
+    @EpoxyAttribute var label: String? = null
+    @EpoxyAttribute @StringRes var labelRes: Int? = null
     @EpoxyAttribute lateinit var onClick: View.OnClickListener
 
     override fun bind(holder: Holder) {
         super.bind(holder)
-        holder.label.text = label
-        holder.label.setOnClickListener(onClick)
+        if (label == null && labelRes == null) {
+            throw IllegalStateException("Either label or labelRes must be non-null")
+        }
+        with(holder.label) {
+            text = label ?: context.getString(labelRes!!)
+            setOnClickListener(onClick)
+        }
     }
 }
 

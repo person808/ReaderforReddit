@@ -3,6 +3,7 @@ package com.kainalu.readerforreddit.di
 import android.content.Context
 import com.kainalu.readerforreddit.MainActivity
 import com.kainalu.readerforreddit.feed.FeedFragment
+import com.kainalu.readerforreddit.submission.SubmissionFragment
 import dagger.BindsInstance
 import dagger.Component
 import javax.inject.Singleton
@@ -18,4 +19,5 @@ interface SingletonComponent {
 
     fun inject(activity: MainActivity)
     fun inject(fragment: FeedFragment)
+    fun inject(fragment: SubmissionFragment)
 }

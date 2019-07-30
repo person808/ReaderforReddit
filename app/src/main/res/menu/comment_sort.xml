@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <item
+        android:id="@+id/best"
+        android:title="@string/best" />
+
+    <item
+        android:id="@+id/top"
+        android:title="@string/top">
+    </item>
+
+    <item
+        android:id="@+id/new_sort"
+        android:title="@string/new_sort" />
+
+    <item
+        android:id="@+id/controversial"
+        android:title="@string/controversial">
+    </item>
+
+    <item
+        android:id="@+id/old"
+        android:title="@string/old" />
+
+    <item
+        android:id="@+id/qa"
+        android:title="@string/q_and_a" />
+
+</menu>

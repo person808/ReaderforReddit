@@ -15,5 +15,7 @@ data class More(
     @Json(name = "parent_id")
     val parentId: String,
     val depth: Int,
-    val children: List<String>
-)
+    val children: List<String>,
+    @Transient
+    override var hidden: Boolean = false
+) : HideableSubmissionItem

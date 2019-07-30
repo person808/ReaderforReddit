@@ -12,7 +12,9 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 import javax.inject.Inject
+import javax.inject.Singleton
 
+@Singleton
 class FeedRepository @Inject constructor(private val apiService: ApiService) {
 
     private val pagingConfig = Config(pageSize = 25, prefetchDistance = 50, enablePlaceholders = false)
@@ -24,7 +26,7 @@ class FeedRepository @Inject constructor(private val apiService: ApiService) {
         after: String = ""
     ): Resource<Listing<Link>> {
         if (subreddit.isNotEmpty() && sort == SubredditSort.BEST) {
-            throw IllegalArgumentException("Subreddit sort ${sort.name} is invalid for $subreddit")
+            throw IllegalArgumentException("Subreddit subreddit_sort ${sort.name} is invalid for $subreddit")
         }
 
         return try {

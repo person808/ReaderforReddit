@@ -16,4 +16,12 @@
         <item name="android:paddingStart">@dimen/small_item_margin</item>
         <item name="android:paddingEnd">@dimen/small_item_margin</item>
     </style>
+
+    <style name="LinkScoreTextAppearance" parent="TextAppearance.MaterialComponents.Caption">
+        <item name="android:textSize">@dimen/link_title_text_size</item>
+    </style>
+
+    <style name="LinkTitleTextAppearance" parent="TextAppearance.MaterialComponents.Body1">
+        <item name="android:textSize">@dimen/link_title_text_size</item>
+    </style>
 </resources>

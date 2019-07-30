@@ -1,7 +1,6 @@
-package com.kainalu.readerforreddit.feed.viewholders
+package com.kainalu.readerforreddit.submission.viewholders
 
 import android.annotation.SuppressLint
-import android.view.View
 import android.widget.TextView
 import com.airbnb.epoxy.EpoxyAttribute
 import com.airbnb.epoxy.EpoxyModelWithHolder
@@ -13,17 +12,14 @@ import com.kainalu.readerforreddit.util.KotlinEpoxyHolder
 import com.kainalu.readerforreddit.util.getFormattedString
 import com.kainalu.readerforreddit.util.getPostTime
 
-abstract class BaseLinkModel<T : BaseHolder> : EpoxyModelWithHolder<T>() {
+abstract class BaseSubmissionModel<T : BaseHolder> : EpoxyModelWithHolder<T>() {
 
     @EpoxyAttribute
     lateinit var link: Link
-    @EpoxyAttribute
-    lateinit var onClick: View.OnClickListener
 
     override fun bind(holder: T) {
         super.bind(holder)
         with(link) {
-            holder.container.setOnClickListener(onClick)
             with(holder.titleTextView) {
                 text = link.getFormattedTitle(context)
             }

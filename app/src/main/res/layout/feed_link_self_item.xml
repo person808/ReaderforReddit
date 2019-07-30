@@ -2,6 +2,7 @@
 <com.google.android.material.card.MaterialCardView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/linkContainer"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:orientation="vertical"
@@ -15,38 +16,29 @@
         android:layout_height="wrap_content">
 
         <TextView
-            android:id="@+id/subredditTextView"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="@dimen/card_margin"
-            android:layout_marginTop="@dimen/card_margin"
-            android:textAppearance="@style/TextAppearance.MaterialComponents.Subtitle2"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            tools:text="r/pics" />
-
-        <TextView
-            android:id="@+id/authorTextView"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:textAppearance="@style/TextAppearance.MaterialComponents.Body2"
-            app:layout_constraintStart_toStartOf="@+id/subredditTextView"
-            app:layout_constraintTop_toBottomOf="@+id/subredditTextView"
-            tools:text="Posted by person808 6 hours ago" />
-
-        <TextView
             android:id="@+id/titleTextView"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginStart="@dimen/card_margin"
             android:layout_marginEnd="@dimen/card_margin"
-            android:layout_marginBottom="@dimen/card_section_margin"
-            android:textAppearance="@style/TextAppearance.MaterialComponents.Headline6"
-            app:layout_constraintBottom_toTopOf="@+id/selfTextView"
+            android:layout_marginTop="@dimen/card_margin"
+            android:textAppearance="@style/LinkTitleTextAppearance"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/authorTextView"
-            tools:text="This is a really long title that just keeps going forever" />
+            app:layout_constraintTop_toTopOf="parent"
+            tools:text="16.2k This is a really long title that just keeps going forever" />
+
+        <TextView
+            android:id="@+id/authorTextView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/card_margin"
+            android:layout_marginBottom="@dimen/card_section_margin"
+            android:textAppearance="@style/TextAppearance.MaterialComponents.Caption"
+            app:layout_constraintBottom_toTopOf="@id/selfTextView"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/titleTextView"
+            tools:text="Posted by person808 6 hours ago" />
 
         <TextView
             android:id="@+id/selfTextView"
@@ -64,16 +56,16 @@
 
 
         <TextView
-            android:id="@+id/scoreTextView"
+            android:id="@+id/subredditTextView"
             android:layout_width="wrap_content"
             android:layout_height="@dimen/feed_details_height"
             android:layout_marginStart="@dimen/card_margin"
+            android:layout_marginTop="@dimen/card_margin"
             android:gravity="center"
-            android:maxLines="1"
-            android:textAppearance="@style/TextAppearance.MaterialComponents.Body2"
+            android:textAppearance="@style/TextAppearance.MaterialComponents.Caption"
             app:layout_constraintBaseline_toBaselineOf="@+id/bulletTextView"
             app:layout_constraintStart_toStartOf="parent"
-            tools:text="2k points" />
+            tools:text="r/pics" />
 
         <TextView
             android:id="@+id/bulletTextView"
@@ -83,8 +75,9 @@
             android:layout_marginStart="@dimen/small_item_margin"
             android:layout_marginBottom="@dimen/small_item_margin"
             android:gravity="center"
+            android:textAppearance="@style/TextAppearance.MaterialComponents.Caption"
             app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintStart_toEndOf="@+id/scoreTextView" />
+            app:layout_constraintStart_toEndOf="@+id/subredditTextView"/>
 
         <TextView
             android:id="@+id/commentTextView"
@@ -93,7 +86,7 @@
             android:layout_marginStart="@dimen/small_item_margin"
             android:gravity="center"
             android:maxLines="1"
-            android:textAppearance="@style/TextAppearance.MaterialComponents.Body2"
+            android:textAppearance="@style/TextAppearance.MaterialComponents.Caption"
             app:layout_constraintBaseline_toBaselineOf="@id/bulletTextView"
             app:layout_constraintStart_toEndOf="@+id/bulletTextView"
             tools:text="20 comments" />

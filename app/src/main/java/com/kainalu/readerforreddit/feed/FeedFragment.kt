@@ -8,17 +8,19 @@ import android.view.ViewGroup
 import androidx.appcompat.widget.PopupMenu
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
+import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.DividerItemDecoration
 import com.kainalu.readerforreddit.R
 import com.kainalu.readerforreddit.di.Injector
+import com.kainalu.readerforreddit.network.models.Link
 import kotlinx.android.synthetic.main.fragment_feed.*
 import javax.inject.Inject
 
-class FeedFragment : Fragment() {
+class FeedFragment : Fragment(), LinkController.LinkClickListener {
 
     private val headerClickListener = View.OnClickListener { v ->
         PopupMenu(requireContext(), v).run {
-            menuInflater.inflate(R.menu.sort, menu)
+            menuInflater.inflate(R.menu.subreddit_sort, menu)
             if (viewModel.viewState.value?.availableSorts?.contains(SubredditSort.BEST) == false) {
                 menu.removeItem(R.id.best)
             }
@@ -83,7 +85,7 @@ class FeedFragment : Fragment() {
             show()
         }
     }
-    private val controller = LinkController(headerClickListener)
+    private val controller = LinkController(headerClickListener, this)
 
     @Inject
     lateinit var viewModel: FeedViewModel
@@ -91,6 +93,7 @@ class FeedFragment : Fragment() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         Injector.get().inject(this)
+        viewModel.init()
     }
 
     override fun onCreateView(
@@ -107,7 +110,6 @@ class FeedFragment : Fragment() {
             addItemDecoration(DividerItemDecoration(context, DividerItemDecoration.VERTICAL))
         }
         swipeRefreshLayout.setOnRefreshListener { viewModel.refresh() }
-        viewModel.init()
         viewModel.feed.observe(viewLifecycleOwner, Observer { controller.submitList(it) })
         viewModel.viewState.observe(viewLifecycleOwner, Observer { render(it) })
     }
@@ -121,5 +123,10 @@ class FeedFragment : Fragment() {
         controller.headerLabel = headerLabel
 
         swipeRefreshLayout.isRefreshing = viewState.loading
+    }
+
+    override fun onLinkClicked(link: Link) {
+        val action = FeedFragmentDirections.actionFeedFragmentToSubmissionFragment(link.subreddit, link.id)
+        findNavController().navigate(action)
     }
 }

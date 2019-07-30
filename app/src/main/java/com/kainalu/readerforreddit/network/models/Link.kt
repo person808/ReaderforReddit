@@ -1,6 +1,13 @@
 package com.kainalu.readerforreddit.network.models
 
+import android.content.Context
+import android.text.Spannable
+import android.text.SpannableString
+import android.text.Spanned
+import android.text.style.TextAppearanceSpan
 import androidx.recyclerview.widget.DiffUtil
+import com.kainalu.readerforreddit.R
+import com.kainalu.readerforreddit.util.getFormattedString
 import com.squareup.moshi.Json
 import com.squareup.moshi.JsonClass
 import org.threeten.bp.LocalDateTime
@@ -17,7 +24,7 @@ data class Link(
     override val ups: Int,
     override val downs: Int,
     override val liked: Boolean?,
-    val score: Int?,
+    val score: Int,
     val thumbnail: String,
     val edited: EditInfo,
     val author: String,
@@ -30,7 +37,7 @@ data class Link(
     val selftext: String,
     val domain: String?,
     val url: String
-) : Votable, Created {
+) : Votable, Created, SubmissionItem {
     companion object {
         val DIFF_CALLBACK = object : DiffUtil.ItemCallback<Link>() {
             override fun areItemsTheSame(oldItem: Link, newItem: Link): Boolean {
@@ -42,4 +49,11 @@ data class Link(
             }
         }
     }
+}
+
+fun Link.getFormattedTitle(context: Context): Spanned {
+    val span = SpannableString("${score.getFormattedString()} $title")
+    val firstSpaceIndex = span.indexOfFirst { it == ' ' }
+    span.setSpan(TextAppearanceSpan(context, R.style.LinkScoreTextAppearance), 0, firstSpaceIndex, Spannable.SPAN_INCLUSIVE_EXCLUSIVE)
+    return span
 }
