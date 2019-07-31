@@ -16,7 +16,7 @@ class SubmissionRepository @Inject constructor(private val apiService: ApiServic
         threadId: String,
         sort: SubmissionSort
     ): Resource<List<SubmissionItem>> {
-        val response = apiService.getSubmission(subreddit, threadId, sort.name.toLowerCase())
+        val response = apiService.getSubmission(subreddit, threadId, sort.urlString)
         return if (response.isSuccessful) {
             // There should be two listings, the first contains the submission link, the second has comments
             val data = mutableListOf<SubmissionItem>()
