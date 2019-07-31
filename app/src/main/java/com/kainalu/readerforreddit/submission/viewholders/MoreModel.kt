@@ -1,8 +1,8 @@
 package com.kainalu.readerforreddit.submission.viewholders
 
 import android.view.View
-import android.widget.LinearLayout
 import android.widget.TextView
+import androidx.constraintlayout.widget.ConstraintLayout
 import com.airbnb.epoxy.EpoxyAttribute
 import com.airbnb.epoxy.EpoxyModelClass
 import com.airbnb.epoxy.EpoxyModelWithHolder
@@ -30,6 +30,6 @@ abstract class MoreModel : EpoxyModelWithHolder<MoreHolder>() {
 }
 
 class MoreHolder : KotlinEpoxyHolder() {
-    val container by bind<LinearLayout>(R.id.viewMoreContainer)
+    val container by bind<ConstraintLayout>(R.id.viewMoreContainer)
     val textView by bind<TextView>(R.id.viewMoreTextView)
 }
