@@ -1,10 +1,12 @@
 package com.kainalu.readerforreddit.submission
 
+import android.net.Uri
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.appcompat.widget.PopupMenu
+import androidx.browser.customtabs.CustomTabsIntent
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.navigation.fragment.navArgs
@@ -12,10 +14,11 @@ import androidx.recyclerview.widget.DividerItemDecoration
 import com.kainalu.readerforreddit.R
 import com.kainalu.readerforreddit.di.Injector
 import com.kainalu.readerforreddit.network.models.Comment
+import com.kainalu.readerforreddit.network.models.Link
 import kotlinx.android.synthetic.main.fragment_submission.*
 import javax.inject.Inject
 
-class SubmissionFragment : Fragment(), SubmissionController.CommentClickListener {
+class SubmissionFragment : Fragment(), SubmissionController.CommentClickListener, SubmissionController.LinkClickListener {
 
     private val args by navArgs<SubmissionFragmentArgs>()
 
@@ -57,7 +60,7 @@ class SubmissionFragment : Fragment(), SubmissionController.CommentClickListener
             show()
         }
     }
-    private val controller = SubmissionController(this, headerClickListener)
+    private val controller = SubmissionController(this, headerClickListener, this)
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -84,6 +87,11 @@ class SubmissionFragment : Fragment(), SubmissionController.CommentClickListener
         } else {
             viewModel.collapseComment(comment)
         }
+    }
+
+    override fun onLinkClicked(link: Link) {
+        val intent = CustomTabsIntent.Builder().build()
+        intent.launchUrl(requireContext(), Uri.parse(link.url))
     }
 
     private fun render(viewState: SubmissionViewState) {

@@ -24,4 +24,9 @@
     <style name="LinkTitleTextAppearance" parent="TextAppearance.MaterialComponents.Body1">
         <item name="android:textSize">@dimen/link_title_text_size</item>
     </style>
+
+    <style name="ShapeAppearanceOverlay.AppTheme.MaterialCardView.Rounded" parent="">
+        <item name="cornerFamily">rounded</item>
+    </style>
+
 </resources>

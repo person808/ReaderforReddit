@@ -11,11 +11,16 @@ import com.kainalu.readerforreddit.ui.sortHeader
 
 class SubmissionController(
     private val commentClickListener: CommentClickListener,
-    private val sortClickListener: View.OnClickListener
+    private val sortClickListener: View.OnClickListener,
+    private val linkClickListener: LinkClickListener
 ) : Typed3EpoxyController<Link, List<SubmissionItem>, SubmissionSort>() {
 
     interface CommentClickListener {
         fun onCommentClicked(comment: Comment)
+    }
+
+    interface LinkClickListener {
+        fun onLinkClicked(link: Link)
     }
 
     override fun buildModels(link: Link?, comments: List<SubmissionItem>?, sort: SubmissionSort?) {
@@ -27,6 +32,7 @@ class SubmissionController(
                 }
                 "link" -> webSubmission {
                     link(it)
+                    onLinkClick { _ -> linkClickListener.onLinkClicked(it) }
                     id(it.id)
                 }
                 "self" -> selfSubmission {
