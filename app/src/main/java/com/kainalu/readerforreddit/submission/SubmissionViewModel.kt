@@ -6,6 +6,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.kainalu.readerforreddit.network.models.Comment
 import com.kainalu.readerforreddit.network.models.HideableSubmissionItem
+import com.kainalu.readerforreddit.network.models.Link
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
@@ -26,11 +27,13 @@ class SubmissionViewModel @Inject constructor(
     private fun loadSubmission(subreddit: String, threadId: String, sort: SubmissionSort) {
         _viewState.value = currentViewState.copy(sort = sort)
         viewModelScope.launch {
+            val submission = submissionRepository.getSubmission(subreddit, threadId, sort).data!!
             _viewState.postValue(
                 currentViewState.copy(
                     subreddit = subreddit,
                     threadId = threadId,
-                    submission = submissionRepository.getSubmission(subreddit, threadId, sort).data!!
+                    link = submission.first() as Link,
+                    comments = submission.drop(1)
                 )
             )
         }
@@ -50,7 +53,7 @@ class SubmissionViewModel @Inject constructor(
         comment.replies.children.forEach {
             setItemHiddenRecursive(it, true)
         }
-        _viewState.value = currentViewState.copy(submission = currentViewState.submission)
+        _viewState.value = currentViewState.copy(comments = currentViewState.comments)
     }
 
     fun expandComment(comment: Comment) {
@@ -58,7 +61,7 @@ class SubmissionViewModel @Inject constructor(
         comment.replies.children.forEach {
             setItemHiddenRecursive(it, false)
         }
-        _viewState.value = currentViewState.copy(submission = currentViewState.submission)
+        _viewState.value = currentViewState.copy(comments = currentViewState.comments)
     }
 
     fun setSort(sort: SubmissionSort) {

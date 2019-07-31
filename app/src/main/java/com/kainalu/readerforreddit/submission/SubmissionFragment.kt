@@ -87,6 +87,6 @@ class SubmissionFragment : Fragment(), SubmissionController.CommentClickListener
     }
 
     private fun render(viewState: SubmissionViewState) {
-        controller.setData(viewState.submission, viewState.sort)
+        controller.setData(viewState.link, viewState.comments, viewState.sort)
     }
 }
