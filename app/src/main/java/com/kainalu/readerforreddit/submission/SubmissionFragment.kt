@@ -10,7 +10,6 @@ import androidx.browser.customtabs.CustomTabsIntent
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.navigation.fragment.navArgs
-import androidx.recyclerview.widget.DividerItemDecoration
 import com.kainalu.readerforreddit.R
 import com.kainalu.readerforreddit.di.Injector
 import com.kainalu.readerforreddit.network.models.Comment
@@ -76,7 +75,7 @@ class SubmissionFragment : Fragment(), SubmissionController.CommentClickListener
         super.onViewCreated(view, savedInstanceState)
         recyclerView.apply {
             setController(controller)
-            addItemDecoration(DividerItemDecoration(context, DividerItemDecoration.VERTICAL))
+            addItemDecoration(CommentItemDecoration(context))
         }
         viewModel.viewState.observe(viewLifecycleOwner, Observer { render(it) } )
     }
