@@ -46,7 +46,6 @@
             android:layout_marginBottom="@dimen/card_section_margin"
             android:background="?selectableItemBackground"
             android:clickable="true"
-            android:elevation="8dp"
             android:focusable="true"
             android:stateListAnimator="@animator/lift_on_touch"
             app:layout_constraintBottom_toTopOf="@id/bulletTextView"
