@@ -1,13 +1,16 @@
 package com.kainalu.readerforreddit.submission.viewholders
 
+import android.text.TextUtils
 import android.view.View
 import android.widget.TextView
 import androidx.constraintlayout.widget.ConstraintLayout
 import com.airbnb.epoxy.EpoxyAttribute
+import com.airbnb.epoxy.EpoxyModel
 import com.airbnb.epoxy.EpoxyModelClass
 import com.airbnb.epoxy.EpoxyModelWithHolder
 import com.kainalu.readerforreddit.R
 import com.kainalu.readerforreddit.network.models.Comment
+import com.kainalu.readerforreddit.network.models.countChildren
 import com.kainalu.readerforreddit.util.KotlinEpoxyHolder
 import com.kainalu.readerforreddit.util.getFormattedString
 import com.kainalu.readerforreddit.util.getPostTime
@@ -27,17 +30,40 @@ abstract class CommentModel : EpoxyModelWithHolder<CommentHolder>() {
                 setOnClickListener(onClick)
             }
             holder.authorTextView.text = author
-            with(holder.scoreTextView) {
-                text = if (scoreHidden) {
-                    context.getString(R.string.score_hidden)
-                } else {
-                    context.resources.getQuantityString(R.plurals.points, score, score.getFormattedString())
-                }
-            }
             with(holder.timeTextView) {
                 text = createdUtc.getPostTime(context)
             }
             holder.bodyTextView.text = comment.body
+            collapseComment(holder)
+        }
+    }
+
+    override fun bind(holder: CommentHolder, previouslyBoundModel: EpoxyModel<*>) {
+        super.bind(holder, previouslyBoundModel)
+        collapseComment(holder)
+    }
+
+    private fun collapseComment(holder: CommentHolder) {
+        if (comment.collapsed) {
+            holder.bodyTextView.maxLines = 1
+            holder.bodyTextView.ellipsize = TextUtils.TruncateAt.END
+            with(holder.scoreTextView) {
+                text = context.getString(R.string.children_hidden, comment.countChildren())
+            }
+        } else {
+            setScore(holder.scoreTextView)
+            holder.bodyTextView.maxLines = Int.MAX_VALUE
+            holder.bodyTextView.ellipsize = null
+        }
+    }
+
+    private fun setScore(textView: TextView) {
+        with(textView) {
+            text = if (comment.scoreHidden) {
+                context.getString(R.string.score_hidden)
+            } else {
+                context.resources.getQuantityString(R.plurals.points, comment.score, comment.score.getFormattedString())
+            }
         }
     }
 }

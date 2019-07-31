@@ -57,14 +57,8 @@ class SubmissionController(
 
         comments?.forEach {
             when (it) {
-                is Comment -> if (!it.collapsed && !it.hidden) {
+                is Comment -> if (!it.hidden) {
                     comment {
-                        comment(it)
-                        onClick { _ -> commentClickListener.onCommentClicked(it) }
-                        id(it.id)
-                    }
-                } else if (!it.hidden) {
-                    collapsedComment {
                         comment(it)
                         onClick { _ -> commentClickListener.onCommentClicked(it) }
                         id(it.id)
