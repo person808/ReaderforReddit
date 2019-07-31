@@ -23,7 +23,7 @@
 
     <string name="just_now">Just now</string>
     <string name="link_author_subtitle">Posted by %1$s %2$s</string>
-    <string name="score_hidden">Score hidden</string>
+    <string name="score_hidden">[Score hidden]</string>
     <plurals name="comments">
         <item quantity="one">%1$s comment</item>
         <item quantity="other">%1$s comments</item>

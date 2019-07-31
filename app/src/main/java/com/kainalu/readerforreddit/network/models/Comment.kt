@@ -8,7 +8,10 @@ import org.threeten.bp.LocalDateTime
 data class Comment(
     val author: String,
     val id: String,
-    val score: Int?,
+    val score: Int,
+    @Json(name = "score_hidden")
+    val scoreHidden: Boolean,
+    val stickied: Boolean,
     override val ups: Int,
     override val downs: Int,
     override val liked: Boolean?,

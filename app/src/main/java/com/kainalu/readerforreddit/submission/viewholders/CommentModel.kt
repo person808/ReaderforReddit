@@ -28,7 +28,7 @@ abstract class CommentModel : EpoxyModelWithHolder<CommentHolder>() {
             }
             holder.authorTextView.text = author
             with(holder.scoreTextView) {
-                text = if (score == null) {
+                text = if (scoreHidden) {
                     context.getString(R.string.score_hidden)
                 } else {
                     context.resources.getQuantityString(R.plurals.points, score, score.getFormattedString())
