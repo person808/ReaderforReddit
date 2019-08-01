@@ -1,7 +1,7 @@
 package com.kainalu.readerforreddit.network.adapters
 
+import com.kainalu.readerforreddit.network.annotations.RedditModel
 import com.kainalu.readerforreddit.network.models.Listing
-import com.kainalu.readerforreddit.network.models.RedditModel
 import com.squareup.moshi.*
 import java.io.IOException
 import java.lang.reflect.ParameterizedType

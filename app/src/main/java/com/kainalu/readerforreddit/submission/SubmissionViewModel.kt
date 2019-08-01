@@ -7,6 +7,7 @@ import androidx.lifecycle.viewModelScope
 import com.kainalu.readerforreddit.network.models.Comment
 import com.kainalu.readerforreddit.network.models.HideableSubmissionItem
 import com.kainalu.readerforreddit.network.models.Link
+import com.kainalu.readerforreddit.network.models.More
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
@@ -22,6 +23,18 @@ class SubmissionViewModel @Inject constructor(
 
     fun init(subreddit: String, threadId: String) {
         loadSubmission(subreddit, threadId, SubmissionSort.BEST)
+    }
+
+    fun getChildren(more: More) {
+        viewModelScope.launch {
+            val result = submissionRepository.getChildren(
+                currentViewState.link!!,
+                currentViewState.sort!!,
+                more,
+                currentViewState.comments.toMutableList()
+            )
+            _viewState.postValue(currentViewState.copy(comments = result.data!!))
+        }
     }
 
     private fun loadSubmission(subreddit: String, threadId: String, sort: SubmissionSort) {

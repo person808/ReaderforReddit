@@ -1,6 +1,6 @@
 package com.kainalu.readerforreddit.network.adapters
 
-import com.kainalu.readerforreddit.network.models.RedditModel
+import com.kainalu.readerforreddit.network.annotations.RedditModel
 import com.squareup.moshi.*
 import java.lang.reflect.ParameterizedType
 import java.lang.reflect.Type

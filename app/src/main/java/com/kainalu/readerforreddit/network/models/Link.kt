@@ -18,6 +18,7 @@ data class Link(
     @Json(name = "num_comments")
     val numComments: Int?,
     val id: String,
+    val name: String,
     override val created: LocalDateTime,
     @Json(name = "created_utc")
     override val createdUtc: LocalDateTime,

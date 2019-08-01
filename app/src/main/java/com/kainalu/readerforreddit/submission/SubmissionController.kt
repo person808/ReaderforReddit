@@ -12,7 +12,8 @@ import com.kainalu.readerforreddit.ui.sortHeader
 class SubmissionController(
     private val commentClickListener: CommentClickListener,
     private val sortClickListener: View.OnClickListener,
-    private val linkClickListener: LinkClickListener
+    private val linkClickListener: LinkClickListener,
+    private val moreClickListener: MoreClickListener
 ) : Typed3EpoxyController<Link, List<SubmissionItem>, SubmissionSort>() {
 
     interface CommentClickListener {
@@ -21,6 +22,10 @@ class SubmissionController(
 
     interface LinkClickListener {
         fun onLinkClicked(link: Link)
+    }
+
+    interface MoreClickListener {
+        fun onMoreClicked(more: More)
     }
 
     override fun buildModels(link: Link?, comments: List<SubmissionItem>?, sort: SubmissionSort?) {
@@ -67,7 +72,7 @@ class SubmissionController(
                 is More -> if (!it.hidden) {
                     more {
                         data(it)
-                        onClick { _ -> }
+                        onClick { _ -> moreClickListener.onMoreClicked(it) }
                         id(it.id)
                     }
                 }

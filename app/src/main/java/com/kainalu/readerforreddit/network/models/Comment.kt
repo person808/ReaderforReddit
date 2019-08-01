@@ -1,5 +1,6 @@
 package com.kainalu.readerforreddit.network.models
 
+import com.kainalu.readerforreddit.network.annotations.RedditModel
 import com.squareup.moshi.Json
 import com.squareup.moshi.JsonClass
 import org.threeten.bp.LocalDateTime
@@ -8,6 +9,7 @@ import org.threeten.bp.LocalDateTime
 data class Comment(
     val author: String,
     val id: String,
+    val name: String,
     val score: Int,
     @Json(name = "score_hidden")
     val scoreHidden: Boolean,

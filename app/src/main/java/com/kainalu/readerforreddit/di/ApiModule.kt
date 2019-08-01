@@ -75,6 +75,7 @@ object ApiModule {
     @JvmStatic
     fun moshi(): Moshi {
         return Moshi.Builder()
+            .add(LegacyRedditResponseJsonAdapter.FACTORY)
             .add(RedditModelListJsonAdapter.FACTORY)
             .add(
                 RedditJsonAdapterFactory.of("kind", "data")

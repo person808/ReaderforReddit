@@ -14,10 +14,12 @@ import com.kainalu.readerforreddit.R
 import com.kainalu.readerforreddit.di.Injector
 import com.kainalu.readerforreddit.network.models.Comment
 import com.kainalu.readerforreddit.network.models.Link
+import com.kainalu.readerforreddit.network.models.More
 import kotlinx.android.synthetic.main.fragment_submission.*
 import javax.inject.Inject
 
-class SubmissionFragment : Fragment(), SubmissionController.CommentClickListener, SubmissionController.LinkClickListener {
+class SubmissionFragment : Fragment(), SubmissionController.CommentClickListener,
+    SubmissionController.LinkClickListener, SubmissionController.MoreClickListener {
 
     private val args by navArgs<SubmissionFragmentArgs>()
 
@@ -59,7 +61,7 @@ class SubmissionFragment : Fragment(), SubmissionController.CommentClickListener
             show()
         }
     }
-    private val controller = SubmissionController(this, headerClickListener, this)
+    private val controller = SubmissionController(this, headerClickListener, this, this)
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -77,7 +79,7 @@ class SubmissionFragment : Fragment(), SubmissionController.CommentClickListener
             setController(controller)
             addItemDecoration(CommentItemDecoration(context))
         }
-        viewModel.viewState.observe(viewLifecycleOwner, Observer { render(it) } )
+        viewModel.viewState.observe(viewLifecycleOwner, Observer { render(it) })
     }
 
     override fun onCommentClicked(comment: Comment) {
@@ -91,6 +93,10 @@ class SubmissionFragment : Fragment(), SubmissionController.CommentClickListener
     override fun onLinkClicked(link: Link) {
         val intent = CustomTabsIntent.Builder().build()
         intent.launchUrl(requireContext(), Uri.parse(link.url))
+    }
+
+    override fun onMoreClicked(more: More) {
+        viewModel.getChildren(more)
     }
 
     private fun render(viewState: SubmissionViewState) {

@@ -1,5 +1,6 @@
 package com.kainalu.readerforreddit.network.models
 
+import com.kainalu.readerforreddit.network.annotations.RedditModel
 import com.squareup.moshi.JsonClass
 
 @JsonClass(generateAdapter = false)
