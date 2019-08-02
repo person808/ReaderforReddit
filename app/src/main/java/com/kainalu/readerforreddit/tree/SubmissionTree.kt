@@ -5,8 +5,8 @@ import com.kainalu.readerforreddit.network.models.Link
 import com.kainalu.readerforreddit.network.models.More
 import com.kainalu.readerforreddit.network.models.SubmissionItem
 
-class SubmissionTree private constructor(root: AbstractSubmissionNode<*>, comments: List<SubmissionItem>) :
-    AbstractSubmissionTree(root) {
+class SubmissionTree private constructor(root: AbstractNode<*>, comments: List<SubmissionItem>) :
+    AbstractTree(root) {
 
     override var size: Int = 1 // Start at 1 because we always have a root
 
@@ -16,27 +16,27 @@ class SubmissionTree private constructor(root: AbstractSubmissionNode<*>, commen
         }
     }
 
-    override fun addChild(parent: AbstractSubmissionNode<*>, child: AbstractSubmissionNode<*>) {
+    override fun addChild(parent: AbstractNode<*>, child: AbstractNode<*>) {
         assertNotLink(child)
         super.addChild(parent, child)
     }
 
-    override fun <T> addChild(parent: AbstractSubmissionNode<*>, data: T) {
+    override fun <T> addChild(parent: AbstractNode<*>, data: T) {
         assertNotLink(data)
         super.addChild(parent, data)
     }
 
-    override fun addChild(parent: AbstractSubmissionNode<*>, index: Int, child: AbstractSubmissionNode<*>) {
+    override fun addChild(parent: AbstractNode<*>, index: Int, child: AbstractNode<*>) {
         assertNotLink(child)
         super.addChild(parent, index, child)
     }
 
-    override fun <T> addChild(parent: AbstractSubmissionNode<*>, index: Int, data: T) {
+    override fun <T> addChild(parent: AbstractNode<*>, index: Int, data: T) {
         assertNotLink(data)
         super.addChild(parent, index, data)
     }
 
-    private fun attachComments(parent: AbstractSubmissionNode<*>, item: SubmissionItem) {
+    private fun attachComments(parent: AbstractNode<*>, item: SubmissionItem) {
         if (item !is Comment && item !is More) {
             throw IllegalArgumentException("Item must be an instance of `Link` or `More`")
         }
@@ -57,9 +57,9 @@ class SubmissionTree private constructor(root: AbstractSubmissionNode<*>, commen
         }
     }
 
-    class Builder : AbstractSubmissionTree.Builder<SubmissionTree> {
+    class Builder : AbstractTree.Builder<SubmissionTree> {
 
-        private var root: AbstractSubmissionNode<*>? = null
+        private var root: AbstractNode<*>? = null
         private var comments: List<SubmissionItem> = emptyList()
 
         fun setComments(comments: List<SubmissionItem>): Builder {

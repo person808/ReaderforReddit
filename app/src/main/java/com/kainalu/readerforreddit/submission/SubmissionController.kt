@@ -5,7 +5,7 @@ import com.airbnb.epoxy.Typed3EpoxyController
 import com.kainalu.readerforreddit.network.models.Link
 import com.kainalu.readerforreddit.network.models.More
 import com.kainalu.readerforreddit.submission.viewholders.*
-import com.kainalu.readerforreddit.tree.AbstractSubmissionNode
+import com.kainalu.readerforreddit.tree.AbstractNode
 import com.kainalu.readerforreddit.tree.CommentNode
 import com.kainalu.readerforreddit.tree.LinkNode
 import com.kainalu.readerforreddit.tree.MoreNode
@@ -16,7 +16,7 @@ class SubmissionController(
     private val sortClickListener: View.OnClickListener,
     private val linkClickListener: LinkClickListener,
     private val moreClickListener: MoreClickListener
-) : Typed3EpoxyController<LinkNode, List<AbstractSubmissionNode<*>>, SubmissionSort>() {
+) : Typed3EpoxyController<LinkNode, List<AbstractNode<*>>, SubmissionSort>() {
 
     interface CommentClickListener {
         fun onCommentClicked(commentNode: CommentNode)
@@ -30,7 +30,7 @@ class SubmissionController(
         fun onMoreClicked(more: More)
     }
 
-    override fun buildModels(linkNode: LinkNode?, comments: List<AbstractSubmissionNode<*>>?, sort: SubmissionSort?) {
+    override fun buildModels(linkNode: LinkNode?, comments: List<AbstractNode<*>>?, sort: SubmissionSort?) {
         linkNode?.data?.let {
             when (it.postHint) {
                 "image" -> imageSubmission {

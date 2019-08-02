@@ -5,7 +5,7 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.kainalu.readerforreddit.network.models.HideableSubmissionItem
-import com.kainalu.readerforreddit.tree.AbstractSubmissionNode
+import com.kainalu.readerforreddit.tree.AbstractNode
 import com.kainalu.readerforreddit.tree.CommentNode
 import com.kainalu.readerforreddit.tree.LinkNode
 import kotlinx.coroutines.launch
@@ -54,7 +54,7 @@ class SubmissionViewModel @Inject constructor(
         }
     }
 
-    private fun setItemHiddenRecursive(node: AbstractSubmissionNode<*>, hidden: Boolean) {
+    private fun setItemHiddenRecursive(node: AbstractNode<*>, hidden: Boolean) {
         val item = node.data
         if (item is HideableSubmissionItem) {
             item.hidden = hidden

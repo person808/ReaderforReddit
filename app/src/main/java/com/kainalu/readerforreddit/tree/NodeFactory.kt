@@ -6,7 +6,7 @@ import com.kainalu.readerforreddit.network.models.More
 
 object NodeFactory {
 
-    fun <T> create(data: T): AbstractSubmissionNode<*> {
+    fun <T> create(data: T): AbstractNode<*> {
         return when (data) {
             is Link -> LinkNode(link = data)
             is Comment -> CommentNode(comment = data)

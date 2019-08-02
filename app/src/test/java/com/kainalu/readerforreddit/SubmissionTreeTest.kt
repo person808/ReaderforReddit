@@ -1,20 +1,19 @@
 package com.kainalu.readerforreddit
 
-import com.kainalu.readerforreddit.tree.AbstractSubmissionNode
-import com.kainalu.readerforreddit.tree.AbstractSubmissionTree
+import com.kainalu.readerforreddit.tree.AbstractNode
+import com.kainalu.readerforreddit.tree.AbstractTree
 import org.junit.Assert.assertEquals
 import org.junit.Test
 
 class SubmissionTreeTest {
 
-    class AbstractSubmissionNodeImpl : AbstractSubmissionNode<Any?>(null)
+    class AbstractNodeImpl : AbstractNode<Any?>(null)
 
-    class AbstractSubmissionTreeImpl : AbstractSubmissionTree() {
-        override var root: AbstractSubmissionNode<*>? = AbstractSubmissionNodeImpl()
+    class AbstractTreeImpl : AbstractTree(AbstractNodeImpl()) {
         override var size: Int = 1
     }
 
-    private fun newNode() = AbstractSubmissionNodeImpl()
+    private fun newNode() = AbstractNodeImpl()
 
     @Test
     fun testNodeSize() {
@@ -35,10 +34,10 @@ class SubmissionTreeTest {
 
     @Test
     fun testTreeSize_forCorrectness() {
-        val tree = AbstractSubmissionTreeImpl()
-        val root = tree.root!!
+        val tree = AbstractTreeImpl()
+        val root = tree.root
 
-        fun newNodeOfSize7(): AbstractSubmissionNodeImpl = newNode().apply {
+        fun newNodeOfSize7(): AbstractNodeImpl = newNode().apply {
             repeat(2) {
                 addChild(newNode())
             }
@@ -68,8 +67,8 @@ class SubmissionTreeTest {
         //     /|\
         //    c d e
         // output of flattening should be zacdeb
-        val tree = AbstractSubmissionTreeImpl()
-        val z = tree.root!!
+        val tree = AbstractTreeImpl()
+        val z = tree.root
         val a = newNode()
         val b = newNode()
         val c = newNode()

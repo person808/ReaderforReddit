@@ -1,17 +1,17 @@
 package com.kainalu.readerforreddit.tree
 
 /**
- * A node that can contain an arbitrary number of children Do not manipulate nodes
- * directly. Instead use the methods in [AbstractSubmissionTree] to manipulate tree data.
+ * A node that can contain an arbitrary number of ordered children. Do not manipulate nodes
+ * directly. Instead use the methods in [AbstractTree] to manipulate tree data.
  *
- * @see AbstractSubmissionTree
+ * @see AbstractTree
  */
-abstract class AbstractSubmissionNode<T>(val data: T) {
+abstract class AbstractNode<T>(val data: T) {
 
-    private val _children: MutableList<AbstractSubmissionNode<*>> = mutableListOf()
+    private val _children: MutableList<AbstractNode<*>> = mutableListOf()
 
     /** The children of this node */
-    val children: List<AbstractSubmissionNode<*>>
+    val children: List<AbstractNode<*>>
         get() = _children
 
     /**
@@ -20,7 +20,7 @@ abstract class AbstractSubmissionNode<T>(val data: T) {
      * @param node The node to add
      * @see SubmissionTree.addChild
      */
-    open fun addChild(node: AbstractSubmissionNode<*>) {
+    open fun addChild(node: AbstractNode<*>) {
         _children.add(node)
     }
 
@@ -31,7 +31,7 @@ abstract class AbstractSubmissionNode<T>(val data: T) {
      * @param node The node to add
      * @see SubmissionTree.addChild
      */
-    open fun addChild(index: Int, node: AbstractSubmissionNode<*>) {
+    open fun addChild(index: Int, node: AbstractNode<*>) {
         _children.add(index, node)
     }
 
@@ -41,7 +41,7 @@ abstract class AbstractSubmissionNode<T>(val data: T) {
      * @param node The node to remove
      * @see SubmissionTree.removeChild
      */
-    open fun removeChild(node: AbstractSubmissionNode<*>): AbstractSubmissionNode<*> {
+    open fun removeChild(node: AbstractNode<*>): AbstractNode<*> {
         _children.remove(node)
         return node
     }
@@ -52,7 +52,7 @@ abstract class AbstractSubmissionNode<T>(val data: T) {
      * @param index The index of the node to remove in [children]
      * @see SubmissionTree.removeChildAt
      */
-    open fun removeChildAt(index: Int): AbstractSubmissionNode<*> {
+    open fun removeChildAt(index: Int): AbstractNode<*> {
         return _children.removeAt(index)
     }
 
@@ -61,10 +61,10 @@ abstract class AbstractSubmissionNode<T>(val data: T) {
      *
      * @param index The index of the node to replace in [children]
      * @param newNode The new child node to add at [index]
-     * @see AbstractSubmissionTree.replaceChild
-     * @see AbstractSubmissionTree.removeChildAt
+     * @see AbstractTree.replaceChild
+     * @see AbstractTree.removeChildAt
      */
-    open fun replaceChildAt(index: Int, newNode: AbstractSubmissionNode<*>) {
+    open fun replaceChildAt(index: Int, newNode: AbstractNode<*>) {
         removeChildAt(index)
         _children.add(index, newNode)
     }
