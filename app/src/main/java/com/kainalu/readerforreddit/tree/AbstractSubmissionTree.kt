@@ -16,7 +16,6 @@ abstract class AbstractSubmissionTree(var root: AbstractSubmissionNode<*>) {
         parent.addChild(child)
     }
 
-
     /**
      * Creates a node for the given data and adds it to a node's children.
      *
