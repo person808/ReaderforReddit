@@ -25,7 +25,11 @@ class SubmissionRepository @Inject constructor(private val apiService: ApiServic
             }
             val link = body.first().children.first() as Link
             val comments = body.last().children
-            Resource.Success(SubmissionTree(link, comments))
+            val tree = SubmissionTree.Builder()
+                .setComments(comments)
+                .setRoot(link)
+                .build()
+            Resource.Success(tree)
         } else {
             Resource.Error(null, null)
         }

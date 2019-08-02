@@ -1,9 +1,6 @@
 package com.kainalu.readerforreddit.tree
 
-abstract class AbstractSubmissionTree {
-
-    /** The root node of the tree */
-    abstract var root: AbstractSubmissionNode<*>?
+abstract class AbstractSubmissionTree(var root: AbstractSubmissionNode<*>) {
 
     /** The number of nodes in the tree */
     abstract var size: Int
@@ -19,6 +16,19 @@ abstract class AbstractSubmissionTree {
         parent.addChild(child)
     }
 
+
+    /**
+     * Creates a node for the given data and adds it to a node's children.
+     *
+     * @param parent The parent node
+     * @param data The data to be held in the new node.
+     */
+    open fun <T> addChild(parent: AbstractSubmissionNode<*>, data: T) {
+        val child = NodeFactory.create(data)
+        size += child.size()
+        parent.addChild(child)
+    }
+
     /**
      * Add child to parent's children at a given index.
      *
@@ -27,6 +37,19 @@ abstract class AbstractSubmissionTree {
      * @param child The child node to add
      */
     open fun addChild(parent: AbstractSubmissionNode<*>, index: Int, child: AbstractSubmissionNode<*>) {
+        size += child.size()
+        parent.addChild(index, child)
+    }
+
+    /**
+     * Creates a node for the given data and adds it to a node's children at a given index.
+     *
+     * @param parent The parent node
+     * @param index The index of the parents children to insert the child at
+     * @param data The data to be held in the new node.
+     */
+    open fun <T> addChild(parent: AbstractSubmissionNode<*>, index: Int, data: T) {
+        val child = NodeFactory.create(data)
         size += child.size()
         parent.addChild(index, child)
     }
@@ -94,9 +117,7 @@ abstract class AbstractSubmissionTree {
      */
     fun flatten(): List<AbstractSubmissionNode<*>> {
         val output = ArrayList<AbstractSubmissionNode<*>>(size)
-        root?.let {
-            flattenNode(it, output)
-        }
+        flattenNode(root, output)
         return output
     }
 
@@ -105,5 +126,9 @@ abstract class AbstractSubmissionTree {
         node.children.forEach {
             flattenNode(it, output)
         }
+    }
+
+    interface Builder<T : AbstractSubmissionTree> {
+        fun build(): T
     }
 }
