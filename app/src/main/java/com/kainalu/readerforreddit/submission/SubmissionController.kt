@@ -2,11 +2,13 @@ package com.kainalu.readerforreddit.submission
 
 import android.view.View
 import com.airbnb.epoxy.Typed3EpoxyController
-import com.kainalu.readerforreddit.network.models.Comment
 import com.kainalu.readerforreddit.network.models.Link
 import com.kainalu.readerforreddit.network.models.More
-import com.kainalu.readerforreddit.network.models.SubmissionItem
 import com.kainalu.readerforreddit.submission.viewholders.*
+import com.kainalu.readerforreddit.tree.AbstractSubmissionNode
+import com.kainalu.readerforreddit.tree.CommentNode
+import com.kainalu.readerforreddit.tree.LinkNode
+import com.kainalu.readerforreddit.tree.MoreNode
 import com.kainalu.readerforreddit.ui.sortHeader
 
 class SubmissionController(
@@ -14,10 +16,10 @@ class SubmissionController(
     private val sortClickListener: View.OnClickListener,
     private val linkClickListener: LinkClickListener,
     private val moreClickListener: MoreClickListener
-) : Typed3EpoxyController<Link, List<SubmissionItem>, SubmissionSort>() {
+) : Typed3EpoxyController<LinkNode, List<AbstractSubmissionNode<*>>, SubmissionSort>() {
 
     interface CommentClickListener {
-        fun onCommentClicked(comment: Comment)
+        fun onCommentClicked(commentNode: CommentNode)
     }
 
     interface LinkClickListener {
@@ -28,8 +30,8 @@ class SubmissionController(
         fun onMoreClicked(more: More)
     }
 
-    override fun buildModels(link: Link?, comments: List<SubmissionItem>?, sort: SubmissionSort?) {
-        link?.let {
+    override fun buildModels(linkNode: LinkNode?, comments: List<AbstractSubmissionNode<*>>?, sort: SubmissionSort?) {
+        linkNode?.data?.let {
             when (it.postHint) {
                 "image" -> imageSubmission {
                     link(it)
@@ -52,7 +54,7 @@ class SubmissionController(
         }
 
         // Ensure we don't show the sort header if the link is not loaded yet
-        if (sort != null && link != null) {
+        if (sort != null && linkNode != null) {
             sortHeader {
                 labelRes(sort.label)
                 onClick(sortClickListener)
@@ -62,18 +64,18 @@ class SubmissionController(
 
         comments?.forEach {
             when (it) {
-                is Comment -> if (!it.hidden) {
+                is CommentNode -> if (!it.data.hidden) {
                     comment {
                         comment(it)
                         onClick { _ -> commentClickListener.onCommentClicked(it) }
-                        id(it.id)
+                        id(it.data.id)
                     }
                 }
-                is More -> if (!it.hidden) {
+                is MoreNode -> if (!it.data.hidden) {
                     more {
-                        data(it)
-                        onClick { _ -> moreClickListener.onMoreClicked(it) }
-                        id(it.id)
+                        data(it.data)
+                        onClick { _ -> moreClickListener.onMoreClicked(it.data) }
+                        id(it.data.id)
                     }
                 }
             }

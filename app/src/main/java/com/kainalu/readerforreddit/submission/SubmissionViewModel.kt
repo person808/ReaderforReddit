@@ -4,10 +4,10 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.kainalu.readerforreddit.network.models.Comment
 import com.kainalu.readerforreddit.network.models.HideableSubmissionItem
-import com.kainalu.readerforreddit.network.models.Link
-import com.kainalu.readerforreddit.network.models.More
+import com.kainalu.readerforreddit.tree.AbstractSubmissionNode
+import com.kainalu.readerforreddit.tree.CommentNode
+import com.kainalu.readerforreddit.tree.LinkNode
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
@@ -24,7 +24,7 @@ class SubmissionViewModel @Inject constructor(
     fun init(subreddit: String, threadId: String) {
         loadSubmission(subreddit, threadId, SubmissionSort.BEST)
     }
-
+/*
     fun getChildren(more: More) {
         viewModelScope.launch {
             val result = submissionRepository.getChildren(
@@ -35,43 +35,46 @@ class SubmissionViewModel @Inject constructor(
             )
             _viewState.postValue(currentViewState.copy(comments = result.data!!))
         }
-    }
+    }*/
 
     private fun loadSubmission(subreddit: String, threadId: String, sort: SubmissionSort) {
         _viewState.value = currentViewState.copy(sort = sort)
         viewModelScope.launch {
-            val submission = submissionRepository.getSubmission(subreddit, threadId, sort).data!!
+            val tree = submissionRepository.getSubmission(subreddit, threadId, sort).data!!
+            val (link, comments) = tree.flatten().partition { it is LinkNode }
             _viewState.postValue(
                 currentViewState.copy(
                     subreddit = subreddit,
                     threadId = threadId,
-                    link = submission.first() as Link,
-                    comments = submission.drop(1)
+                    submissionTree = tree,
+                    link = link.first() as LinkNode,
+                    comments = comments
                 )
             )
         }
     }
 
-    private fun setItemHiddenRecursive(root: HideableSubmissionItem, hidden: Boolean) {
-        root.hidden = hidden
-        if (root is Comment) {
-            root.replies.children.forEach {
-                setItemHiddenRecursive(it, hidden)
-            }
+    private fun setItemHiddenRecursive(node: AbstractSubmissionNode<*>, hidden: Boolean) {
+        val item = node.data
+        if (item is HideableSubmissionItem) {
+            item.hidden = hidden
+        }
+        node.children.forEach {
+            setItemHiddenRecursive(it, hidden)
         }
     }
 
-    fun collapseComment(comment: Comment) {
-        comment.collapsed = true
-        comment.replies.children.forEach {
+    fun collapseComment(commentNode: CommentNode) {
+        commentNode.data.collapsed = true
+        commentNode.children.forEach {
             setItemHiddenRecursive(it, true)
         }
         _viewState.value = currentViewState.copy(comments = currentViewState.comments)
     }
 
-    fun expandComment(comment: Comment) {
-        comment.collapsed = false
-        comment.replies.children.forEach {
+    fun expandComment(commentNode: CommentNode) {
+        commentNode.data.collapsed = false
+        commentNode.children.forEach {
             setItemHiddenRecursive(it, false)
         }
         _viewState.value = currentViewState.copy(comments = currentViewState.comments)

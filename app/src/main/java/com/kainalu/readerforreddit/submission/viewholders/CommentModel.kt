@@ -9,8 +9,7 @@ import com.airbnb.epoxy.EpoxyModel
 import com.airbnb.epoxy.EpoxyModelClass
 import com.airbnb.epoxy.EpoxyModelWithHolder
 import com.kainalu.readerforreddit.R
-import com.kainalu.readerforreddit.network.models.Comment
-import com.kainalu.readerforreddit.network.models.countChildren
+import com.kainalu.readerforreddit.tree.CommentNode
 import com.kainalu.readerforreddit.util.KotlinEpoxyHolder
 import com.kainalu.readerforreddit.util.getFormattedString
 import com.kainalu.readerforreddit.util.getPostTime
@@ -18,12 +17,12 @@ import com.kainalu.readerforreddit.util.getPostTime
 @EpoxyModelClass(layout = R.layout.comment)
 abstract class CommentModel : EpoxyModelWithHolder<CommentHolder>() {
 
-    @EpoxyAttribute lateinit var comment: Comment
+    @EpoxyAttribute lateinit var comment: CommentNode
     @EpoxyAttribute lateinit var onClick: View.OnClickListener
 
     override fun bind(holder: CommentHolder) {
         super.bind(holder)
-        with(comment) {
+        with(comment.data) {
             with(holder.container) {
                 val indicatorWidth = context.resources.getDimensionPixelSize(R.dimen.comment_depth_indicator)
                 setPaddingRelative(indicatorWidth * (depth - 1), 0, 0, 0)
@@ -33,7 +32,7 @@ abstract class CommentModel : EpoxyModelWithHolder<CommentHolder>() {
             with(holder.timeTextView) {
                 text = createdUtc.getPostTime(context)
             }
-            holder.bodyTextView.text = comment.body
+            holder.bodyTextView.text = body
             collapseComment(holder)
         }
     }
@@ -44,7 +43,7 @@ abstract class CommentModel : EpoxyModelWithHolder<CommentHolder>() {
     }
 
     private fun collapseComment(holder: CommentHolder) {
-        if (comment.collapsed) {
+        if (comment.data.collapsed) {
             holder.bodyTextView.maxLines = 1
             holder.bodyTextView.ellipsize = TextUtils.TruncateAt.END
             with(holder.scoreTextView) {
@@ -59,10 +58,12 @@ abstract class CommentModel : EpoxyModelWithHolder<CommentHolder>() {
 
     private fun setScore(textView: TextView) {
         with(textView) {
-            text = if (comment.scoreHidden) {
-                context.getString(R.string.score_hidden)
-            } else {
-                context.resources.getQuantityString(R.plurals.points, comment.score, comment.score.getFormattedString())
+            with(comment.data) {
+                text = if (comment.data.scoreHidden) {
+                    context.getString(R.string.score_hidden)
+                } else {
+                    context.resources.getQuantityString(R.plurals.points, score, score.getFormattedString())
+                }
             }
         }
     }

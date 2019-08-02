@@ -12,9 +12,9 @@ import androidx.lifecycle.Observer
 import androidx.navigation.fragment.navArgs
 import com.kainalu.readerforreddit.R
 import com.kainalu.readerforreddit.di.Injector
-import com.kainalu.readerforreddit.network.models.Comment
 import com.kainalu.readerforreddit.network.models.Link
 import com.kainalu.readerforreddit.network.models.More
+import com.kainalu.readerforreddit.tree.CommentNode
 import kotlinx.android.synthetic.main.fragment_submission.*
 import javax.inject.Inject
 
@@ -82,11 +82,11 @@ class SubmissionFragment : Fragment(), SubmissionController.CommentClickListener
         viewModel.viewState.observe(viewLifecycleOwner, Observer { render(it) })
     }
 
-    override fun onCommentClicked(comment: Comment) {
-        if (comment.collapsed) {
-            viewModel.expandComment(comment)
+    override fun onCommentClicked(commentNode: CommentNode) {
+        if (commentNode.data.collapsed) {
+            viewModel.expandComment(commentNode)
         } else {
-            viewModel.collapseComment(comment)
+            viewModel.collapseComment(commentNode)
         }
     }
 
@@ -96,7 +96,7 @@ class SubmissionFragment : Fragment(), SubmissionController.CommentClickListener
     }
 
     override fun onMoreClicked(more: More) {
-        viewModel.getChildren(more)
+        //viewModel.getChildren(more)
     }
 
     private fun render(viewState: SubmissionViewState) {
