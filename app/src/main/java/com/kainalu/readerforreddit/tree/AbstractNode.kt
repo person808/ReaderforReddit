@@ -1,8 +1,9 @@
 package com.kainalu.readerforreddit.tree
 
 /**
- * A node that can contain an arbitrary number of ordered children. Do not manipulate nodes
- * directly. Instead use the methods in [AbstractTree] to manipulate tree data.
+ * A node that can contain an arbitrary number of ordered children.
+ * It is preferred to use the methods in [AbstractTree] to manipulate tree data
+ * instead of directly manipulating the nodes using the methods in this class.
  *
  * @see AbstractTree
  */
