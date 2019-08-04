@@ -6,7 +6,8 @@ package com.kainalu.readerforreddit.tree
 abstract class AbstractTree(var root: AbstractNode) {
 
     /** The number of nodes in the tree */
-    abstract var size: Int
+    val size: Int
+        get() = root.size()
 
     /**
      * Add child to parent's children.
@@ -15,7 +16,6 @@ abstract class AbstractTree(var root: AbstractNode) {
      * @param child The child node to add
      */
     open fun addChild(parent: AbstractNode, child: AbstractNode) {
-        size += child.size()
         parent.addChild(child)
         setNodeDepth(child, parent.depth + 1)
     }
@@ -28,7 +28,6 @@ abstract class AbstractTree(var root: AbstractNode) {
      */
     open fun <T> addChild(parent: AbstractNode, data: T) {
         val child = NodeFactory.create(data)
-        size += child.size()
         parent.addChild(child)
         setNodeDepth(child, parent.depth + 1)
     }
@@ -41,7 +40,6 @@ abstract class AbstractTree(var root: AbstractNode) {
      * @param child The child node to add
      */
     open fun addChild(parent: AbstractNode, index: Int, child: AbstractNode) {
-        size += child.size()
         parent.addChild(index, child)
         setNodeDepth(child, parent.depth + 1)
     }
@@ -55,7 +53,6 @@ abstract class AbstractTree(var root: AbstractNode) {
      */
     open fun <T> addChild(parent: AbstractNode, index: Int, data: T) {
         val child = NodeFactory.create(data)
-        size += child.size()
         parent.addChild(index, child)
         setNodeDepth(child, parent.depth + 1)
     }
@@ -68,7 +65,6 @@ abstract class AbstractTree(var root: AbstractNode) {
      * @return The removed node
      */
     fun removeChild(parent: AbstractNode, child: AbstractNode): AbstractNode {
-        size -= child.size()
         return parent.removeChild(child)
     }
 
@@ -81,7 +77,6 @@ abstract class AbstractTree(var root: AbstractNode) {
      */
     fun removeChildAt(parent: AbstractNode, index: Int): AbstractNode {
         val child = parent.removeChildAt(index)
-        size -= child.size()
         return child
     }
 
@@ -118,7 +113,7 @@ abstract class AbstractTree(var root: AbstractNode) {
         var index = parent.children.indexOf(oldChild)
         removeChild(parent, oldChild)
         newChildren.forEach {
-           addChild(parent, index++, it)
+            addChild(parent, index++, it)
         }
     }
 
@@ -132,7 +127,6 @@ abstract class AbstractTree(var root: AbstractNode) {
      */
     fun replaceChildAt(parent: AbstractNode, index: Int, newChild: AbstractNode) {
         val oldChild = parent.removeChildAt(index)
-        size = size - oldChild.size() + newChild.size()
         parent.addChild(index, newChild)
         setNodeDepth(newChild, parent.depth + 1)
     }

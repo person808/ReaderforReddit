@@ -8,8 +8,6 @@ import com.kainalu.readerforreddit.network.models.SubmissionItem
 class SubmissionTree private constructor(root: AbstractNode, comments: List<SubmissionItem>) :
     AbstractTree(root) {
 
-    override var size: Int = 1 // Start at 1 because we always have a root
-
     init {
         root.depth = 0
         comments.forEach { item ->

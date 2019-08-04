@@ -9,11 +9,8 @@ class SubmissionTreeTest {
 
     class AbstractNodeImpl : AbstractNode()
 
-    class AbstractTreeImpl : AbstractTree(AbstractNodeImpl()) {
-        override var size: Int = 1
-    }
+    class AbstractTreeImpl : AbstractTree(AbstractNodeImpl())
 
-    // We aren't testing depth so just use 0
     private fun newNode() = AbstractNodeImpl()
 
     @Test
