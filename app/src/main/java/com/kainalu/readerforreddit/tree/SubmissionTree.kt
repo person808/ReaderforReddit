@@ -11,6 +11,7 @@ class SubmissionTree private constructor(root: AbstractNode, comments: List<Subm
     override var size: Int = 1 // Start at 1 because we always have a root
 
     init {
+        root.depth = 0
         comments.forEach { item ->
             attachComments(root, item)
         }
@@ -41,7 +42,7 @@ class SubmissionTree private constructor(root: AbstractNode, comments: List<Subm
             throw IllegalArgumentException("Item must be an instance of `Link` or `More`")
         }
 
-        val node = NodeFactory.create(item, parent.depth + 1)
+        val node = NodeFactory.create(item)
         addChild(parent, node)
 
         if (item is Comment) {
@@ -68,7 +69,7 @@ class SubmissionTree private constructor(root: AbstractNode, comments: List<Subm
         }
 
         fun setRoot(link: LinkData): Builder {
-            root = LinkNode(link, depth = 0)
+            root = LinkNode(link)
             return this
         }
 

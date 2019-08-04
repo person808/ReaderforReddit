@@ -1,4 +1,4 @@
 package com.kainalu.readerforreddit.network.models
 
-interface SubmissionItem
+interface SubmissionItem : Thing
 

@@ -17,16 +17,16 @@ data class Link(
     override val created: LocalDateTime,
     @Json(name = "created_utc")
     override val createdUtc: LocalDateTime,
+    override val id: String,
+    override val name: String,
     override val downs: Int,
     override val ups: Int,
     override val liked: Boolean?,
     val author: String,
     val domain: String?,
     val edited: EditInfo,
-    val id: String,
     @Json(name = "is_self")
     val isSelfPost: Boolean?,
-    val name: String,
     @Json(name = "num_comments")
     val numComments: Int?,
     @Json(name = "post_hint")

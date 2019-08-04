@@ -10,6 +10,8 @@ data class Comment(
     override val created: LocalDateTime,
     @Json(name = "created_utc")
     override val createdUtc: LocalDateTime,
+    override val id: String,
+    override val name: String,
     override val downs: Int,
     override val ups: Int,
     override val liked: Boolean?,
@@ -18,8 +20,8 @@ data class Comment(
     val collapsed: Boolean,
     val depth: Int,
     val edited: EditInfo,
-    val id: String,
-    val name: String,
+    @Json(name = "parent_id")
+    val parentId: String,
     val score: Int,
     @Json(name = "score_hidden")
     val scoreHidden: Boolean,

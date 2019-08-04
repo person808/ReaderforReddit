@@ -17,6 +17,7 @@ abstract class AbstractTree(var root: AbstractNode) {
     open fun addChild(parent: AbstractNode, child: AbstractNode) {
         size += child.size()
         parent.addChild(child)
+        setNodeDepth(child, parent.depth + 1)
     }
 
     /**
@@ -26,9 +27,10 @@ abstract class AbstractTree(var root: AbstractNode) {
      * @param data The data to be held in the new node.
      */
     open fun <T> addChild(parent: AbstractNode, data: T) {
-        val child = NodeFactory.create(data, parent.depth + 1)
+        val child = NodeFactory.create(data)
         size += child.size()
         parent.addChild(child)
+        setNodeDepth(child, parent.depth + 1)
     }
 
     /**
@@ -41,6 +43,7 @@ abstract class AbstractTree(var root: AbstractNode) {
     open fun addChild(parent: AbstractNode, index: Int, child: AbstractNode) {
         size += child.size()
         parent.addChild(index, child)
+        setNodeDepth(child, parent.depth + 1)
     }
 
     /**
@@ -51,9 +54,10 @@ abstract class AbstractTree(var root: AbstractNode) {
      * @param data The data to be held in the new node.
      */
     open fun <T> addChild(parent: AbstractNode, index: Int, data: T) {
-        val child = NodeFactory.create(data, parent.depth + 1)
+        val child = NodeFactory.create(data)
         size += child.size()
         parent.addChild(index, child)
+        setNodeDepth(child, parent.depth + 1)
     }
 
     /**
@@ -99,6 +103,26 @@ abstract class AbstractTree(var root: AbstractNode) {
     }
 
     /**
+     * Removes a child node from a node's children and adds new children nodes starting
+     * at the same index of the removed child node
+     *
+     * @param parent The parent node
+     * @param oldChild The child node to remove
+     * @param newChildren A list of new children nodes to add
+     */
+    fun replaceChild(
+        parent: AbstractNode,
+        oldChild: AbstractNode,
+        newChildren: List<AbstractNode>
+    ) {
+        var index = parent.children.indexOf(oldChild)
+        removeChild(parent, oldChild)
+        newChildren.forEach {
+           addChild(parent, index++, it)
+        }
+    }
+
+    /**
      * Removes a child node at a given index from a node's children and adds a new child node
      * at that index
      *
@@ -110,6 +134,14 @@ abstract class AbstractTree(var root: AbstractNode) {
         val oldChild = parent.removeChildAt(index)
         size = size - oldChild.size() + newChild.size()
         parent.addChild(index, newChild)
+        setNodeDepth(newChild, parent.depth + 1)
+    }
+
+    private fun setNodeDepth(node: AbstractNode, depth: Int) {
+        node.depth = depth
+        node.children.forEach {
+            setNodeDepth(it, depth + 1)
+        }
     }
 
     /**

@@ -2,7 +2,7 @@ package com.kainalu.readerforreddit.tree
 
 import com.kainalu.readerforreddit.network.models.Comment
 
-class CommentNode(comment: Comment, depth: Int) : AbstractNode(depth), HideableItem {
+class CommentNode(comment: Comment) : AbstractNode(), HideableItem, NestedItem {
 
     override var visibility: VisibilityState = if (comment.collapsed) {
         VisibilityState.COLLAPSED
@@ -10,6 +10,7 @@ class CommentNode(comment: Comment, depth: Int) : AbstractNode(depth), HideableI
         VisibilityState.VISIBLE
     }
 
+    override val parentId = comment.parentId
     val author = comment.author
     val body = comment.body
     val createdUtc = comment.createdUtc

@@ -7,13 +7,19 @@ package com.kainalu.readerforreddit.tree
  *
  * @see AbstractTree
  */
-abstract class AbstractNode(val depth: Int) {
+abstract class AbstractNode {
 
     private val _children: MutableList<AbstractNode> = mutableListOf()
 
     /** The children of this node */
     val children: List<AbstractNode>
         get() = _children
+
+    /** The depth of a node in a tree. -1 if the node is not attached to a tree */
+    var depth = -1
+
+    /** The immediate parent of this node */
+    var parent: AbstractNode? = null
 
     /**
      * Adds a child node to this node.
@@ -23,6 +29,7 @@ abstract class AbstractNode(val depth: Int) {
      */
     open fun addChild(node: AbstractNode) {
         _children.add(node)
+        node.parent = this
     }
 
     /**
@@ -34,6 +41,7 @@ abstract class AbstractNode(val depth: Int) {
      */
     open fun addChild(index: Int, node: AbstractNode) {
         _children.add(index, node)
+        node.parent = this
     }
 
     /**

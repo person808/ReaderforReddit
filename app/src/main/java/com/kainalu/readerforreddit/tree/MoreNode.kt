@@ -2,15 +2,15 @@ package com.kainalu.readerforreddit.tree
 
 import com.kainalu.readerforreddit.network.models.More
 
-class MoreNode(more: More, depth: Int) : AbstractNode(depth), HideableItem {
+class MoreNode(more: More) : AbstractNode(), HideableItem, NestedItem {
 
     override var visibility: VisibilityState = VisibilityState.VISIBLE
 
-    val childIds = more.children
-    val count = more.count
+    override val parentId = more.parentId
+    val childIds: MutableList<String> = more.children.toMutableList()
+    var count = more.count
     val id = more.id
     val name = more.name
-    val parentId = more.parentId
 
     override fun addChild(node: AbstractNode) {
         throw UnsupportedOperationException("MoreChildrenNodes cannot have children")
@@ -30,6 +30,18 @@ class MoreNode(more: More, depth: Int) : AbstractNode(depth), HideableItem {
 
     override fun replaceChildAt(index: Int, newNode: AbstractNode) {
         throw UnsupportedOperationException("MoreChildrenNodes do not have children")
+    }
+
+    fun merge(newNode: MoreNode): MoreNode {
+        val more = More(
+            id = newNode.id,
+            name = newNode.name,
+            children = childIds + newNode.childIds,
+            count = count + newNode.count,
+            parentId = newNode.parentId,
+            depth = newNode.depth - 2
+        )
+        return MoreNode(more)
     }
 
     override fun equals(other: Any?): Boolean {

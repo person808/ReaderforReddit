@@ -7,16 +7,15 @@ import com.kainalu.readerforreddit.network.models.More
 object NodeFactory {
 
     /**
-     * Creates a new instance of an [AbstractNode] based on the data we want the node to hold.
+     * Creates a new instance of an [AbstractNode] with no parent.
      *
      * @param data The data used to instantiate fields of the node.
-     * @param depth The node's depth in the tree.
      */
-    fun <T> create(data: T, depth: Int): AbstractNode {
+    fun <T> create(data: T): AbstractNode {
         return when (data) {
-            is LinkData -> LinkNode(linkData = data, depth = depth)
-            is Comment -> CommentNode(comment = data, depth = depth)
-            is More -> MoreNode(more = data, depth = depth)
+            is LinkData -> LinkNode(linkData = data)
+            is Comment -> CommentNode(comment = data)
+            is More -> MoreNode(more = data)
             else -> throw IllegalArgumentException("No node registered for this type.")
         }
     }

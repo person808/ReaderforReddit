@@ -24,7 +24,7 @@ abstract class MoreModel : EpoxyModelWithHolder<MoreHolder>() {
             setPaddingRelative(indicatorWidth * (data.depth - 2), 0, 0, 0)
         }
         with(holder.textView) {
-            text = context.resources.getQuantityString(R.plurals.view_more, data.count, data.count)
+            text = context.resources.getQuantityString(R.plurals.view_more, data.childIds.size, data.childIds.size)
         }
     }
 }

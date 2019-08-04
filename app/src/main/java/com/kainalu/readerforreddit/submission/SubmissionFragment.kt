@@ -97,7 +97,7 @@ class SubmissionFragment : Fragment(), SubmissionController.CommentClickListener
     }
 
     override fun onMoreClicked(more: MoreNode) {
-        //viewModel.getChildren(more)
+        viewModel.getChildren(more)
     }
 
     private fun render(viewState: SubmissionViewState) {

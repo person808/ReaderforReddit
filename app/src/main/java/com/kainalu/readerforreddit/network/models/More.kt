@@ -9,11 +9,11 @@ import com.squareup.moshi.JsonClass
  */
 @JsonClass(generateAdapter = true)
 data class More(
+    override val id: String,
+    override val name: String,
     val children: List<String>,
     val count: Int,
     val depth: Int,
-    val id: String,
-    val name: String,
     @Json(name = "parent_id")
     val parentId: String
 ) : SubmissionItem

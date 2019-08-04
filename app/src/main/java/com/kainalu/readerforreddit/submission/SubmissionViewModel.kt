@@ -21,18 +21,20 @@ class SubmissionViewModel @Inject constructor(
     fun init(subreddit: String, threadId: String) {
         loadSubmission(subreddit, threadId, SubmissionSort.BEST)
     }
-/*
-    fun getChildren(more: More) {
+
+    fun getChildren(more: MoreNode) {
         viewModelScope.launch {
-            val result = submissionRepository.getChildren(
+            val result = submissionRepository.loadChildren(
                 currentViewState.link!!,
                 currentViewState.sort!!,
                 more,
-                currentViewState.comments.toMutableList()
+                currentViewState.submissionTree!!
             )
-            _viewState.postValue(currentViewState.copy(comments = result.data!!))
+            _viewState.postValue(currentViewState.copy(
+                comments = currentViewState.submissionTree!!.flatten().drop(1)
+            ))
         }
-    }*/
+    }
 
     private fun loadSubmission(subreddit: String, threadId: String, sort: SubmissionSort) {
         _viewState.value = currentViewState.copy(sort = sort)
