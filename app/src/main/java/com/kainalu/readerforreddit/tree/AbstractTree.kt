@@ -130,7 +130,7 @@ abstract class AbstractTree(var root: AbstractNode) {
      * @param newChild The child node to add
      */
     fun replaceChildAt(parent: AbstractNode, index: Int, newChild: AbstractNode) {
-        val oldChild = parent.removeChildAt(index)
+        parent.removeChildAt(index)
         parent.addChild(index, newChild)
         setNodeDepth(newChild, parent.depth + 1)
     }
