@@ -1,7 +1,6 @@
 package com.kainalu.readerforreddit.submission.viewholders
 
 import android.text.TextUtils
-import android.util.Log
 import android.view.View
 import android.widget.TextView
 import androidx.constraintlayout.widget.ConstraintLayout
@@ -46,17 +45,20 @@ abstract class CommentModel : EpoxyModelWithHolder<CommentHolder>() {
     }
 
     private fun collapseComment(holder: CommentHolder) {
-        Log.d("hi", comment.visibility.name)
         if (comment.visibility == VisibilityState.COLLAPSED) {
             holder.bodyTextView.maxLines = 1
             holder.bodyTextView.ellipsize = TextUtils.TruncateAt.END
             with(holder.scoreTextView) {
                 text = context.getString(R.string.children_hidden, comment.countChildren())
             }
+            holder.scoreTimeSeparator.visibility = View.GONE
+            holder.timeTextView.visibility = View.GONE
         } else if (comment.visibility == VisibilityState.VISIBLE) {
             setScore(holder.scoreTextView)
             holder.bodyTextView.maxLines = Int.MAX_VALUE
             holder.bodyTextView.ellipsize = null
+            holder.scoreTimeSeparator.visibility = View.VISIBLE
+            holder.timeTextView.visibility = View.VISIBLE
         }
     }
 
@@ -77,6 +79,7 @@ class CommentHolder : KotlinEpoxyHolder() {
     val container by bind<ConstraintLayout>(R.id.commentContainer)
     val authorTextView by bind<TextView>(R.id.authorTextView)
     val scoreTextView by bind<TextView>(R.id.scoreTextView)
+    val scoreTimeSeparator by bind<TextView>(R.id.bulletSeparator2)
     val timeTextView by bind<TextView>(R.id.timeTextView)
     val bodyTextView by bind<TextView>(R.id.bodyTextView)
 }
