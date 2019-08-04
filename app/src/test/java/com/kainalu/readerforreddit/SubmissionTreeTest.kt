@@ -7,13 +7,14 @@ import org.junit.Test
 
 class SubmissionTreeTest {
 
-    class AbstractNodeImpl : AbstractNode<Any?>(null)
+    class AbstractNodeImpl(depth: Int) : AbstractNode(depth)
 
-    class AbstractTreeImpl : AbstractTree(AbstractNodeImpl()) {
+    class AbstractTreeImpl : AbstractTree(AbstractNodeImpl(0)) {
         override var size: Int = 1
     }
 
-    private fun newNode() = AbstractNodeImpl()
+    // We aren't testing depth so just use 0
+    private fun newNode() = AbstractNodeImpl(0)
 
     @Test
     fun testNodeSize() {
