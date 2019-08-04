@@ -2,7 +2,13 @@ package com.kainalu.readerforreddit.tree
 
 import com.kainalu.readerforreddit.network.models.Comment
 
-class CommentNode(comment: Comment) : AbstractNode<Comment>(comment) {
+class CommentNode(comment: Comment) : AbstractNode<Comment>(comment), HideableItem {
+
+    override var visibility: VisibilityState = if (comment.collapsed) {
+        VisibilityState.COLLAPSED
+    } else {
+        VisibilityState.VISIBLE
+    }
 
     override fun addChild(node: AbstractNode<*>) {
         checkNodeType(node)

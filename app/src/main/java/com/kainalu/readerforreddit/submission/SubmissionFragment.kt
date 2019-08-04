@@ -15,6 +15,7 @@ import com.kainalu.readerforreddit.di.Injector
 import com.kainalu.readerforreddit.network.models.Link
 import com.kainalu.readerforreddit.network.models.More
 import com.kainalu.readerforreddit.tree.CommentNode
+import com.kainalu.readerforreddit.tree.VisibilityState
 import kotlinx.android.synthetic.main.fragment_submission.*
 import javax.inject.Inject
 
@@ -83,7 +84,7 @@ class SubmissionFragment : Fragment(), SubmissionController.CommentClickListener
     }
 
     override fun onCommentClicked(commentNode: CommentNode) {
-        if (commentNode.data.collapsed) {
+        if (commentNode.visibility != VisibilityState.VISIBLE) {
             viewModel.expandComment(commentNode)
         } else {
             viewModel.collapseComment(commentNode)

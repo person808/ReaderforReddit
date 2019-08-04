@@ -5,10 +5,7 @@ import com.airbnb.epoxy.Typed3EpoxyController
 import com.kainalu.readerforreddit.network.models.Link
 import com.kainalu.readerforreddit.network.models.More
 import com.kainalu.readerforreddit.submission.viewholders.*
-import com.kainalu.readerforreddit.tree.AbstractNode
-import com.kainalu.readerforreddit.tree.CommentNode
-import com.kainalu.readerforreddit.tree.LinkNode
-import com.kainalu.readerforreddit.tree.MoreNode
+import com.kainalu.readerforreddit.tree.*
 import com.kainalu.readerforreddit.ui.sortHeader
 
 class SubmissionController(
@@ -64,14 +61,14 @@ class SubmissionController(
 
         comments?.forEach {
             when (it) {
-                is CommentNode -> if (!it.data.hidden) {
+                is CommentNode -> if (it.visibility == VisibilityState.VISIBLE || it.visibility == VisibilityState.COLLAPSED) {
                     comment {
                         comment(it)
                         onClick { _ -> commentClickListener.onCommentClicked(it) }
                         id(it.data.id)
                     }
                 }
-                is MoreNode -> if (!it.data.hidden) {
+                is MoreNode -> if (it.visibility == VisibilityState.VISIBLE) {
                     more {
                         data(it.data)
                         onClick { _ -> moreClickListener.onMoreClicked(it.data) }

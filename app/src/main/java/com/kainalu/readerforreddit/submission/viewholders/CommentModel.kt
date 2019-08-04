@@ -1,6 +1,7 @@
 package com.kainalu.readerforreddit.submission.viewholders
 
 import android.text.TextUtils
+import android.util.Log
 import android.view.View
 import android.widget.TextView
 import androidx.constraintlayout.widget.ConstraintLayout
@@ -10,6 +11,7 @@ import com.airbnb.epoxy.EpoxyModelClass
 import com.airbnb.epoxy.EpoxyModelWithHolder
 import com.kainalu.readerforreddit.R
 import com.kainalu.readerforreddit.tree.CommentNode
+import com.kainalu.readerforreddit.tree.VisibilityState
 import com.kainalu.readerforreddit.util.KotlinEpoxyHolder
 import com.kainalu.readerforreddit.util.getFormattedString
 import com.kainalu.readerforreddit.util.getPostTime
@@ -43,13 +45,14 @@ abstract class CommentModel : EpoxyModelWithHolder<CommentHolder>() {
     }
 
     private fun collapseComment(holder: CommentHolder) {
-        if (comment.data.collapsed) {
+        Log.d("hi", comment.visibility.name)
+        if (comment.visibility == VisibilityState.COLLAPSED) {
             holder.bodyTextView.maxLines = 1
             holder.bodyTextView.ellipsize = TextUtils.TruncateAt.END
             with(holder.scoreTextView) {
                 text = context.getString(R.string.children_hidden, comment.countChildren())
             }
-        } else {
+        } else if (comment.visibility == VisibilityState.VISIBLE) {
             setScore(holder.scoreTextView)
             holder.bodyTextView.maxLines = Int.MAX_VALUE
             holder.bodyTextView.ellipsize = null

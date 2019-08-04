@@ -2,7 +2,6 @@ package com.kainalu.readerforreddit.network
 
 import com.kainalu.readerforreddit.network.annotations.LegacyRedditResponse
 import com.kainalu.readerforreddit.network.annotations.RedditModel
-import com.kainalu.readerforreddit.network.models.HideableSubmissionItem
 import com.kainalu.readerforreddit.network.models.Link
 import com.kainalu.readerforreddit.network.models.Listing
 import com.kainalu.readerforreddit.network.models.SubmissionItem
@@ -46,5 +45,5 @@ interface ApiService {
         @Query("children") children: String,
         @Query("link_id") linkId: String,
         @Query("sort") sort: String
-    ): Response<List<HideableSubmissionItem>>
+    ): Response<List<SubmissionItem>>
 }

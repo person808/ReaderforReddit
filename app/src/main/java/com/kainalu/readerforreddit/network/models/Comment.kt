@@ -23,9 +23,7 @@ data class Comment(
     val body: String,
     val edited: EditInfo,
     @RedditModel
-    val replies: Listing<HideableSubmissionItem>,
+    val replies: Listing<SubmissionItem>,
     val depth: Int,
-    var collapsed: Boolean,
-    @Transient
-    override var hidden: Boolean = false
-) : Votable, Created, HideableSubmissionItem
+    val collapsed: Boolean
+) : Votable, Created, SubmissionItem

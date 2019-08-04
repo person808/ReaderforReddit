@@ -2,7 +2,9 @@ package com.kainalu.readerforreddit.tree
 
 import com.kainalu.readerforreddit.network.models.More
 
-class MoreNode(more: More) : AbstractNode<More>(more) {
+class MoreNode(more: More) : AbstractNode<More>(more), HideableItem {
+
+    override var visibility: VisibilityState = VisibilityState.VISIBLE
 
     override fun addChild(node: AbstractNode<*>) {
         throw UnsupportedOperationException("MoreChildrenNodes cannot have children")

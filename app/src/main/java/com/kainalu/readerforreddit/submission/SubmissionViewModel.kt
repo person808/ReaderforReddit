@@ -4,10 +4,7 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.kainalu.readerforreddit.network.models.HideableSubmissionItem
-import com.kainalu.readerforreddit.tree.AbstractNode
-import com.kainalu.readerforreddit.tree.CommentNode
-import com.kainalu.readerforreddit.tree.LinkNode
+import com.kainalu.readerforreddit.tree.*
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
@@ -54,28 +51,44 @@ class SubmissionViewModel @Inject constructor(
         }
     }
 
-    private fun setItemHiddenRecursive(node: AbstractNode<*>, hidden: Boolean) {
-        val item = node.data
-        if (item is HideableSubmissionItem) {
-            item.hidden = hidden
+    private fun showCommentsRecursive(node: AbstractNode<*>) {
+        if (node is HideableItem) {
+            if (node.visibility == VisibilityState.COLLAPSED_HIDDEN) {
+                node.visibility = VisibilityState.COLLAPSED
+            } else {
+                node.visibility = VisibilityState.VISIBLE
+                node.children.forEach {
+                    showCommentsRecursive(it)
+                }
+            }
+        }
+    }
+
+    private fun hideCommentsRecursive(node: AbstractNode<*>) {
+        if (node is HideableItem) {
+            node.visibility = if (node.visibility == VisibilityState.COLLAPSED) {
+                VisibilityState.COLLAPSED_HIDDEN
+            } else {
+                VisibilityState.HIDDEN
+            }
         }
         node.children.forEach {
-            setItemHiddenRecursive(it, hidden)
+            hideCommentsRecursive(it)
         }
     }
 
     fun collapseComment(commentNode: CommentNode) {
-        commentNode.data.collapsed = true
+        commentNode.visibility = VisibilityState.COLLAPSED
         commentNode.children.forEach {
-            setItemHiddenRecursive(it, true)
+            hideCommentsRecursive(it)
         }
         _viewState.value = currentViewState.copy(comments = currentViewState.comments)
     }
 
     fun expandComment(commentNode: CommentNode) {
-        commentNode.data.collapsed = false
+        commentNode.visibility = VisibilityState.VISIBLE
         commentNode.children.forEach {
-            setItemHiddenRecursive(it, false)
+            showCommentsRecursive(it)
         }
         _viewState.value = currentViewState.copy(comments = currentViewState.comments)
     }
