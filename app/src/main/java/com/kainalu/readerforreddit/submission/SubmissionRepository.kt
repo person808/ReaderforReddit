@@ -61,7 +61,7 @@ class SubmissionRepository @Inject constructor(private val apiService: ApiServic
             // more node, we may not have loaded all its childIds so we need to merge the old
             // more node with the new ones
             var rootMoreNode: MoreNode = moreNode
-            var hasRootMoreNode = false
+            var hasRootMoreNode = moreNode.childIds.size > 0
             rootNodes.forEach {
                 if (it is MoreNode) {
                     hasRootMoreNode = true
