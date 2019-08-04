@@ -17,6 +17,7 @@
         android:id="@+id/top"
         android:title="@string/top">
         <!-- A empty submenu to be added when the menu is inflated -->
+        <!--suppress CheckTagEmptyBody -->
         <menu></menu>
     </item>
 
@@ -24,6 +25,7 @@
         android:id="@+id/controversial"
         android:title="@string/controversial">
         <!-- A empty submenu to be added when the menu is inflated -->
+        <!--suppress CheckTagEmptyBody -->
         <menu></menu>
     </item>
 

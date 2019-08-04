@@ -87,7 +87,7 @@ class SubmissionRepository @Inject constructor(private val apiService: ApiServic
         // We use a node depth of 0 to indicate that a node is a root node.
         val lookup = mutableMapOf<String, AbstractNode>()
         items.forEach { item ->
-            lookup.put(item.name, NodeFactory.create(item))
+            lookup[item.name] = NodeFactory.create(item)
         }
 
         lookup.values.forEach { node ->

@@ -80,8 +80,7 @@ abstract class AbstractTree(var root: AbstractNode) {
      * @return The removed node
      */
     fun removeChildAt(parent: AbstractNode, index: Int): AbstractNode {
-        val child = parent.removeChildAt(index)
-        return child
+        return parent.removeChildAt(index)
     }
 
     /**
