@@ -19,6 +19,9 @@ class SubmissionViewModel @Inject constructor(
         get() = _viewState.value!!
 
     fun init(subreddit: String, threadId: String) {
+        if (currentViewState.submissionTree != null) {
+            return
+        }
         loadSubmission(subreddit, threadId, SubmissionSort.BEST)
     }
 
