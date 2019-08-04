@@ -9,6 +9,10 @@ abstract class AbstractTree(var root: AbstractNode) {
     val size: Int
         get() = root.size()
 
+    init {
+        root.depth = 0
+    }
+
     /**
      * Add child to parent's children.
      *

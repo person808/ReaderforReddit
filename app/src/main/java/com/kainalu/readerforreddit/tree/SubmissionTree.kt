@@ -9,7 +9,6 @@ class SubmissionTree private constructor(root: AbstractNode, comments: List<Subm
     AbstractTree(root) {
 
     init {
-        root.depth = 0
         comments.forEach { item ->
             attachComments(root, item)
         }
