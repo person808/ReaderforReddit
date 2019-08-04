@@ -49,18 +49,16 @@ class SubmissionRepository @Inject constructor(private val apiService: ApiServic
         }
     }
 
-
-    // TODO only allow 1 request at a time per reddit api limitations
     suspend fun loadChildren(
         linkData: LinkData,
         sort: SubmissionSort,
         moreNode: MoreNode,
         submissionTree: SubmissionTree
-    ): LiveData<Resource<out Nothing?>> = liveData {
+    ): LiveData<Resource<SubmissionTree>> = liveData {
         val ids = moreNode.childIds.take(LOAD_CHILDREN_LIMIT)
         moreNode.childIds.removeAll(ids)
 
-        emit(Resource.Loading(null))
+        emit(Resource.Loading<SubmissionTree>(null))
         val response = apiService.getChildren(
             children = TextUtils.join(",", ids),
             linkId = linkData.name,
@@ -70,7 +68,7 @@ class SubmissionRepository @Inject constructor(private val apiService: ApiServic
         if (response.isSuccessful) {
             val body = response.body()
             if (body == null) {
-                emit(Resource.Error(null, null))
+                emit(Resource.Error<SubmissionTree>(null, null))
                 return@liveData
             }
 
@@ -91,9 +89,9 @@ class SubmissionRepository @Inject constructor(private val apiService: ApiServic
                 newNodes.add(rootMoreNode)
             }
             submissionTree.replaceChild(moreNode.parent!!, moreNode, newNodes)
-            emit(Resource.Success(null))
+            emit(Resource.Success(submissionTree))
         } else {
-            emit(Resource.Error(null, null))
+            emit(Resource.Error<SubmissionTree>(null, null))
         }
     }
 

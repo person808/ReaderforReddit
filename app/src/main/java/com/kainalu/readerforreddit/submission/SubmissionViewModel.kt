@@ -28,15 +28,29 @@ class SubmissionViewModel @Inject constructor(
 
     fun getChildren(more: MoreNode) {
         viewModelScope.launch {
-            val result = submissionRepository.loadChildren(
+            val liveData = submissionRepository.loadChildren(
                 currentViewState.link!!,
                 currentViewState.sort!!,
                 more,
                 currentViewState.submissionTree!!
             )
-            _viewState.postValue(currentViewState.copy(
-                comments = currentViewState.submissionTree?.getDataPair()?.second
-            ))
+            _viewState.addSource(liveData) {
+                when (it) {
+                    is Resource.Success -> {
+                        _viewState.postValue(currentViewState.copy(comments = it.data.getDataPair().second))
+                        _viewState.removeSource(liveData)
+                    }
+                    is Resource.Loading -> {
+                        more.loading = true
+                        _viewState.postValue(currentViewState) // Force update
+                    }
+                    is Resource.Error -> {
+                        more.loading = false
+                        _viewState.postValue(currentViewState) // Force update
+                        _viewState.removeSource(liveData)
+                    }
+                }
+            }
         }
     }
 

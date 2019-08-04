@@ -11,6 +11,8 @@ class MoreNode(more: More) : AbstractNode(), HideableItem, NestedItem {
     var count = more.count
     val id = more.id
     val name = more.name
+    /** Whether the additional comments are currently being retrieved */
+    var loading = false
 
     override fun addChild(node: AbstractNode) {
         throw UnsupportedOperationException("MoreChildrenNodes cannot have children")

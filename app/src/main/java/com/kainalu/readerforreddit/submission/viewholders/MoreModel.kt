@@ -4,6 +4,7 @@ import android.view.View
 import android.widget.TextView
 import androidx.constraintlayout.widget.ConstraintLayout
 import com.airbnb.epoxy.EpoxyAttribute
+import com.airbnb.epoxy.EpoxyModel
 import com.airbnb.epoxy.EpoxyModelClass
 import com.airbnb.epoxy.EpoxyModelWithHolder
 import com.kainalu.readerforreddit.R
@@ -23,8 +24,21 @@ abstract class MoreModel : EpoxyModelWithHolder<MoreHolder>() {
             val indicatorWidth = context.resources.getDimensionPixelSize(R.dimen.comment_depth_indicator)
             setPaddingRelative(indicatorWidth * (data.depth - 2), 0, 0, 0)
         }
-        with(holder.textView) {
-            text = context.resources.getQuantityString(R.plurals.view_more, data.childIds.size, data.childIds.size)
+        setText(holder.textView)
+    }
+
+    override fun bind(holder: MoreHolder, previouslyBoundModel: EpoxyModel<*>) {
+        super.bind(holder, previouslyBoundModel)
+        setText(holder.textView)
+    }
+
+    private fun setText(textView: TextView) {
+        with(textView) {
+            text = if (data.loading) {
+                context.getString(R.string.loading)
+            } else {
+                context.resources.getQuantityString(R.plurals.view_more, data.childIds.size, data.childIds.size)
+            }
         }
     }
 }

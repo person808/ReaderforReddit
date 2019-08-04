@@ -1,5 +1,6 @@
 <resources>
     <string name="app_name">Reader for Reddit</string>
+
     <plurals name="years_placeholder">
         <item quantity="one">%1$d year ago</item>
         <item quantity="other">%1$d years ago</item>
@@ -62,4 +63,6 @@
     <string name="new_posts">New Posts</string>
     <string name="rising_posts">Rising Posts</string>
     <string name="controversial_posts">Controversial Posts</string>
+
+    <string name="loading">Loading…</string>
 </resources>
