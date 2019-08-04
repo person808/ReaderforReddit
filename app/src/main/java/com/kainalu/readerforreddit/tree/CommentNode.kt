@@ -21,17 +21,35 @@ class CommentNode(comment: Comment) : AbstractNode(), HideableItem, NestedItem {
 
     override fun addChild(node: AbstractNode) {
         checkNodeType(node)
+        setChildVisibility(node)
         super.addChild(node)
     }
 
     override fun addChild(index: Int, node: AbstractNode) {
         checkNodeType(node)
+        setChildVisibility(node)
         super.addChild(index, node)
+    }
+
+    override fun replaceChildAt(index: Int, newNode: AbstractNode) {
+        checkNodeType(newNode)
+        setChildVisibility(newNode)
+        super.replaceChildAt(index, newNode)
     }
 
     private fun checkNodeType(node: AbstractNode) {
         if (node !is CommentNode && node !is MoreNode) {
             throw IllegalArgumentException("Only CommentNodes and MoreNodes can be children of a CommentNode.")
+        }
+    }
+
+    private fun setChildVisibility(node: AbstractNode) {
+        if (node is HideableItem && (visibility == VisibilityState.COLLAPSED_HIDDEN || visibility == VisibilityState.COLLAPSED)) {
+            node.visibility = if (node.visibility == VisibilityState.COLLAPSED) {
+                VisibilityState.COLLAPSED_HIDDEN
+            } else {
+                VisibilityState.HIDDEN
+            }
         }
     }
 
