@@ -42,7 +42,7 @@ dependencies {
     def dagger_version = '2.23.2'
     def epoxy_version = '3.7.0'
     def glide_version = '4.9.0'
-    def lifecycle_version = '2.1.0-rc01'
+    def lifecycle_version = '2.2.0-alpha02'
     def moshi_version = '1.8.0'
     def okhttp_version = '4.0.0'
 

@@ -2,6 +2,8 @@ package com.kainalu.readerforreddit.submission
 
 import android.text.TextUtils
 import android.util.Log
+import androidx.lifecycle.LiveData
+import androidx.lifecycle.liveData
 import com.kainalu.readerforreddit.models.LinkData
 import com.kainalu.readerforreddit.models.LinkDataImpl
 import com.kainalu.readerforreddit.network.ApiService
@@ -19,25 +21,34 @@ class SubmissionRepository @Inject constructor(private val apiService: ApiServic
         subreddit: String,
         threadId: String,
         sort: SubmissionSort
-    ): Resource<SubmissionTree> {
+    ): LiveData<Resource<SubmissionTree>> = liveData {
+        emit(Resource.Loading<SubmissionTree>(null))
         val response = apiService.getSubmission(subreddit, threadId, sort.urlString)
-        return if (response.isSuccessful) {
-            val body = response.body() ?: return Resource.Error(null, null)
+        if (response.isSuccessful) {
+            val body = response.body()
+            if (body == null) {
+                emit(Resource.Error<SubmissionTree>(null, null))
+                return@liveData
+            }
+
             if (body.size != 2) {
                 Log.e(TAG, "Response should contain 2 items. Found ${body.size} items.")
-                return Resource.Error(null, null)
+                emit(Resource.Error<SubmissionTree>(null, null))
+                return@liveData
             }
+
             val link = body.first().children.first() as Link
             val comments = body.last().children
             val tree = SubmissionTree.Builder()
                 .setComments(comments)
                 .setRoot(LinkDataImpl(link))
                 .build()
-            Resource.Success(tree)
+            emit(Resource.Success(tree))
         } else {
-            Resource.Error(null, null)
+            emit(Resource.Error<SubmissionTree>(null, null))
         }
     }
+
 
     // TODO only allow 1 request at a time per reddit api limitations
     suspend fun loadChildren(
@@ -45,9 +56,11 @@ class SubmissionRepository @Inject constructor(private val apiService: ApiServic
         sort: SubmissionSort,
         moreNode: MoreNode,
         submissionTree: SubmissionTree
-    ) {
+    ): LiveData<Resource<out Nothing?>> = liveData {
         val ids = moreNode.childIds.take(LOAD_CHILDREN_LIMIT)
         moreNode.childIds.removeAll(ids)
+
+        emit(Resource.Loading(null))
         val response = apiService.getChildren(
             children = TextUtils.join(",", ids),
             linkId = linkData.name,
@@ -55,7 +68,12 @@ class SubmissionRepository @Inject constructor(private val apiService: ApiServic
         )
 
         if (response.isSuccessful) {
-            val body = response.body()!!
+            val body = response.body()
+            if (body == null) {
+                emit(Resource.Error(null, null))
+                return@liveData
+            }
+
             val rootNodes = buildTree(body)
             // We can only have one top level more node but if we are loading from a top level
             // more node, we may not have loaded all its childIds so we need to merge the old
@@ -73,6 +91,9 @@ class SubmissionRepository @Inject constructor(private val apiService: ApiServic
                 newNodes.add(rootMoreNode)
             }
             submissionTree.replaceChild(moreNode.parent!!, moreNode, newNodes)
+            emit(Resource.Success(null))
+        } else {
+            emit(Resource.Error(null, null))
         }
     }
 

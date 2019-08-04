@@ -10,5 +10,6 @@ data class SubmissionViewState(
     val sort: SubmissionSort? = null,
     val submissionTree: SubmissionTree? = null,
     val link: LinkNode? = null,
-    val comments: List<AbstractNode>? = null
+    val comments: List<AbstractNode>? = null,
+    val loading: Boolean = false
 )

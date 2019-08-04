@@ -83,6 +83,7 @@ class SubmissionFragment : Fragment(), SubmissionController.CommentClickListener
             setController(controller)
             addItemDecoration(CommentItemDecoration(context))
         }
+        swipeRefreshLayout.setOnRefreshListener { viewModel.refresh() }
         viewModel.viewState.observe(viewLifecycleOwner, Observer { render(it) })
     }
 
@@ -105,5 +106,6 @@ class SubmissionFragment : Fragment(), SubmissionController.CommentClickListener
 
     private fun render(viewState: SubmissionViewState) {
         controller.setData(viewState.link, viewState.comments, viewState.sort)
+        swipeRefreshLayout.isRefreshing = viewState.loading
     }
 }

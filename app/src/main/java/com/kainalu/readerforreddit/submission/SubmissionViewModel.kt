@@ -1,9 +1,10 @@
 package com.kainalu.readerforreddit.submission
 
 import androidx.lifecycle.LiveData
-import androidx.lifecycle.MutableLiveData
+import androidx.lifecycle.MediatorLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.kainalu.readerforreddit.network.Resource
 import com.kainalu.readerforreddit.tree.*
 import kotlinx.coroutines.launch
 import javax.inject.Inject
@@ -12,7 +13,7 @@ class SubmissionViewModel @Inject constructor(
     private val submissionRepository: SubmissionRepository
 ) : ViewModel() {
 
-    private val _viewState = MutableLiveData(SubmissionViewState())
+    private val _viewState = MediatorLiveData<SubmissionViewState>().apply { value = SubmissionViewState() }
     val viewState: LiveData<SubmissionViewState>
         get() = _viewState
     private val currentViewState: SubmissionViewState
@@ -39,20 +40,38 @@ class SubmissionViewModel @Inject constructor(
         }
     }
 
+    fun refresh() {
+        loadSubmission(currentViewState.subreddit, currentViewState.threadId, currentViewState.sort!!)
+    }
+
     private fun loadSubmission(subreddit: String, threadId: String, sort: SubmissionSort) {
         _viewState.value = currentViewState.copy(sort = sort)
         viewModelScope.launch {
-            val tree = submissionRepository.getSubmission(subreddit, threadId, sort).data!!
-            val (link, comments) = tree.getDataPair()
-            _viewState.postValue(
-                currentViewState.copy(
-                    subreddit = subreddit,
-                    threadId = threadId,
-                    submissionTree = tree,
-                    link = link,
-                    comments = comments
-                )
-            )
+            val liveData = submissionRepository.getSubmission(subreddit, threadId, sort)
+            _viewState.addSource(liveData) {
+                when (it) {
+                    is Resource.Success -> {
+                        val (link, comments) = it.data.getDataPair()
+                        _viewState.postValue(
+                            currentViewState.copy(
+                                subreddit = subreddit,
+                                threadId = threadId,
+                                submissionTree = it.data,
+                                link = link,
+                                comments = comments,
+                                loading = false
+                            )
+                        )
+                        _viewState.removeSource(liveData)
+                    }
+                    is Resource.Loading -> _viewState.postValue(currentViewState.copy(loading = true))
+                    is Resource.Error -> {
+                        _viewState.postValue(currentViewState.copy(loading = false))
+                        _viewState.removeSource(liveData)
+                    }
+                }
+            }
+
         }
     }
 
