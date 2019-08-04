@@ -12,7 +12,7 @@ class SubmissionViewModel @Inject constructor(
     private val submissionRepository: SubmissionRepository
 ) : ViewModel() {
 
-    private val _viewState = MutableLiveData<SubmissionViewState>().apply { value = SubmissionViewState() }
+    private val _viewState = MutableLiveData(SubmissionViewState())
     val viewState: LiveData<SubmissionViewState>
         get() = _viewState
     private val currentViewState: SubmissionViewState
