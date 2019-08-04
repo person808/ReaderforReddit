@@ -14,29 +14,29 @@ import org.threeten.bp.LocalDateTime
 
 @JsonClass(generateAdapter = true)
 data class Link(
-    val subreddit: String,
-    @Json(name = "num_comments")
-    val numComments: Int?,
-    val id: String,
-    val name: String,
     override val created: LocalDateTime,
     @Json(name = "created_utc")
     override val createdUtc: LocalDateTime,
-    override val ups: Int,
     override val downs: Int,
+    override val ups: Int,
     override val liked: Boolean?,
-    val score: Int,
-    val thumbnail: String,
-    val edited: EditInfo,
     val author: String,
+    val domain: String?,
+    val edited: EditInfo,
+    val id: String,
+    @Json(name = "is_self")
+    val isSelfPost: Boolean?,
+    val name: String,
+    @Json(name = "num_comments")
+    val numComments: Int?,
     @Json(name = "post_hint")
     val postHint: String?,
     val preview: PreviewInfo?,
-    val title: String,
-    @Json(name = "is_self")
-    val isSelfPost: Boolean?,
+    val score: Int,
     val selftext: String,
-    val domain: String?,
+    val subreddit: String,
+    val thumbnail: String,
+    val title: String,
     val url: String
 ) : Votable, Created, SubmissionItem {
     companion object {
@@ -55,6 +55,11 @@ data class Link(
 fun Link.getFormattedTitle(context: Context): Spanned {
     val span = SpannableString("${score.getFormattedString()} $title")
     val firstSpaceIndex = span.indexOfFirst { it == ' ' }
-    span.setSpan(TextAppearanceSpan(context, R.style.LinkScoreTextAppearance), 0, firstSpaceIndex, Spannable.SPAN_INCLUSIVE_EXCLUSIVE)
+    span.setSpan(
+        TextAppearanceSpan(context, R.style.LinkScoreTextAppearance),
+        0,
+        firstSpaceIndex,
+        Spannable.SPAN_INCLUSIVE_EXCLUSIVE
+    )
     return span
 }

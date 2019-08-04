@@ -5,10 +5,10 @@ import com.squareup.moshi.JsonClass
 
 @JsonClass(generateAdapter = false)
 data class Listing<T>(
-    @RedditModel
-    val children: List<T>,
+    val after: String? = null,
     val before: String? = null,
-    val after: String? = null
+    @RedditModel
+    val children: List<T>
 ) {
     companion object {
         fun empty(): Listing<Any> = Listing(children = emptyList())
