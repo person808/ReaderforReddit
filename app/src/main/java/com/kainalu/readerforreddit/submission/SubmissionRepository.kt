@@ -11,6 +11,7 @@ import com.kainalu.readerforreddit.network.Resource
 import com.kainalu.readerforreddit.network.models.Link
 import com.kainalu.readerforreddit.network.models.SubmissionItem
 import com.kainalu.readerforreddit.tree.*
+import retrofit2.HttpException
 import javax.inject.Inject
 import javax.inject.Singleton
 
@@ -23,29 +24,33 @@ class SubmissionRepository @Inject constructor(private val apiService: ApiServic
         sort: SubmissionSort
     ): LiveData<Resource<SubmissionTree>> = liveData {
         emit(Resource.Loading<SubmissionTree>(null))
-        val response = apiService.getSubmission(subreddit, threadId, sort.urlString)
-        if (response.isSuccessful) {
-            val body = response.body()
-            if (body == null) {
-                emit(Resource.Error<SubmissionTree>(null, null))
-                return@liveData
-            }
+        try {
+            val response = apiService.getSubmission(subreddit, threadId, sort.urlString)
+            if (response.isSuccessful) {
+                val body = response.body()
+                if (body == null) {
+                    emit(Resource.Error<SubmissionTree>(error = null))
+                    return@liveData
+                }
 
-            if (body.size != 2) {
-                Log.e(TAG, "Response should contain 2 items. Found ${body.size} items.")
-                emit(Resource.Error<SubmissionTree>(null, null))
-                return@liveData
-            }
+                if (body.size != 2) {
+                    Log.e(TAG, "Response should contain 2 items. Found ${body.size} items.")
+                    emit(Resource.Error<SubmissionTree>(null, null))
+                    return@liveData
+                }
 
-            val link = body.first().children.first() as Link
-            val comments = body.last().children
-            val tree = SubmissionTree.Builder()
-                .setComments(comments)
-                .setRoot(LinkDataImpl(link))
-                .build()
-            emit(Resource.Success(tree))
-        } else {
-            emit(Resource.Error<SubmissionTree>(null, null))
+                val link = body.first().children.first() as Link
+                val comments = body.last().children
+                val tree = SubmissionTree.Builder()
+                    .setComments(comments)
+                    .setRoot(LinkDataImpl(link))
+                    .build()
+                emit(Resource.Success(tree))
+            } else {
+                emit(Resource.Error<SubmissionTree>(error = null))
+            }
+        } catch (e: HttpException) {
+            emit(Resource.Error<SubmissionTree>(error = e))
         }
     }
 

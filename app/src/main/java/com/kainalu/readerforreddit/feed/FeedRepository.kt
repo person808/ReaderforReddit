@@ -12,6 +12,7 @@ import com.kainalu.readerforreddit.network.models.Listing
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
+import retrofit2.HttpException
 import javax.inject.Inject
 import javax.inject.Singleton
 
@@ -42,7 +43,7 @@ class FeedRepository @Inject constructor(private val apiService: ApiService) {
             } else {
                 Resource.Error(response.body(), null)
             }
-        } catch (e: Exception) {
+        } catch (e: HttpException) {
             Log.e(TAG, e.message ?: "Unknown error", e)
             Resource.Error(error = e)
         }
