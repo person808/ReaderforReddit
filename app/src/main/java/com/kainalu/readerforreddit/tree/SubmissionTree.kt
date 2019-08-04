@@ -5,7 +5,11 @@ import com.kainalu.readerforreddit.network.models.Comment
 import com.kainalu.readerforreddit.network.models.More
 import com.kainalu.readerforreddit.network.models.SubmissionItem
 
-class SubmissionTree private constructor(root: AbstractNode, comments: List<SubmissionItem>) :
+/**
+ * A tree for representing individual submissions. The root is always the link of the submission.
+ * The root's children are the top level comments.
+ */
+class SubmissionTree private constructor(root: LinkNode, comments: List<SubmissionItem>) :
     AbstractTree(root) {
 
     init {
@@ -34,6 +38,14 @@ class SubmissionTree private constructor(root: AbstractNode, comments: List<Subm
         super.addChild(parent, index, data)
     }
 
+    /**
+     * Get the link and comments in a [Pair].
+     */
+    fun getDataPair(): Pair<LinkNode, List<AbstractNode>> {
+        val flattenedTree = flatten()
+        return Pair(flattenedTree.first() as LinkNode, flattenedTree.drop(1))
+    }
+
     private fun attachComments(parent: AbstractNode, item: SubmissionItem) {
         if (item !is Comment && item !is More) {
             throw IllegalArgumentException("Item must be an instance of `Link` or `More`")
@@ -57,7 +69,7 @@ class SubmissionTree private constructor(root: AbstractNode, comments: List<Subm
 
     class Builder : AbstractTree.Builder<SubmissionTree> {
 
-        private var root: AbstractNode? = null
+        private var root: LinkNode? = null
         private var comments: List<SubmissionItem> = emptyList()
 
         fun setComments(comments: List<SubmissionItem>): Builder {

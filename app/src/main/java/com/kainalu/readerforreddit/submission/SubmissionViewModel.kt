@@ -34,7 +34,7 @@ class SubmissionViewModel @Inject constructor(
                 currentViewState.submissionTree!!
             )
             _viewState.postValue(currentViewState.copy(
-                comments = currentViewState.submissionTree!!.flatten().drop(1)
+                comments = currentViewState.submissionTree?.getDataPair()?.second
             ))
         }
     }
@@ -43,13 +43,13 @@ class SubmissionViewModel @Inject constructor(
         _viewState.value = currentViewState.copy(sort = sort)
         viewModelScope.launch {
             val tree = submissionRepository.getSubmission(subreddit, threadId, sort).data!!
-            val (link, comments) = tree.flatten().partition { it is LinkNode }
+            val (link, comments) = tree.getDataPair()
             _viewState.postValue(
                 currentViewState.copy(
                     subreddit = subreddit,
                     threadId = threadId,
                     submissionTree = tree,
-                    link = link.first() as LinkNode,
+                    link = link,
                     comments = comments
                 )
             )
