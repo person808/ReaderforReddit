@@ -2,8 +2,7 @@ package com.kainalu.readerforreddit.submission
 
 import android.view.View
 import com.airbnb.epoxy.Typed3EpoxyController
-import com.kainalu.readerforreddit.network.models.Link
-import com.kainalu.readerforreddit.network.models.More
+import com.kainalu.readerforreddit.models.LinkData
 import com.kainalu.readerforreddit.submission.viewholders.*
 import com.kainalu.readerforreddit.tree.*
 import com.kainalu.readerforreddit.ui.sortHeader
@@ -13,22 +12,22 @@ class SubmissionController(
     private val sortClickListener: View.OnClickListener,
     private val linkClickListener: LinkClickListener,
     private val moreClickListener: MoreClickListener
-) : Typed3EpoxyController<LinkNode, List<AbstractNode<*>>, SubmissionSort>() {
+) : Typed3EpoxyController<LinkNode, List<AbstractNode>, SubmissionSort>() {
 
     interface CommentClickListener {
         fun onCommentClicked(commentNode: CommentNode)
     }
 
     interface LinkClickListener {
-        fun onLinkClicked(link: Link)
+        fun onLinkClicked(link: LinkData)
     }
 
     interface MoreClickListener {
-        fun onMoreClicked(more: More)
+        fun onMoreClicked(more: MoreNode)
     }
 
-    override fun buildModels(linkNode: LinkNode?, comments: List<AbstractNode<*>>?, sort: SubmissionSort?) {
-        linkNode?.data?.let {
+    override fun buildModels(linkNode: LinkNode?, comments: List<AbstractNode>?, sort: SubmissionSort?) {
+        linkNode?.let {
             when (it.postHint) {
                 "image" -> imageSubmission {
                     link(it)
@@ -65,14 +64,14 @@ class SubmissionController(
                     comment {
                         comment(it)
                         onClick { _ -> commentClickListener.onCommentClicked(it) }
-                        id(it.data.id)
+                        id(it.id)
                     }
                 }
                 is MoreNode -> if (it.visibility == VisibilityState.VISIBLE) {
                     more {
-                        data(it.data)
-                        onClick { _ -> moreClickListener.onMoreClicked(it.data) }
-                        id(it.data.id)
+                        data(it)
+                        onClick { _ -> moreClickListener.onMoreClicked(it) }
+                        id(it.id)
                     }
                 }
             }

@@ -1,11 +1,11 @@
 package com.kainalu.readerforreddit.tree
 
+import com.kainalu.readerforreddit.models.LinkData
 import com.kainalu.readerforreddit.network.models.Comment
-import com.kainalu.readerforreddit.network.models.Link
 import com.kainalu.readerforreddit.network.models.More
 import com.kainalu.readerforreddit.network.models.SubmissionItem
 
-class SubmissionTree private constructor(root: AbstractNode<*>, comments: List<SubmissionItem>) :
+class SubmissionTree private constructor(root: AbstractNode, comments: List<SubmissionItem>) :
     AbstractTree(root) {
 
     override var size: Int = 1 // Start at 1 because we always have a root
@@ -16,32 +16,32 @@ class SubmissionTree private constructor(root: AbstractNode<*>, comments: List<S
         }
     }
 
-    override fun addChild(parent: AbstractNode<*>, child: AbstractNode<*>) {
+    override fun addChild(parent: AbstractNode, child: AbstractNode) {
         assertNotLink(child)
         super.addChild(parent, child)
     }
 
-    override fun <T> addChild(parent: AbstractNode<*>, data: T) {
+    override fun <T> addChild(parent: AbstractNode, data: T) {
         assertNotLink(data)
         super.addChild(parent, data)
     }
 
-    override fun addChild(parent: AbstractNode<*>, index: Int, child: AbstractNode<*>) {
+    override fun addChild(parent: AbstractNode, index: Int, child: AbstractNode) {
         assertNotLink(child)
         super.addChild(parent, index, child)
     }
 
-    override fun <T> addChild(parent: AbstractNode<*>, index: Int, data: T) {
+    override fun <T> addChild(parent: AbstractNode, index: Int, data: T) {
         assertNotLink(data)
         super.addChild(parent, index, data)
     }
 
-    private fun attachComments(parent: AbstractNode<*>, item: SubmissionItem) {
+    private fun attachComments(parent: AbstractNode, item: SubmissionItem) {
         if (item !is Comment && item !is More) {
             throw IllegalArgumentException("Item must be an instance of `Link` or `More`")
         }
 
-        val node = NodeFactory.create(item)
+        val node = NodeFactory.create(item, parent.depth + 1)
         addChild(parent, node)
 
         if (item is Comment) {
@@ -52,14 +52,14 @@ class SubmissionTree private constructor(root: AbstractNode<*>, comments: List<S
     }
 
     private fun <T> assertNotLink(obj: T) {
-        if (obj is Link || obj is LinkNode) {
+        if (obj is LinkData || obj is LinkNode) {
             throw IllegalArgumentException("Links are only allowed as the root of this tree")
         }
     }
 
     class Builder : AbstractTree.Builder<SubmissionTree> {
 
-        private var root: AbstractNode<*>? = null
+        private var root: AbstractNode? = null
         private var comments: List<SubmissionItem> = emptyList()
 
         fun setComments(comments: List<SubmissionItem>): Builder {
@@ -67,8 +67,8 @@ class SubmissionTree private constructor(root: AbstractNode<*>, comments: List<S
             return this
         }
 
-        fun setRoot(link: Link): Builder {
-            root = LinkNode(link)
+        fun setRoot(link: LinkData): Builder {
+            root = LinkNode(link, depth = 0)
             return this
         }
 

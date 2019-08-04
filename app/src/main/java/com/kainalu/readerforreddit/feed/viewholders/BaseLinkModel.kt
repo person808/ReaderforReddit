@@ -7,8 +7,8 @@ import com.airbnb.epoxy.EpoxyAttribute
 import com.airbnb.epoxy.EpoxyModelWithHolder
 import com.google.android.material.card.MaterialCardView
 import com.kainalu.readerforreddit.R
-import com.kainalu.readerforreddit.network.models.Link
-import com.kainalu.readerforreddit.network.models.getFormattedTitle
+import com.kainalu.readerforreddit.models.LinkData
+import com.kainalu.readerforreddit.models.getFormattedTitle
 import com.kainalu.readerforreddit.util.KotlinEpoxyHolder
 import com.kainalu.readerforreddit.util.getFormattedString
 import com.kainalu.readerforreddit.util.getPostTime
@@ -16,7 +16,7 @@ import com.kainalu.readerforreddit.util.getPostTime
 abstract class BaseLinkModel<T : BaseHolder> : EpoxyModelWithHolder<T>() {
 
     @EpoxyAttribute
-    lateinit var link: Link
+    lateinit var link: LinkData
     @EpoxyAttribute
     lateinit var onClick: View.OnClickListener
 

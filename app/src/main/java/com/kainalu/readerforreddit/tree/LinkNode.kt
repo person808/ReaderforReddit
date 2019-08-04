@@ -1,5 +1,5 @@
 package com.kainalu.readerforreddit.tree
 
-import com.kainalu.readerforreddit.network.models.Link
+import com.kainalu.readerforreddit.models.LinkData
 
-class LinkNode(link: Link) : AbstractNode<Link>(link)
+class LinkNode(linkData: LinkData, depth: Int) : AbstractNode(depth), LinkData by linkData

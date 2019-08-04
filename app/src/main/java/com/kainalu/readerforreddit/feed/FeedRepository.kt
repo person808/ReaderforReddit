@@ -4,6 +4,7 @@ import android.util.Log
 import androidx.arch.core.executor.ArchTaskExecutor
 import androidx.paging.Config
 import androidx.paging.PagedList
+import com.kainalu.readerforreddit.models.LinkData
 import com.kainalu.readerforreddit.network.ApiService
 import com.kainalu.readerforreddit.network.Resource
 import com.kainalu.readerforreddit.network.models.Link
@@ -47,7 +48,12 @@ class FeedRepository @Inject constructor(private val apiService: ApiService) {
         }
     }
 
-    suspend fun getPagedList(subreddit: String, sort: SubredditSort, sortDuration: Duration, scope: CoroutineScope): PagedList<Link> =
+    suspend fun getPagedList(
+        subreddit: String,
+        sort: SubredditSort,
+        sortDuration: Duration,
+        scope: CoroutineScope
+    ): PagedList<LinkData> =
         withContext(Dispatchers.IO) {
             val sourceFactory = SubredditDataSourceFactory(
                 this@FeedRepository,

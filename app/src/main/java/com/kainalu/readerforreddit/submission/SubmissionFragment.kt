@@ -12,9 +12,9 @@ import androidx.lifecycle.Observer
 import androidx.navigation.fragment.navArgs
 import com.kainalu.readerforreddit.R
 import com.kainalu.readerforreddit.di.Injector
-import com.kainalu.readerforreddit.network.models.Link
-import com.kainalu.readerforreddit.network.models.More
+import com.kainalu.readerforreddit.models.LinkData
 import com.kainalu.readerforreddit.tree.CommentNode
+import com.kainalu.readerforreddit.tree.MoreNode
 import com.kainalu.readerforreddit.tree.VisibilityState
 import kotlinx.android.synthetic.main.fragment_submission.*
 import javax.inject.Inject
@@ -91,12 +91,12 @@ class SubmissionFragment : Fragment(), SubmissionController.CommentClickListener
         }
     }
 
-    override fun onLinkClicked(link: Link) {
+    override fun onLinkClicked(link: LinkData) {
         val intent = CustomTabsIntent.Builder().build()
         intent.launchUrl(requireContext(), Uri.parse(link.url))
     }
 
-    override fun onMoreClicked(more: More) {
+    override fun onMoreClicked(more: MoreNode) {
         //viewModel.getChildren(more)
     }
 

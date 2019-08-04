@@ -7,12 +7,12 @@ package com.kainalu.readerforreddit.tree
  *
  * @see AbstractTree
  */
-abstract class AbstractNode<T>(val data: T) {
+abstract class AbstractNode(val depth: Int) {
 
-    private val _children: MutableList<AbstractNode<*>> = mutableListOf()
+    private val _children: MutableList<AbstractNode> = mutableListOf()
 
     /** The children of this node */
-    val children: List<AbstractNode<*>>
+    val children: List<AbstractNode>
         get() = _children
 
     /**
@@ -21,7 +21,7 @@ abstract class AbstractNode<T>(val data: T) {
      * @param node The node to add
      * @see SubmissionTree.addChild
      */
-    open fun addChild(node: AbstractNode<*>) {
+    open fun addChild(node: AbstractNode) {
         _children.add(node)
     }
 
@@ -32,7 +32,7 @@ abstract class AbstractNode<T>(val data: T) {
      * @param node The node to add
      * @see SubmissionTree.addChild
      */
-    open fun addChild(index: Int, node: AbstractNode<*>) {
+    open fun addChild(index: Int, node: AbstractNode) {
         _children.add(index, node)
     }
 
@@ -42,7 +42,7 @@ abstract class AbstractNode<T>(val data: T) {
      * @param node The node to remove
      * @see SubmissionTree.removeChild
      */
-    open fun removeChild(node: AbstractNode<*>): AbstractNode<*> {
+    open fun removeChild(node: AbstractNode): AbstractNode {
         _children.remove(node)
         return node
     }
@@ -53,7 +53,7 @@ abstract class AbstractNode<T>(val data: T) {
      * @param index The index of the node to remove in [children]
      * @see SubmissionTree.removeChildAt
      */
-    open fun removeChildAt(index: Int): AbstractNode<*> {
+    open fun removeChildAt(index: Int): AbstractNode {
         return _children.removeAt(index)
     }
 
@@ -65,7 +65,7 @@ abstract class AbstractNode<T>(val data: T) {
      * @see AbstractTree.replaceChild
      * @see AbstractTree.removeChildAt
      */
-    open fun replaceChildAt(index: Int, newNode: AbstractNode<*>) {
+    open fun replaceChildAt(index: Int, newNode: AbstractNode) {
         removeChildAt(index)
         _children.add(index, newNode)
     }

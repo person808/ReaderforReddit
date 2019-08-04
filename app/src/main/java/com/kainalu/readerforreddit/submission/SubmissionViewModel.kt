@@ -51,7 +51,7 @@ class SubmissionViewModel @Inject constructor(
         }
     }
 
-    private fun showCommentsRecursive(node: AbstractNode<*>) {
+    private fun showCommentsRecursive(node: AbstractNode) {
         if (node is HideableItem) {
             if (node.visibility == VisibilityState.COLLAPSED_HIDDEN) {
                 node.visibility = VisibilityState.COLLAPSED
@@ -64,7 +64,7 @@ class SubmissionViewModel @Inject constructor(
         }
     }
 
-    private fun hideCommentsRecursive(node: AbstractNode<*>) {
+    private fun hideCommentsRecursive(node: AbstractNode) {
         if (node is HideableItem) {
             node.visibility = if (node.visibility == VisibilityState.COLLAPSED) {
                 VisibilityState.COLLAPSED_HIDDEN

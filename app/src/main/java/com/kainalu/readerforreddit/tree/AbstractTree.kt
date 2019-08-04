@@ -3,7 +3,7 @@ package com.kainalu.readerforreddit.tree
 /**
  * A tree whose nodes contain an arbitrary number of ordered children.
  */
-abstract class AbstractTree(var root: AbstractNode<*>) {
+abstract class AbstractTree(var root: AbstractNode) {
 
     /** The number of nodes in the tree */
     abstract var size: Int
@@ -14,7 +14,7 @@ abstract class AbstractTree(var root: AbstractNode<*>) {
      * @param parent The parent node
      * @param child The child node to add
      */
-    open fun addChild(parent: AbstractNode<*>, child: AbstractNode<*>) {
+    open fun addChild(parent: AbstractNode, child: AbstractNode) {
         size += child.size()
         parent.addChild(child)
     }
@@ -25,8 +25,8 @@ abstract class AbstractTree(var root: AbstractNode<*>) {
      * @param parent The parent node
      * @param data The data to be held in the new node.
      */
-    open fun <T> addChild(parent: AbstractNode<*>, data: T) {
-        val child = NodeFactory.create(data)
+    open fun <T> addChild(parent: AbstractNode, data: T) {
+        val child = NodeFactory.create(data, parent.depth + 1)
         size += child.size()
         parent.addChild(child)
     }
@@ -38,7 +38,7 @@ abstract class AbstractTree(var root: AbstractNode<*>) {
      * @param index The index of the parents children to insert the child at
      * @param child The child node to add
      */
-    open fun addChild(parent: AbstractNode<*>, index: Int, child: AbstractNode<*>) {
+    open fun addChild(parent: AbstractNode, index: Int, child: AbstractNode) {
         size += child.size()
         parent.addChild(index, child)
     }
@@ -50,8 +50,8 @@ abstract class AbstractTree(var root: AbstractNode<*>) {
      * @param index The index of the parents children to insert the child at
      * @param data The data to be held in the new node.
      */
-    open fun <T> addChild(parent: AbstractNode<*>, index: Int, data: T) {
-        val child = NodeFactory.create(data)
+    open fun <T> addChild(parent: AbstractNode, index: Int, data: T) {
+        val child = NodeFactory.create(data, parent.depth + 1)
         size += child.size()
         parent.addChild(index, child)
     }
@@ -63,7 +63,7 @@ abstract class AbstractTree(var root: AbstractNode<*>) {
      * @param child The child node to remove
      * @return The removed node
      */
-    fun removeChild(parent: AbstractNode<*>, child: AbstractNode<*>): AbstractNode<*> {
+    fun removeChild(parent: AbstractNode, child: AbstractNode): AbstractNode {
         size -= child.size()
         return parent.removeChild(child)
     }
@@ -75,7 +75,7 @@ abstract class AbstractTree(var root: AbstractNode<*>) {
      * @param index The index of the child to remove
      * @return The removed node
      */
-    fun removeChildAt(parent: AbstractNode<*>, index: Int): AbstractNode<*> {
+    fun removeChildAt(parent: AbstractNode, index: Int): AbstractNode {
         val child = parent.removeChildAt(index)
         size -= child.size()
         return child
@@ -90,9 +90,9 @@ abstract class AbstractTree(var root: AbstractNode<*>) {
      * @param newChild The child node to add
      */
     fun replaceChild(
-        parent: AbstractNode<*>,
-        oldChild: AbstractNode<*>,
-        newChild: AbstractNode<*>
+        parent: AbstractNode,
+        oldChild: AbstractNode,
+        newChild: AbstractNode
     ) {
         val index = parent.children.indexOf(oldChild)
         replaceChildAt(parent, index, newChild)
@@ -106,7 +106,7 @@ abstract class AbstractTree(var root: AbstractNode<*>) {
      * @param index The index of the child node to remove
      * @param newChild The child node to add
      */
-    fun replaceChildAt(parent: AbstractNode<*>, index: Int, newChild: AbstractNode<*>) {
+    fun replaceChildAt(parent: AbstractNode, index: Int, newChild: AbstractNode) {
         val oldChild = parent.removeChildAt(index)
         size = size - oldChild.size() + newChild.size()
         parent.addChild(index, newChild)
@@ -117,13 +117,13 @@ abstract class AbstractTree(var root: AbstractNode<*>) {
      *
      * @return A list of nodes
      */
-    fun flatten(): List<AbstractNode<*>> {
-        val output = ArrayList<AbstractNode<*>>(size)
+    fun flatten(): List<AbstractNode> {
+        val output = ArrayList<AbstractNode>(size)
         flattenNode(root, output)
         return output
     }
 
-    private fun flattenNode(node: AbstractNode<*>, output: MutableList<AbstractNode<*>>) {
+    private fun flattenNode(node: AbstractNode, output: MutableList<AbstractNode>) {
         output.add(node)
         node.children.forEach {
             flattenNode(it, output)

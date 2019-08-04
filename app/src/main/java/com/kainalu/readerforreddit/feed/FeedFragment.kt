@@ -12,7 +12,7 @@ import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.DividerItemDecoration
 import com.kainalu.readerforreddit.R
 import com.kainalu.readerforreddit.di.Injector
-import com.kainalu.readerforreddit.network.models.Link
+import com.kainalu.readerforreddit.models.LinkData
 import kotlinx.android.synthetic.main.fragment_feed.*
 import javax.inject.Inject
 
@@ -125,7 +125,7 @@ class FeedFragment : Fragment(), LinkController.LinkClickListener {
         swipeRefreshLayout.isRefreshing = viewState.loading
     }
 
-    override fun onLinkClicked(link: Link) {
+    override fun onLinkClicked(link: LinkData) {
         val action = FeedFragmentDirections.actionFeedFragmentToSubmissionFragment(link.subreddit, link.id)
         findNavController().navigate(action)
     }

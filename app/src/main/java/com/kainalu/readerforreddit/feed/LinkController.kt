@@ -6,16 +6,16 @@ import com.airbnb.epoxy.paging.PagedListEpoxyController
 import com.kainalu.readerforreddit.feed.viewholders.ImagePostModel_
 import com.kainalu.readerforreddit.feed.viewholders.SelfPostModel_
 import com.kainalu.readerforreddit.feed.viewholders.WebLinkModel_
-import com.kainalu.readerforreddit.network.models.Link
+import com.kainalu.readerforreddit.models.LinkData
 import com.kainalu.readerforreddit.ui.sortHeader
 
 class LinkController(
     private val headerClickListener: View.OnClickListener,
     private val linkClickListener: LinkClickListener
-) : PagedListEpoxyController<Link>() {
+) : PagedListEpoxyController<LinkData>() {
 
     interface LinkClickListener {
-        fun onLinkClicked(link: Link)
+        fun onLinkClicked(link: LinkData)
     }
 
     var headerLabel = ""
@@ -26,7 +26,7 @@ class LinkController(
             }
         }
 
-    override fun buildItemModel(currentPosition: Int, item: Link?): EpoxyModel<*> {
+    override fun buildItemModel(currentPosition: Int, item: LinkData?): EpoxyModel<*> {
         if (item == null) {
             throw NullPointerException()
         }

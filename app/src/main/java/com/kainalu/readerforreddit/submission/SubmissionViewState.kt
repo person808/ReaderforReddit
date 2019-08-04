@@ -10,5 +10,5 @@ data class SubmissionViewState(
     val sort: SubmissionSort? = null,
     val submissionTree: AbstractTree? = null,
     val link: LinkNode? = null,
-    val comments: List<AbstractNode<*>> = emptyList()
+    val comments: List<AbstractNode> = emptyList()
 )

@@ -24,10 +24,11 @@ abstract class CommentModel : EpoxyModelWithHolder<CommentHolder>() {
 
     override fun bind(holder: CommentHolder) {
         super.bind(holder)
-        with(comment.data) {
+        with(comment) {
             with(holder.container) {
                 val indicatorWidth = context.resources.getDimensionPixelSize(R.dimen.comment_depth_indicator)
-                setPaddingRelative(indicatorWidth * (depth - 1), 0, 0, 0)
+                // Subtract 2 from depth because top level comments have a depth of 2 in our tree
+                setPaddingRelative(indicatorWidth * (depth - 2), 0, 0, 0)
                 setOnClickListener(onClick)
             }
             holder.authorTextView.text = author
@@ -61,8 +62,8 @@ abstract class CommentModel : EpoxyModelWithHolder<CommentHolder>() {
 
     private fun setScore(textView: TextView) {
         with(textView) {
-            with(comment.data) {
-                text = if (comment.data.scoreHidden) {
+            with(comment) {
+                text = if (scoreHidden) {
                     context.getString(R.string.score_hidden)
                 } else {
                     context.resources.getQuantityString(R.plurals.points, score, score.getFormattedString())

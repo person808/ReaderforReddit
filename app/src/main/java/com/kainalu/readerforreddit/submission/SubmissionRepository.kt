@@ -1,6 +1,7 @@
 package com.kainalu.readerforreddit.submission
 
 import android.util.Log
+import com.kainalu.readerforreddit.models.LinkDataImpl
 import com.kainalu.readerforreddit.network.ApiService
 import com.kainalu.readerforreddit.network.Resource
 import com.kainalu.readerforreddit.network.models.Link
@@ -27,7 +28,7 @@ class SubmissionRepository @Inject constructor(private val apiService: ApiServic
             val comments = body.last().children
             val tree = SubmissionTree.Builder()
                 .setComments(comments)
-                .setRoot(link)
+                .setRoot(LinkDataImpl(link))
                 .build()
             Resource.Success(tree)
         } else {

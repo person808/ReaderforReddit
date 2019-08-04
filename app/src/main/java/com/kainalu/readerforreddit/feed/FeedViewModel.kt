@@ -5,14 +5,14 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import androidx.paging.PagedList
-import com.kainalu.readerforreddit.network.models.Link
+import com.kainalu.readerforreddit.models.LinkData
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 class FeedViewModel @Inject constructor(private val feedRepository: FeedRepository) : ViewModel() {
 
-    private val _feed = MutableLiveData<PagedList<Link>>()
-    val feed: LiveData<PagedList<Link>>
+    private val _feed = MutableLiveData<PagedList<LinkData>>()
+    val feed: LiveData<PagedList<LinkData>>
         get() = _feed
     private val _viewState = MutableLiveData<FeedViewState>()
     val viewState: LiveData<FeedViewState>

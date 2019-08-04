@@ -2,7 +2,7 @@ package com.kainalu.readerforreddit.feed
 
 import androidx.lifecycle.MutableLiveData
 import androidx.paging.DataSource
-import com.kainalu.readerforreddit.network.models.Link
+import com.kainalu.readerforreddit.models.LinkData
 import kotlinx.coroutines.CoroutineScope
 
 class SubredditDataSourceFactory(
@@ -11,11 +11,11 @@ class SubredditDataSourceFactory(
     private val sort: SubredditSort,
     private val sortDuration: Duration,
     private val coroutineScope: CoroutineScope
-) : DataSource.Factory<String, Link>() {
+) : DataSource.Factory<String, LinkData>() {
 
     val sourceLiveData = MutableLiveData<SubredditDataSource>()
 
-    override fun create(): DataSource<String, Link> {
+    override fun create(): DataSource<String, LinkData> {
         return SubredditDataSource(repository, subreddit, sort, sortDuration, coroutineScope).also {
             sourceLiveData.postValue(it)
         }
