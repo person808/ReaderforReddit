@@ -8,10 +8,12 @@ import android.view.ViewGroup
 import androidx.appcompat.widget.PopupMenu
 import androidx.browser.customtabs.CustomTabsIntent
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
 import androidx.navigation.fragment.navArgs
 import com.kainalu.readerforreddit.R
 import com.kainalu.readerforreddit.di.Injector
+import com.kainalu.readerforreddit.di.ViewModelFactory
 import com.kainalu.readerforreddit.models.LinkData
 import com.kainalu.readerforreddit.tree.CommentNode
 import com.kainalu.readerforreddit.tree.MoreNode
@@ -25,7 +27,8 @@ class SubmissionFragment : Fragment(), SubmissionController.CommentClickListener
     private val args by navArgs<SubmissionFragmentArgs>()
 
     @Inject
-    lateinit var viewModel: SubmissionViewModel
+    lateinit var viewModelFactory: ViewModelFactory
+    private val viewModel by viewModels<SubmissionViewModel> { viewModelFactory }
 
     private val headerClickListener = View.OnClickListener { v ->
         PopupMenu(requireContext(), v).run {

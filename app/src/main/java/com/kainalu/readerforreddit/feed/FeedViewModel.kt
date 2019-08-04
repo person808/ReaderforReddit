@@ -21,6 +21,9 @@ class FeedViewModel @Inject constructor(private val feedRepository: FeedReposito
         get() = _viewState.value!!
 
     fun init(subreddit: String = "") {
+        if (_viewState.value != null) {
+            return
+        }
         _viewState.value = FeedViewState(
             subreddit = subreddit,
             sort = feedRepository.getDefaultSort(subreddit),

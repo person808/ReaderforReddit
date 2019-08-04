@@ -7,11 +7,13 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.appcompat.widget.PopupMenu
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.DividerItemDecoration
 import com.kainalu.readerforreddit.R
 import com.kainalu.readerforreddit.di.Injector
+import com.kainalu.readerforreddit.di.ViewModelFactory
 import com.kainalu.readerforreddit.models.LinkData
 import kotlinx.android.synthetic.main.fragment_feed.*
 import javax.inject.Inject
@@ -88,7 +90,8 @@ class FeedFragment : Fragment(), LinkController.LinkClickListener {
     private val controller = LinkController(headerClickListener, this)
 
     @Inject
-    lateinit var viewModel: FeedViewModel
+    lateinit var viewModelFactory: ViewModelFactory
+    private val viewModel by viewModels<FeedViewModel> { viewModelFactory }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
