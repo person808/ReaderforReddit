@@ -50,6 +50,7 @@ class CommentNode(comment: Comment) : AbstractNode(), HideableItem, NestedItem {
             } else {
                 VisibilityState.HIDDEN
             }
+            node.children.forEach { setChildVisibility(it) }
         }
     }
 
