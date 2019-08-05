@@ -67,7 +67,7 @@ class SubmissionController(
                         id(it.id)
                     }
                 }
-                is MoreNode -> if (it.visibility == VisibilityState.VISIBLE) {
+                is MoreNode -> if (it.visibility == VisibilityState.VISIBLE && it.childIds.isNotEmpty()) {
                     more {
                         data(it)
                         onClick { _ -> moreClickListener.onMoreClicked(it) }
