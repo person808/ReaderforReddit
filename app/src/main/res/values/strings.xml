@@ -65,4 +65,9 @@
     <string name="controversial_posts">Controversial Posts</string>
 
     <string name="loading">Loading…</string>
+
+    <string name="home">Home</string>
+    <string name="subscriptions">Subscriptions</string>
+    <string name="search">Search</string>
+    <string name="profile">Profile</string>
 </resources>

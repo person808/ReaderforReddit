@@ -13,6 +13,9 @@
         <action
             android:id="@+id/action_feedFragment_to_submissionFragment"
             app:destination="@id/submissionFragment" />
+        <action
+            android:id="@+id/action_feedFragment_to_subscriptionsFragment"
+            app:destination="@id/subscriptionsFragment" />
     </fragment>
     <fragment
         android:id="@+id/submissionFragment"
@@ -25,4 +28,8 @@
             android:name="threadId"
             app:argType="string" />
     </fragment>
+    <fragment
+        android:id="@+id/subscriptionsFragment"
+        android:name="com.kainalu.readerforreddit.subscription.SubscriptionsFragment"
+        android:label="SubscriptionsFragment" />
 </navigation>

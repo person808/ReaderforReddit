@@ -2,9 +2,7 @@ package com.kainalu.readerforreddit.network
 
 import com.kainalu.readerforreddit.network.annotations.LegacyRedditResponse
 import com.kainalu.readerforreddit.network.annotations.RedditModel
-import com.kainalu.readerforreddit.network.models.Link
-import com.kainalu.readerforreddit.network.models.Listing
-import com.kainalu.readerforreddit.network.models.SubmissionItem
+import com.kainalu.readerforreddit.network.models.*
 import retrofit2.Response
 import retrofit2.http.GET
 import retrofit2.http.Path
@@ -46,4 +44,12 @@ interface ApiService {
         @Query("link_id") linkId: String,
         @Query("sort") sort: String
     ): Response<List<SubmissionItem>>
+
+    @RedditModel
+    @GET("/subreddits/default")
+    suspend fun getDefaultSubreddits(
+        @Query("limit") limit: Int,
+        @Query("after") after: String = "",
+        @Query("before") before: String = ""
+    ): Response<Listing<Subreddit>>
 }
