@@ -1,27 +1,57 @@
 package com.kainalu.readerforreddit.user
 
+import androidx.room.ColumnInfo
+import androidx.room.Entity
+import androidx.room.Ignore
+import androidx.room.PrimaryKey
 import com.kainalu.readerforreddit.di.Injector
 import com.kainalu.readerforreddit.network.models.Account
 import com.kainalu.readerforreddit.network.models.Subreddit
+import kotlinx.android.parcel.IgnoredOnParcel
+import kotlinx.android.parcel.Parcelize
 import javax.inject.Inject
 
-class User(account: Account) : UserData {
+@Entity
+@Parcelize
+data class User(
+    @PrimaryKey
+    override val id: String,
+    @ColumnInfo
+    override val name: String,
+    @ColumnInfo
+    override val username: String,
+    @ColumnInfo
+    override val commentKarma: Int,
+    @ColumnInfo
+    override val linkKarma: Int
+) : UserData {
 
-    @Inject lateinit var userRepository: UserRepository
+    @Ignore
+    @IgnoredOnParcel
+    @Inject
+    lateinit var userRepository: UserRepository
 
     init {
         Injector.get().inject(this)
     }
 
-    override val id: String = account.id
-    override val name = account.name
-    override val username = account.username
-    override val commentKarma = account.commentKarma
-    override val linkKarma = account.linkKarma
     override val totalKarma: Int?
         get() = commentKarma + linkKarma
 
     override suspend fun getSubscriptions(): List<Subreddit> {
         return userRepository.getDefaultSubscriptions()
+    }
+
+    companion object {
+
+        fun fromAccount(account: Account): User {
+            return User(
+                id = account.id,
+                name = account.name,
+                username = account.username,
+                commentKarma = account.commentKarma,
+                linkKarma = account.linkKarma
+            )
+        }
     }
 }

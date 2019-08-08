@@ -6,8 +6,8 @@ import com.kainalu.readerforreddit.network.models.Token
 import java.util.*
 import javax.inject.Inject
 
-class SessionManagerImpl @Inject constructor(private val sharedPreferences: SharedPreferences)
-    : SessionManager {
+class TokenManagerImpl @Inject constructor(private val sharedPreferences: SharedPreferences)
+    : TokenManager {
 
     override fun saveToken(token: Token) {
         sharedPreferences.edit {
@@ -41,10 +41,6 @@ class SessionManagerImpl @Inject constructor(private val sharedPreferences: Shar
         sharedPreferences.edit(commit = true) {
             listOf(ACCESS_TOKEN, TOKEN_TYPE, DURATION, SCOPE, REFRESH_TOKEN).map { remove(it) }
         }
-    }
-
-    override fun isLoggedIn(): Boolean {
-        return false // TODO
     }
 
     override fun getDeviceId(): String {

@@ -1,8 +1,9 @@
 package com.kainalu.readerforreddit.user
 
+import android.os.Parcelable
 import com.kainalu.readerforreddit.network.models.Subreddit
 
-interface UserData {
+interface UserData : Parcelable {
 
     val id: String?
     val name: String?

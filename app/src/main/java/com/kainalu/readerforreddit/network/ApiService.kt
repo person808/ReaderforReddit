@@ -46,8 +46,20 @@ interface ApiService {
     ): Response<List<SubmissionItem>>
 
     @RedditModel
+    @GET("/user/{username}/about")
+    suspend fun getUser(@Path("username") username: String): Response<Account>
+
+    @RedditModel
     @GET("/subreddits/default")
     suspend fun getDefaultSubreddits(
+        @Query("limit") limit: Int,
+        @Query("after") after: String = "",
+        @Query("before") before: String = ""
+    ): Response<Listing<Subreddit>>
+
+    @RedditModel
+    @GET("/subreddits/mine/subscriber")
+    suspend fun getSubscribedSubreddits(
         @Query("limit") limit: Int,
         @Query("after") after: String = "",
         @Query("before") before: String = ""

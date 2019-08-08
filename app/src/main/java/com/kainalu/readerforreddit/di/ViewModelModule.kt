@@ -2,6 +2,7 @@ package com.kainalu.readerforreddit.di
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
+import com.kainalu.readerforreddit.ActivityViewModel
 import com.kainalu.readerforreddit.feed.FeedViewModel
 import com.kainalu.readerforreddit.submission.SubmissionViewModel
 import com.kainalu.readerforreddit.subscription.SubscriptionsViewModel
@@ -12,6 +13,11 @@ import dagger.multibindings.IntoMap
 @Module
 interface ViewModelModule {
     @Binds fun bindViewModelFactory(factory: ViewModelFactory): ViewModelProvider.Factory
+
+    @Binds
+    @IntoMap
+    @ViewModelKey(ActivityViewModel::class)
+    fun activityViewModel(viewModel: ActivityViewModel): ViewModel
 
     @Binds
     @IntoMap

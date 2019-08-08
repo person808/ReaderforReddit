@@ -32,4 +32,16 @@
         android:id="@+id/subscriptionsFragment"
         android:name="com.kainalu.readerforreddit.subscription.SubscriptionsFragment"
         android:label="SubscriptionsFragment" />
+    <dialog
+        android:id="@+id/accountSwitcherDialog"
+        android:name="com.kainalu.readerforreddit.ui.AccountSwitcherDialog"
+        android:label="AccountSwitcherDialog" >
+        <argument
+            android:name="currentUser"
+            app:argType="com.kainalu.readerforreddit.user.UserData" />
+        <argument
+            android:name="users"
+            app:argType="com.kainalu.readerforreddit.user.UserData[]" />
+    </dialog>
+    <action android:id="@+id/action_global_accountSwitcherDialog" app:destination="@id/accountSwitcherDialog" />
 </navigation>

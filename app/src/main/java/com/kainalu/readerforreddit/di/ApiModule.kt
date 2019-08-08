@@ -2,12 +2,9 @@ package com.kainalu.readerforreddit.di
 
 import com.kainalu.readerforreddit.network.ApiService
 import com.kainalu.readerforreddit.network.AuthService
-import com.kainalu.readerforreddit.network.SessionManager
+import com.kainalu.readerforreddit.network.TokenManager
 import com.kainalu.readerforreddit.network.adapters.*
-import com.kainalu.readerforreddit.network.models.Comment
-import com.kainalu.readerforreddit.network.models.Link
-import com.kainalu.readerforreddit.network.models.More
-import com.kainalu.readerforreddit.network.models.Token
+import com.kainalu.readerforreddit.network.models.*
 import com.squareup.moshi.Moshi
 import com.squareup.moshi.kotlin.reflect.KotlinJsonAdapterFactory
 import dagger.Module
@@ -28,12 +25,12 @@ object ApiModule {
     @Singleton
     @Named("api")
     @JvmStatic
-    fun okhttp(authService: AuthService, sessionManager: SessionManager): OkHttpClient {
+    fun okhttp(authService: AuthService, tokenManager: TokenManager): OkHttpClient {
         val logger = HttpLoggingInterceptor().apply { level = HttpLoggingInterceptor.Level.BASIC }
 
         fun refreshToken(): Token = runBlocking {
-            val token = authService.getLoggedOutToken(deviceId = sessionManager.getDeviceId())
-            sessionManager.saveToken(token)
+            val token = authService.getLoggedOutToken(deviceId = tokenManager.getDeviceId())
+            tokenManager.saveToken(token)
             return@runBlocking token
         }
 
@@ -43,7 +40,7 @@ object ApiModule {
             val url = original.url.newBuilder()
                 .addQueryParameter("raw_json", "1")
                 .build()
-            val credential = sessionManager.getToken()?.accessToken ?: refreshToken().accessToken
+            val credential = tokenManager.getToken()?.accessToken ?: refreshToken().accessToken
 
             val request = original.newBuilder()
                 .addHeader("User-Agent", "unix:MyRedditTestApp:v1.0.0")
@@ -80,7 +77,9 @@ object ApiModule {
             .add(
                 RedditJsonAdapterFactory.of("kind", "data")
                     .withType(Comment::class.java, "t1")
+                    .withType(Account::class.java, "t2")
                     .withType(Link::class.java, "t3")
+                    .withType(Subreddit::class.java, "t5")
                     .withType(More::class.java, "more")
             )
             .add(EditInfoJsonAdapter())

@@ -70,4 +70,7 @@
     <string name="subscriptions">Subscriptions</string>
     <string name="search">Search</string>
     <string name="profile">Profile</string>
+
+    <string name="anonymous_user">Anonymous</string>
+    <string name="add_account">Add an Account</string>
 </resources>
