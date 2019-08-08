@@ -29,11 +29,15 @@ android {
     buildTypes {
         debug {
             buildConfigField 'String', "CLIENT_ID", ReaderForReddit_ClientId
+            buildConfigField 'String', "REDIRECT_URI", ReaderForReddit_RedirectUri
+            buildConfigField 'String', "REDIRECT_HOST", ReaderForReddit_RedirectHost
         }
         release {
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
             buildConfigField 'String', "CLIENT_ID", ReaderForReddit_ClientId
+            buildConfigField 'String', "REDIRECT_URI", ReaderForReddit_RedirectUri
+            buildConfigField 'String', "REDIRECT_HOST", ReaderForReddit_RedirectHost
         }
     }
 }

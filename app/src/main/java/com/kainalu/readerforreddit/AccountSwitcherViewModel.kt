@@ -7,7 +7,7 @@ import com.kainalu.readerforreddit.user.UserManager
 import kotlinx.coroutines.runBlocking
 import javax.inject.Inject
 
-class ActivityViewModel @Inject constructor(private val userManager: UserManager) : ViewModel() {
+class AccountSwitcherViewModel @Inject constructor(private val userManager: UserManager) : ViewModel() {
 
     var users = emptyList<UserData>()
     var currentUser: UserData = LoggedOutUser()

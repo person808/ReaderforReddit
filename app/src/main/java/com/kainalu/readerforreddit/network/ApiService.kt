@@ -45,6 +45,9 @@ interface ApiService {
         @Query("sort") sort: String
     ): Response<List<SubmissionItem>>
 
+    @GET("/api/v1/me")
+    suspend fun me(): Response<Account>
+
     @RedditModel
     @GET("/user/{username}/about")
     suspend fun getUser(@Path("username") username: String): Response<Account>

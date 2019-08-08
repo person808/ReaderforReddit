@@ -6,8 +6,29 @@ import com.kainalu.readerforreddit.network.models.Token
 import java.util.*
 import javax.inject.Inject
 
-class TokenManagerImpl @Inject constructor(private val sharedPreferences: SharedPreferences)
-    : TokenManager {
+class TokenManagerImpl @Inject constructor(
+    private val authService: AuthService,
+    private val sharedPreferences: SharedPreferences
+) : TokenManager {
+
+    override suspend fun retrieveLoggedInToken(code: String, redirectUri: String): Token {
+        return authService.getToken(code = code, redirectUri = redirectUri)
+    }
+
+    override suspend fun refreshToken(): Token {
+        val refreshToken = sharedPreferences.getString(REFRESH_TOKEN, null)
+        val token = if (refreshToken == null) {
+            authService.getLoggedOutToken(deviceId = getDeviceId())
+        } else {
+            authService.refreshToken(refreshToken = refreshToken)
+        }
+        saveToken(token)
+        return token
+    }
+
+    override suspend fun retrieveLoggedOutToken(): Token {
+        return authService.getLoggedOutToken(deviceId = getDeviceId())
+    }
 
     override fun saveToken(token: Token) {
         sharedPreferences.edit {
@@ -37,13 +58,13 @@ class TokenManagerImpl @Inject constructor(private val sharedPreferences: Shared
             )
         }
 
-    override fun deleteToken(token: Token) {
+    override fun deleteToken() {
         sharedPreferences.edit(commit = true) {
             listOf(ACCESS_TOKEN, TOKEN_TYPE, DURATION, SCOPE, REFRESH_TOKEN).map { remove(it) }
         }
     }
 
-    override fun getDeviceId(): String {
+    private fun getDeviceId(): String {
         var id = sharedPreferences.getString(DEVICE_ID, null)
         if (id == null) {
             id = UUID.randomUUID().toString()

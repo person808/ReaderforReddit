@@ -36,12 +36,19 @@
         android:id="@+id/accountSwitcherDialog"
         android:name="com.kainalu.readerforreddit.ui.AccountSwitcherDialog"
         android:label="AccountSwitcherDialog" >
-        <argument
-            android:name="currentUser"
-            app:argType="com.kainalu.readerforreddit.user.UserData" />
-        <argument
-            android:name="users"
-            app:argType="com.kainalu.readerforreddit.user.UserData[]" />
+        <action
+            android:id="@+id/action_accountSwitcherDialog_to_authFragment"
+            app:destination="@id/authFragment" />
     </dialog>
     <action android:id="@+id/action_global_accountSwitcherDialog" app:destination="@id/accountSwitcherDialog" />
+    <fragment
+        android:id="@+id/authFragment"
+        android:name="com.kainalu.readerforreddit.auth.AuthFragment"
+        android:label="AuthFragment" >
+        <action
+            android:id="@+id/action_authFragment_to_feedFragment"
+            app:destination="@id/feedFragment"
+            app:popUpTo="@+id/feedFragment"
+            app:popUpToInclusive="true" />
+    </fragment>
 </navigation>
