@@ -1,5 +1,6 @@
 package com.kainalu.readerforreddit.user
 
+import com.kainalu.readerforreddit.models.User
 import com.kainalu.readerforreddit.network.ApiService
 import com.kainalu.readerforreddit.network.models.Subreddit
 import com.kainalu.readerforreddit.util.collectListing

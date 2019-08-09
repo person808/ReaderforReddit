@@ -1,7 +1,7 @@
 package com.kainalu.readerforreddit.cache
 
 import androidx.room.*
-import com.kainalu.readerforreddit.user.User
+import com.kainalu.readerforreddit.models.User
 
 @Dao
 interface UserDao {

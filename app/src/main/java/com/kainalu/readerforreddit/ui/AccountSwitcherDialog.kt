@@ -13,7 +13,7 @@ import com.kainalu.readerforreddit.AccountSwitcherViewModel
 import com.kainalu.readerforreddit.R
 import com.kainalu.readerforreddit.di.Injector
 import com.kainalu.readerforreddit.di.ViewModelFactory
-import com.kainalu.readerforreddit.user.UserData
+import com.kainalu.readerforreddit.models.UserData
 import javax.inject.Inject
 
 class AccountSwitcherDialog : BottomSheetDialogFragment() {
@@ -34,23 +34,34 @@ class AccountSwitcherDialog : BottomSheetDialogFragment() {
             override fun onChanged(it: Pair<UserData, List<UserData>>) {
                 val (currentUser, users) = it
                 users.forEach { user ->
-                    val view = AccountSwitcherItemView(requireContext()).apply {
+                    with(AccountSwitcherItemView(requireContext())) {
                         setUserData(user)
                         isChecked = user == currentUser
+                        setOnClickListener {
+                            if (!isChecked) {
+                                switchToUser(user)
+                            }
+                        }
+                        linearLayout.addView(this)
                     }
-                    linearLayout.addView(view)
                 }
 
-                val addAccount = AddAccountItemView(requireContext()).apply {
+                with(AddAccountItemView(requireContext())) {
                     setOnClickListener {
                         findNavController().navigate(AccountSwitcherDialogDirections.actionAccountSwitcherDialogToAuthFragment())
                     }
+                    linearLayout.addView(this)
                 }
-                linearLayout.addView(addAccount)
                 viewModel.userLiveData.removeObserver(this)
             }
         })
 
         return layout
+    }
+
+    private fun switchToUser(userData: UserData) {
+        viewModel.switchToUser(userData)
+        val action = AccountSwitcherDialogDirections.actionAccountSwitcherDialogToFeedFragment()
+        findNavController().navigate(action)
     }
 }

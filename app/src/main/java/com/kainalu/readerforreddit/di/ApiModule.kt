@@ -1,5 +1,6 @@
 package com.kainalu.readerforreddit.di
 
+import com.kainalu.readerforreddit.models.TokenData
 import com.kainalu.readerforreddit.network.ApiService
 import com.kainalu.readerforreddit.network.TokenManager
 import com.kainalu.readerforreddit.network.adapters.*
@@ -27,7 +28,9 @@ object ApiModule {
     fun okhttp(tokenManager: TokenManager): OkHttpClient {
         val logger = HttpLoggingInterceptor().apply { level = HttpLoggingInterceptor.Level.BASIC }
 
-        fun refreshToken(): Token = runBlocking { tokenManager.refreshToken() }
+        fun refreshToken(): TokenData = runBlocking {
+            tokenManager.refreshToken(tokenManager.getActiveTokenId())
+        }
 
         // Adds the required headers and the query to receive unescaped json
         val interceptor = Interceptor { chain ->
@@ -35,7 +38,9 @@ object ApiModule {
             val url = original.url.newBuilder()
                 .addQueryParameter("raw_json", "1")
                 .build()
-            val credential = tokenManager.getToken()?.accessToken
+            val credential = runBlocking {
+                tokenManager.getToken(tokenManager.getActiveTokenId())?.accessToken
+            }
 
             val request = original.newBuilder()
                 .addHeader("User-Agent", "unix:MyRedditTestApp:v1.0.0")

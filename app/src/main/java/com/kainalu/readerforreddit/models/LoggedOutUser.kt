@@ -1,14 +1,16 @@
-package com.kainalu.readerforreddit.user
+package com.kainalu.readerforreddit.models
 
 import com.kainalu.readerforreddit.di.Injector
+import com.kainalu.readerforreddit.network.TokenManager
 import com.kainalu.readerforreddit.network.models.Subreddit
+import com.kainalu.readerforreddit.user.UserRepository
 import kotlinx.android.parcel.IgnoredOnParcel
 import kotlinx.android.parcel.Parcelize
 import javax.inject.Inject
 
 @Parcelize
 data class LoggedOutUser(
-    override val id: String? = null,
+    override val id: String = TokenManager.LOGGED_OUT_TOKEN_ID,
     override val name: String? = null,
     override val username: String? = null,
     override val commentKarma: Int? = null,

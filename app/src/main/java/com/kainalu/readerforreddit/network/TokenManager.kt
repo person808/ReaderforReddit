@@ -1,5 +1,7 @@
 package com.kainalu.readerforreddit.network
 
+import com.kainalu.readerforreddit.auth.SavedToken
+import com.kainalu.readerforreddit.models.TokenData
 import com.kainalu.readerforreddit.network.models.Token
 
 interface TokenManager {
@@ -19,31 +21,42 @@ interface TokenManager {
      *
      * @return The authenticated token.
      */
-    suspend fun retrieveLoggedInToken(code: String, redirectUri: String): Token
+    suspend fun retrieveLoggedInToken(code: String, redirectUri: String): TokenData
 
     /**
-     * Refreshes the saved token and saves the new token to disk.
+     * Refreshes the saved token for a user and saves the new token to disk.
      *
+     * @param userId The userId of the user associated with the token we are trying to refresh.
      * @return The new token.
      */
-    suspend fun refreshToken(): Token
+    suspend fun refreshToken(userId: String): TokenData
+
+    fun getActiveTokenId(): String
+    fun setActiveTokenId(userId: String)
 
     /**
      * Saves a token to the disk.
      *
      * @param token The token to save
      */
-    fun saveToken(token: Token)
+    suspend fun saveToken(token: SavedToken)
 
     /**
-     * Retrieves the token saved on disk.
+     * Retrieves the token for a user saved on disk.
      *
+     * @param userId The userId of the user associated with the token we are trying to retrieve.
      * @return The token if there is one saved, null otherwise.
      */
-    fun getToken(): Token?
+    suspend fun getToken(userId: String): TokenData?
 
     /**
-     * Deletes a token from the disk.
+     * Deletes a token for a user from the disk.
+     *
+     * @param userId The userId of the user associated with the token to delete.
      */
-    fun deleteToken()
+    suspend fun deleteToken(userId: String)
+
+    companion object {
+        const val LOGGED_OUT_TOKEN_ID = "logged_out"
+    }
 }

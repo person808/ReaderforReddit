@@ -4,11 +4,11 @@ import android.content.Context
 import com.kainalu.readerforreddit.MainActivity
 import com.kainalu.readerforreddit.auth.AuthFragment
 import com.kainalu.readerforreddit.feed.FeedFragment
+import com.kainalu.readerforreddit.models.LoggedOutUser
+import com.kainalu.readerforreddit.models.User
 import com.kainalu.readerforreddit.submission.SubmissionFragment
 import com.kainalu.readerforreddit.subscription.SubscriptionsFragment
 import com.kainalu.readerforreddit.ui.AccountSwitcherDialog
-import com.kainalu.readerforreddit.user.LoggedOutUser
-import com.kainalu.readerforreddit.user.User
 import dagger.BindsInstance
 import dagger.Component
 import javax.inject.Singleton

@@ -1,4 +1,4 @@
-package com.kainalu.readerforreddit.user
+package com.kainalu.readerforreddit.models
 
 import androidx.room.ColumnInfo
 import androidx.room.Entity
@@ -7,6 +7,7 @@ import androidx.room.PrimaryKey
 import com.kainalu.readerforreddit.di.Injector
 import com.kainalu.readerforreddit.network.models.Account
 import com.kainalu.readerforreddit.network.models.Subreddit
+import com.kainalu.readerforreddit.user.UserRepository
 import kotlinx.android.parcel.IgnoredOnParcel
 import kotlinx.android.parcel.Parcelize
 import javax.inject.Inject

@@ -39,6 +39,11 @@
         <action
             android:id="@+id/action_accountSwitcherDialog_to_authFragment"
             app:destination="@id/authFragment" />
+        <action
+            android:id="@+id/action_accountSwitcherDialog_to_feedFragment"
+            app:destination="@id/feedFragment"
+            app:popUpTo="@+id/feedFragment"
+            app:popUpToInclusive="true" />
     </dialog>
     <action android:id="@+id/action_global_accountSwitcherDialog" app:destination="@id/accountSwitcherDialog" />
     <fragment

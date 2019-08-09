@@ -7,8 +7,8 @@ import android.view.View
 import android.widget.Checkable
 import android.widget.LinearLayout
 import com.kainalu.readerforreddit.R
-import com.kainalu.readerforreddit.user.LoggedOutUser
-import com.kainalu.readerforreddit.user.UserData
+import com.kainalu.readerforreddit.models.LoggedOutUser
+import com.kainalu.readerforreddit.models.UserData
 import kotlinx.android.synthetic.main.account_switcher_item.view.*
 
 class AccountSwitcherItemView @JvmOverloads constructor(

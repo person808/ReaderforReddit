@@ -6,7 +6,6 @@ import androidx.lifecycle.MediatorLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.kainalu.readerforreddit.network.Resource
-import com.kainalu.readerforreddit.user.UserManager
 import com.kainalu.readerforreddit.util.Event
 import kotlinx.coroutines.launch
 import javax.inject.Inject
