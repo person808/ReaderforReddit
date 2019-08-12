@@ -40,7 +40,7 @@ data class User(
         get() = commentKarma + linkKarma
 
     override suspend fun getSubscriptions(): List<Subreddit> {
-        return userRepository.getDefaultSubscriptions()
+        return userRepository.getUserSubscriptions()
     }
 
     companion object {

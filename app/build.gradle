@@ -71,6 +71,7 @@ dependencies {
     implementation "com.airbnb.android:epoxy:$epoxy_version"
     implementation "com.airbnb.android:epoxy-paging:$epoxy_version"
     kapt "com.airbnb.android:epoxy-processor:$epoxy_version"
+    implementation 'com.amulyakhare:com.amulyakhare.textdrawable:1.0.1'
     implementation "com.github.bumptech.glide:glide:$glide_version"
     kapt "com.github.bumptech.glide:compiler:$glide_version"
     implementation 'com.google.android.material:material:1.1.0-alpha09'

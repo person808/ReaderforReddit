@@ -14,5 +14,7 @@ data class Subreddit(
     @Json(name = "display_name")
     val displayName: String,
     @Json(name = "display_name_prefixed")
-    val prefixedDisplayName: String
+    val prefixedDisplayName: String,
+    @Json(name = "icon_img")
+    val iconUrl: String?
 ) : Thing, Created
