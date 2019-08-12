@@ -29,6 +29,7 @@ class AccountSwitcherItemView @JvmOverloads constructor(
         layoutParams = LayoutParams(LayoutParams.MATCH_PARENT, height)
         orientation = HORIZONTAL
         addRipple()
+        profileImageView.clipToOutline = true
     }
 
     override fun isChecked(): Boolean {

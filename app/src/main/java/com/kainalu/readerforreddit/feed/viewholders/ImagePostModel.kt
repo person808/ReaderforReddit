@@ -15,6 +15,7 @@ abstract class ImagePostModel : BaseLinkModel<ImagePostHolder>() {
     override fun bind(holder: ImagePostHolder) {
         super.bind(holder)
         holder.imageView.visibility = if (link.preview == null) View.GONE else View.VISIBLE
+        holder.imageView.clipToOutline = true
         link.preview?.let {
             GlideApp.with(holder.imageView)
                 .load(link.url)
