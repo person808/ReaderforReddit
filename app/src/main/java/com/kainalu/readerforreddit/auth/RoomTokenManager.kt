@@ -27,7 +27,7 @@ class RoomTokenManager @Inject constructor(
         } else {
             authService.refreshToken(refreshToken = refreshToken)
         }
-        saveToken(SavedToken.fromToken(userId, token))
+        saveToken(SavedToken.fromToken(userId, token.copy(refreshToken = refreshToken)))
         return token
     }
 
