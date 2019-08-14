@@ -7,18 +7,20 @@ import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
+import androidx.navigation.fragment.findNavController
 import com.kainalu.readerforreddit.R
 import com.kainalu.readerforreddit.di.Injector
 import com.kainalu.readerforreddit.di.ViewModelFactory
+import com.kainalu.readerforreddit.network.models.Subreddit
 import kotlinx.android.synthetic.main.fragment_subscriptions.*
 import javax.inject.Inject
 
-class SubscriptionsFragment : Fragment() {
+class SubscriptionsFragment : Fragment(), SubscriptionController.SubredditClickListener {
 
     @Inject
     lateinit var viewModelFactory: ViewModelFactory
     private val viewmodel by viewModels<SubscriptionsViewModel> { viewModelFactory }
-    private val controller = SubscriptionController()
+    private val controller = SubscriptionController(this)
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -35,5 +37,10 @@ class SubscriptionsFragment : Fragment() {
         viewmodel.subscriptions.observe(viewLifecycleOwner, Observer {
             controller.setData(it)
         })
+    }
+
+    override fun onSubredditClicked(subreddit: Subreddit) {
+        val action = SubscriptionsFragmentDirections.actionSubscriptionsFragmentToSubredditFragment(subreddit.displayName)
+        findNavController().navigate(action)
     }
 }

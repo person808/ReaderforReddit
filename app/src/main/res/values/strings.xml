@@ -41,6 +41,8 @@
 
     <string name="children_hidden">%1$d hidden</string>
 
+    <string name="frontpage">Frontpage</string>
+
     <string name="best">Best</string>
     <string name="hot">Hot</string>
     <string name="top">Top</string>

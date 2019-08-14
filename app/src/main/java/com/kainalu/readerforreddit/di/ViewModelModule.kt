@@ -6,6 +6,7 @@ import com.kainalu.readerforreddit.AccountSwitcherViewModel
 import com.kainalu.readerforreddit.auth.AuthViewModel
 import com.kainalu.readerforreddit.feed.FeedViewModel
 import com.kainalu.readerforreddit.submission.SubmissionViewModel
+import com.kainalu.readerforreddit.subreddit.SubredditViewModel
 import com.kainalu.readerforreddit.subscription.SubscriptionsViewModel
 import dagger.Binds
 import dagger.Module
@@ -39,4 +40,9 @@ interface ViewModelModule {
     @IntoMap
     @ViewModelKey(AuthViewModel::class)
     fun authViewModel(viewModel: AuthViewModel): ViewModel
+
+    @Binds
+    @IntoMap
+    @ViewModelKey(SubredditViewModel::class)
+    fun subredditViewModel(viewModel: SubredditViewModel): ViewModel
 }

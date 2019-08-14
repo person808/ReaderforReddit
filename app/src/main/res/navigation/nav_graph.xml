@@ -9,13 +9,16 @@
         android:id="@+id/feedFragment"
         android:name="com.kainalu.readerforreddit.feed.FeedFragment"
         android:label="fragment_feed"
-        tools:layout="@layout/fragment_feed" >
+        tools:layout="@layout/fragment_subreddit" >
         <action
             android:id="@+id/action_feedFragment_to_submissionFragment"
             app:destination="@id/submissionFragment" />
         <action
             android:id="@+id/action_feedFragment_to_subscriptionsFragment"
             app:destination="@id/subscriptionsFragment" />
+        <action
+            android:id="@+id/action_feedFragment_to_subredditFragment"
+            app:destination="@id/subredditFragment" />
     </fragment>
     <fragment
         android:id="@+id/submissionFragment"
@@ -27,11 +30,18 @@
         <argument
             android:name="threadId"
             app:argType="string" />
+        <action
+            android:id="@+id/action_submissionFragment_to_subredditFragment"
+            app:destination="@id/subredditFragment" />
     </fragment>
     <fragment
         android:id="@+id/subscriptionsFragment"
         android:name="com.kainalu.readerforreddit.subscription.SubscriptionsFragment"
-        android:label="SubscriptionsFragment" />
+        android:label="SubscriptionsFragment" >
+        <action
+            android:id="@+id/action_subscriptionsFragment_to_subredditFragment"
+            app:destination="@id/subredditFragment" />
+    </fragment>
     <dialog
         android:id="@+id/accountSwitcherDialog"
         android:name="com.kainalu.readerforreddit.ui.AccountSwitcherDialog"
@@ -55,5 +65,16 @@
             app:destination="@id/feedFragment"
             app:popUpTo="@+id/feedFragment"
             app:popUpToInclusive="true" />
+    </fragment>
+    <fragment
+        android:id="@+id/subredditFragment"
+        android:name="com.kainalu.readerforreddit.subreddit.SubredditFragment"
+        android:label="SubredditFragment" >
+        <argument
+            android:name="subreddit"
+            app:argType="string" />
+        <action
+            android:id="@+id/action_subredditFragment_to_submissionFragment"
+            app:destination="@id/submissionFragment" />
     </fragment>
 </navigation>

@@ -7,6 +7,7 @@ import com.kainalu.readerforreddit.feed.FeedFragment
 import com.kainalu.readerforreddit.models.LoggedOutUser
 import com.kainalu.readerforreddit.models.User
 import com.kainalu.readerforreddit.submission.SubmissionFragment
+import com.kainalu.readerforreddit.subreddit.SubredditFragment
 import com.kainalu.readerforreddit.subscription.SubscriptionsFragment
 import com.kainalu.readerforreddit.ui.AccountSwitcherDialog
 import dagger.BindsInstance
@@ -28,6 +29,7 @@ interface SingletonComponent {
     fun inject(fragment: SubscriptionsFragment)
     fun inject(fragment: AccountSwitcherDialog)
     fun inject(fragment: AuthFragment)
+    fun inject(fragment: SubredditFragment)
     fun inject(user: User)
     fun inject(user: LoggedOutUser)
 }
