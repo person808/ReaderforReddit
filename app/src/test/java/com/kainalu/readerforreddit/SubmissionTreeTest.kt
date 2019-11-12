@@ -1,7 +1,6 @@
 package com.kainalu.readerforreddit
 
 import com.kainalu.readerforreddit.tree.AbstractNode
-import com.kainalu.readerforreddit.tree.AbstractTree
 import org.junit.Assert.assertEquals
 import org.junit.Test
 
@@ -9,31 +8,28 @@ class SubmissionTreeTest {
 
     class AbstractNodeImpl : AbstractNode()
 
-    class AbstractTreeImpl : AbstractTree(AbstractNodeImpl())
-
     private fun newNode() = AbstractNodeImpl()
 
     @Test
     fun testNodeSize() {
         val node = newNode()
-        assertEquals(1, node.size())
+        assertEquals(1, node.size)
 
         repeat(2) {
             node.addChild(newNode())
         }
-        assertEquals(3, node.size())
+        assertEquals(3, node.size)
 
         repeat(2) {
             node.children[0].addChild(newNode())
             node.children[1].addChild(newNode())
         }
-        assertEquals(7, node.size())
+        assertEquals(7, node.size)
     }
 
     @Test
     fun testTreeSize_forCorrectness() {
-        val tree = AbstractTreeImpl()
-        val root = tree.root
+        val root = AbstractNodeImpl()
 
         fun newNodeOfSize7(): AbstractNodeImpl = newNode().apply {
             repeat(2) {
@@ -46,14 +42,14 @@ class SubmissionTreeTest {
         }
 
         val newNode = newNodeOfSize7()
-        tree.addChild(root, newNode)
-        assertEquals(8, tree.size)
+        root.addChild(newNode)
+        assertEquals(8, root.size)
 
-        tree.addChild(newNode, newNodeOfSize7())
-        assertEquals(15, tree.size)
+        newNode.addChild(newNodeOfSize7())
+        assertEquals(15, root.size)
 
-        tree.replaceChild(root, newNode, newNode())
-        assertEquals(2, tree.size)
+        root.replaceChild(newNode, newNode())
+        assertEquals(2, root.size)
     }
 
     @Test
@@ -65,21 +61,21 @@ class SubmissionTreeTest {
         //     /|\
         //    c d e
         // output of flattening should be zacdeb
-        val tree = AbstractTreeImpl()
-        val z = tree.root
+        val root = AbstractNodeImpl()
+        val z = root
         val a = newNode()
         val b = newNode()
         val c = newNode()
         val d = newNode()
         val e = newNode()
 
-        tree.addChild(z, a)
-        tree.addChild(z, b)
-        tree.addChild(a, c)
-        tree.addChild(a, d)
-        tree.addChild(a, e)
+        root.addChild(a)
+        root.addChild(b)
+        a.addChild(c)
+        a.addChild(d)
+        a.addChild(e)
 
-        val flattenedTree = tree.flatten()
+        val flattenedTree = root.flatten()
         val expected = listOf(z, a, c, d, e, b)
         assertEquals(expected, flattenedTree)
     }

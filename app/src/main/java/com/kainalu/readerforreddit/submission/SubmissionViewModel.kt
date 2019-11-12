@@ -13,7 +13,8 @@ class SubmissionViewModel @Inject constructor(
     private val submissionRepository: SubmissionRepository
 ) : ViewModel() {
 
-    private val _viewState = MediatorLiveData<SubmissionViewState>().apply { value = SubmissionViewState() }
+    private val _viewState =
+        MediatorLiveData<SubmissionViewState>().apply { value = SubmissionViewState() }
     val viewState: LiveData<SubmissionViewState>
         get() = _viewState
     private val currentViewState: SubmissionViewState
@@ -29,15 +30,15 @@ class SubmissionViewModel @Inject constructor(
     fun getChildren(more: MoreNode) {
         viewModelScope.launch {
             val liveData = submissionRepository.loadChildren(
-                currentViewState.link!!,
+                currentViewState.submissionTree!!,
                 currentViewState.sort!!,
-                more,
-                currentViewState.submissionTree!!
+                more
             )
             _viewState.addSource(liveData) {
                 when (it) {
                     is Resource.Success -> {
-                        _viewState.postValue(currentViewState.copy(comments = it.data.getDataPair().second))
+                        val comments = currentViewState.submissionTree?.getFlattenedComments()
+                        _viewState.postValue(currentViewState.copy(comments = comments))
                         _viewState.removeSource(liveData)
                     }
                     is Resource.Loading -> {
@@ -55,24 +56,26 @@ class SubmissionViewModel @Inject constructor(
     }
 
     fun refresh() {
-        loadSubmission(currentViewState.subreddit, currentViewState.threadId, currentViewState.sort!!)
+        loadSubmission(
+            currentViewState.subreddit,
+            currentViewState.threadId,
+            currentViewState.sort!!
+        )
     }
 
     private fun loadSubmission(subreddit: String, threadId: String, sort: SubmissionSort) {
         _viewState.value = currentViewState.copy(sort = sort)
         viewModelScope.launch {
             val liveData = submissionRepository.getSubmission(subreddit, threadId, sort)
-            _viewState.addSource(liveData) {
-                when (it) {
+            _viewState.addSource(liveData) { submissionResource ->
+                when (submissionResource) {
                     is Resource.Success -> {
-                        val (link, comments) = it.data.getDataPair()
                         _viewState.postValue(
                             currentViewState.copy(
                                 subreddit = subreddit,
                                 threadId = threadId,
-                                submissionTree = it.data,
-                                link = link,
-                                comments = comments,
+                                submissionTree = submissionResource.data,
+                                comments = submissionResource.data.getFlattenedComments(),
                                 loading = false
                             )
                         )

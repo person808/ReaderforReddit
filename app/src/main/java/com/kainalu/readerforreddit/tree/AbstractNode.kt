@@ -2,10 +2,6 @@ package com.kainalu.readerforreddit.tree
 
 /**
  * A node that can contain an arbitrary number of ordered children.
- * It is preferred to use the methods in [AbstractTree] to manipulate tree data
- * instead of directly manipulating the nodes using the methods in this class.
- *
- * @see AbstractTree
  */
 abstract class AbstractNode {
 
@@ -17,6 +13,24 @@ abstract class AbstractNode {
 
     /** The depth of a node in a tree. -1 if the node is not attached to a tree */
     var depth = -1
+        set(value) {
+            field = value
+            for (_child in _children) {
+                _child.depth = depth + 1
+            }
+        }
+
+    /**
+     * The number of nodes in the tree starting at this node.
+     */
+    val size: Int
+        get() {
+            var total = 1  // Always count this node
+            for (child in _children) {
+                total += child.size
+            }
+            return total
+        }
 
     /** The immediate parent of this node */
     var parent: AbstractNode? = null
@@ -25,11 +39,11 @@ abstract class AbstractNode {
      * Adds a child node to this node.
      *
      * @param node The node to add
-     * @see SubmissionTree.addChild
      */
     open fun addChild(node: AbstractNode) {
         _children.add(node)
         node.parent = this
+        node.depth = depth + 1
     }
 
     /**
@@ -37,18 +51,17 @@ abstract class AbstractNode {
      *
      * @param index The index of [children] where the new node is added
      * @param node The node to add
-     * @see SubmissionTree.addChild
      */
     open fun addChild(index: Int, node: AbstractNode) {
         _children.add(index, node)
         node.parent = this
+        node.depth = depth + 1
     }
 
     /**
      * Removes a child of this node.
      *
      * @param node The node to remove
-     * @see SubmissionTree.removeChild
      */
     open fun removeChild(node: AbstractNode): AbstractNode {
         _children.remove(node)
@@ -59,7 +72,6 @@ abstract class AbstractNode {
      * Removes a child of this node at a given index of this node's children.
      *
      * @param index The index of the node to remove in [children]
-     * @see SubmissionTree.removeChildAt
      */
     open fun removeChildAt(index: Int): AbstractNode {
         return _children.removeAt(index)
@@ -70,27 +82,70 @@ abstract class AbstractNode {
      *
      * @param index The index of the node to replace in [children]
      * @param newNode The new child node to add at [index]
-     * @see AbstractTree.replaceChild
-     * @see AbstractTree.removeChildAt
      */
     open fun replaceChildAt(index: Int, newNode: AbstractNode) {
         removeChildAt(index)
         _children.add(index, newNode)
+        newNode.depth = depth + 1
     }
 
     /**
-     * The number of nodes in the tree starting at this node.
+     * Removes a child node from this node's children and adds a new child node at the same
+     * index of the removed child node
+     *
+     * @param oldChild The child node to remove
+     * @param newChild The child node to add
      */
-    fun size(): Int {
-        var total = 1  // Always count this node
-        children.forEach {
-            total += it.size()
+    open fun replaceChild(oldChild: AbstractNode, newChild: AbstractNode) {
+        val index = _children.indexOf(oldChild)
+        replaceChildAt(index, newChild)
+    }
+
+    /**
+     * Removes a child node from this node's children and adds new children nodes starting
+     * at the same index of the removed child node
+     *
+     * @param oldChild The child node to remove
+     * @param newChildren A list of new children nodes to add
+     */
+    fun replaceChild(
+        oldChild: AbstractNode,
+        newChildren: List<AbstractNode>
+    ) {
+        var index = _children.indexOf(oldChild)
+        removeChildAt(index)
+        for (child in newChildren) {
+            addChild(index++, child)
         }
-        return total
+    }
+
+    /**
+     * Flattens the tree into a list using pre-order traversal
+     *
+     * @return A list of nodes
+     */
+    fun flatten(): List<AbstractNode> {
+        val output = ArrayList<AbstractNode>(size)
+        flattenNode(this, output)
+        return output
+    }
+
+    private fun flattenNode(node: AbstractNode, output: MutableList<AbstractNode>) {
+        output.add(node)
+        for (childNode in node._children) {
+            flattenNode(childNode, output)
+        }
+    }
+
+    private fun setNodeDepth(node: AbstractNode, depth: Int) {
+        node.depth = depth
+        for (child in node.children) {
+            setNodeDepth(child, depth + 1)
+        }
     }
 
     /**
      * A recursive count of the number of children attached to this node
      */
-    fun countChildren(): Int = size() - 1
+    fun countChildren(): Int = size - 1
 }

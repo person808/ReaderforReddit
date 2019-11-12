@@ -105,7 +105,7 @@ class SubmissionFragment : Fragment(), SubmissionController.CommentClickListener
     }
 
     private fun render(viewState: SubmissionViewState) {
-        controller.setData(viewState.link, viewState.comments, viewState.sort)
+        controller.setData(viewState.submissionTree, viewState.comments, viewState.sort)
         swipeRefreshLayout.isRefreshing = viewState.loading
     }
 }

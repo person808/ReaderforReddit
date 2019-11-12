@@ -22,48 +22,43 @@ class SubmissionRepository @Inject constructor(private val apiService: ApiServic
         subreddit: String,
         threadId: String,
         sort: SubmissionSort
-    ): LiveData<Resource<SubmissionTree>> = liveData {
-        emit(Resource.Loading<SubmissionTree>(null))
+    ): LiveData<Resource<LinkNode>> = liveData {
+        emit(Resource.Loading<LinkNode>(null))
         try {
             val response = apiService.getSubmission(subreddit, threadId, sort.urlString)
             if (response.isSuccessful) {
                 val body = response.body()
                 if (body == null) {
-                    emit(Resource.Error<SubmissionTree>(error = null))
+                    emit(Resource.Error(error = null))
                     return@liveData
                 }
 
                 if (body.size != 2) {
                     Log.e(TAG, "Response should contain 2 items. Found ${body.size} items.")
-                    emit(Resource.Error<SubmissionTree>(null, null))
+                    emit(Resource.Error<LinkNode>(null, null))
                     return@liveData
                 }
 
                 val link = body.first().children.first() as Link
                 val comments = body.last().children
-                val tree = SubmissionTree.Builder()
-                    .setComments(comments)
-                    .setRoot(LinkDataImpl(link))
-                    .build()
-                emit(Resource.Success(tree))
+                emit(Resource.Success(LinkNode(LinkDataImpl(link), comments)))
             } else {
-                emit(Resource.Error<SubmissionTree>(error = null))
+                emit(Resource.Error(error = null))
             }
         } catch (e: HttpException) {
-            emit(Resource.Error<SubmissionTree>(error = e))
+            emit(Resource.Error(error = e))
         }
     }
 
     suspend fun loadChildren(
         linkData: LinkData,
         sort: SubmissionSort,
-        moreNode: MoreNode,
-        submissionTree: SubmissionTree
-    ): LiveData<Resource<SubmissionTree>> = liveData {
+        moreNode: MoreNode
+    ): LiveData<Resource<Any>> = liveData {
         val ids = moreNode.childIds.take(LOAD_CHILDREN_LIMIT)
         moreNode.childIds.removeAll(ids)
 
-        emit(Resource.Loading<SubmissionTree>(null))
+        emit(Resource.Loading<Any>(null))
         val response = apiService.getChildren(
             children = TextUtils.join(",", ids),
             linkId = linkData.name,
@@ -73,7 +68,7 @@ class SubmissionRepository @Inject constructor(private val apiService: ApiServic
         if (response.isSuccessful) {
             val body = response.body()
             if (body == null) {
-                emit(Resource.Error<SubmissionTree>(null, null))
+                emit(Resource.Error<Any>(null, null))
                 return@liveData
             }
 
@@ -93,10 +88,10 @@ class SubmissionRepository @Inject constructor(private val apiService: ApiServic
             if (hasRootMoreNode) {
                 newNodes.add(rootMoreNode)
             }
-            submissionTree.replaceChild(moreNode.parent!!, moreNode, newNodes)
-            emit(Resource.Success(submissionTree))
+            moreNode.parent!!.replaceChild(moreNode, newNodes)
+            emit(Resource.Success<Any>(Any()))
         } else {
-            emit(Resource.Error<SubmissionTree>(null, null))
+            emit(Resource.Error<Any>(null, null))
         }
     }
 
