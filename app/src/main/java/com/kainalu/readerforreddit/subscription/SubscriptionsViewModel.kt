@@ -8,6 +8,7 @@ import com.kainalu.readerforreddit.auth.UserManager
 import com.kainalu.readerforreddit.models.UserData
 import com.kainalu.readerforreddit.network.models.Subreddit
 import kotlinx.coroutines.launch
+import java.util.*
 import javax.inject.Inject
 
 class SubscriptionsViewModel @Inject constructor(
@@ -35,7 +36,11 @@ class SubscriptionsViewModel @Inject constructor(
     fun getSubscriptions() {
         withUser { user ->
             // TODO handle HttpExceptions when retrieving subscriptions
-            _subscriptions.postValue(user.getSubscriptions().sortedBy { it.displayName.toLowerCase() })
+            _subscriptions.postValue(user.getSubscriptions().sortedBy {
+                it.displayName.toLowerCase(
+                    Locale.getDefault()
+                )
+            })
         }
     }
 }

@@ -13,6 +13,7 @@ import com.kainalu.readerforreddit.GlideApp
 import com.kainalu.readerforreddit.R
 import com.kainalu.readerforreddit.network.models.Subreddit
 import com.kainalu.readerforreddit.util.KotlinEpoxyHolder
+import java.util.*
 
 @EpoxyModelClass(layout = R.layout.subreddit_list_item)
 abstract class SubredditModel : EpoxyModelWithHolder<SubredditHolder>() {
@@ -28,7 +29,7 @@ abstract class SubredditModel : EpoxyModelWithHolder<SubredditHolder>() {
         val colorGenerator = ColorGenerator.MATERIAL
         val color = colorGenerator.getColor(subreddit.id)
         val iconPlaceholder = TextDrawable.builder()
-            .buildRect(subreddit.displayName.toUpperCase().first().toString(), color)
+            .buildRect(subreddit.displayName.toUpperCase(Locale.US).first().toString(), color)
         holder.iconImageView.clipToOutline = true
         GlideApp.with(holder.iconImageView)
             .load(subreddit.iconUrl)

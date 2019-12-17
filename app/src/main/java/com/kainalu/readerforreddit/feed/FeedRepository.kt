@@ -13,6 +13,7 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 import retrofit2.HttpException
+import java.util.*
 import javax.inject.Inject
 import javax.inject.Singleton
 
@@ -35,12 +36,16 @@ class FeedRepository @Inject constructor(private val apiService: ApiService) {
             val subreddit = if (subredditName.isNotEmpty()) {
                 apiService.getSubreddit(
                     subredditName,
-                    sort.name.toLowerCase(),
+                    sort.name.toLowerCase(Locale.US),
                     sortDuration.string,
                     after
                 )
             } else {
-                apiService.getSubreddit(sort.name.toLowerCase(), sortDuration.string, after)
+                apiService.getSubreddit(
+                    sort.name.toLowerCase(Locale.US),
+                    sortDuration.string,
+                    after
+                )
             }
             Resource.Success(subreddit)
         } catch (e: HttpException) {
@@ -70,7 +75,7 @@ class FeedRepository @Inject constructor(private val apiService: ApiService) {
         }
 
     fun getDefaultSort(subreddit: String): SubredditSort {
-        return when (subreddit.toLowerCase()) {
+        return when (subreddit.toLowerCase(Locale.US)) {
             "" -> SubredditSort.BEST
             else -> SubredditSort.HOT
         }
