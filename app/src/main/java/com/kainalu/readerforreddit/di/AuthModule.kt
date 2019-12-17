@@ -18,7 +18,7 @@ object AuthModule {
     @Singleton
     @Named("auth")
     @JvmStatic
-    fun okhttp(): OkHttpClient {
+    fun okhttp(okHttpClient: OkHttpClient): OkHttpClient {
         val logger = HttpLoggingInterceptor().apply { level = HttpLoggingInterceptor.Level.BASIC }
         val headersInterceptor = Interceptor { chain ->
             val original = chain.request()
@@ -41,7 +41,7 @@ object AuthModule {
             }
         }
 
-        return OkHttpClient.Builder()
+        return okHttpClient.newBuilder()
             .authenticator(authenticator)
             .addInterceptor(headersInterceptor)
             .addInterceptor(logger)

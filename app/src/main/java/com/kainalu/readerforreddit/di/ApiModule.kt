@@ -18,14 +18,14 @@ import retrofit2.converter.moshi.MoshiConverterFactory
 import javax.inject.Named
 import javax.inject.Singleton
 
-@Module
+@Module(includes = [NetworkModule::class])
 object ApiModule {
 
     @Provides
     @Singleton
     @Named("api")
     @JvmStatic
-    fun okhttp(tokenManager: TokenManager): OkHttpClient {
+    fun okhttp(okHttpClient: OkHttpClient, tokenManager: TokenManager): OkHttpClient {
         val logger = HttpLoggingInterceptor().apply { level = HttpLoggingInterceptor.Level.BASIC }
 
         fun refreshToken(): TokenData = runBlocking {
@@ -61,7 +61,7 @@ object ApiModule {
             response
         }
 
-        return OkHttpClient.Builder()
+        return okHttpClient.newBuilder()
             .addInterceptor(interceptor)
             .addInterceptor(logger)
             .build()

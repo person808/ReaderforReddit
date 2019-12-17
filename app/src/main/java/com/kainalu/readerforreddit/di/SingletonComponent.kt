@@ -15,7 +15,15 @@ import dagger.Component
 import javax.inject.Singleton
 
 @Singleton
-@Component(modules = [ApiModule::class, AuthModule::class, PersistenceModule::class, ViewModelModule::class])
+@Component(
+    modules = [
+        ApiModule::class,
+        AuthModule::class,
+        NetworkModule::class,
+        PersistenceModule::class,
+        ViewModelModule::class
+    ]
+)
 interface SingletonComponent {
 
     @Component.Factory
