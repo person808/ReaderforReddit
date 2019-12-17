@@ -1,5 +1,6 @@
 package com.kainalu.readerforreddit.auth
 
+import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.liveData
 import com.kainalu.readerforreddit.BuildConfig
@@ -19,7 +20,7 @@ class UserManagerImpl @Inject constructor(
     private val apiService: ApiService,
     private val database: AppDatabase,
     private val tokenManager: TokenManager
-): UserManager {
+) : UserManager {
 
     override fun isLoggedIn(): Boolean {
         return tokenManager.getActiveTokenId() != TokenManager.LOGGED_OUT_TOKEN_ID
@@ -43,21 +44,21 @@ class UserManagerImpl @Inject constructor(
     override suspend fun addUser(code: String): LiveData<Resource<User>> = liveData {
         emit(Resource.Loading<User>(null))
 
-        val token = tokenManager.retrieveLoggedInToken(code, BuildConfig.REDIRECT_URI)
-        // store the token temporarily with a temporary userId so we can request the actual userId
-        tokenManager.saveToken(SavedToken.fromToken(TEMP_USER_ID, token))
-        tokenManager.setActiveTokenId(TEMP_USER_ID)
+        try {
+            val token = tokenManager.retrieveLoggedInToken(code, BuildConfig.REDIRECT_URI)
+            // store the token temporarily with a temporary userId so we can request the actual userId
+            tokenManager.saveToken(SavedToken.fromToken(TEMP_USER_ID, token))
+            tokenManager.setActiveTokenId(TEMP_USER_ID)
 
-        val response = apiService.me()
-        if (response.isSuccessful) {
-            val user = User.fromAccount(response.body()!!)
+            val user = User.fromAccount(apiService.me())
             database.userDao().insertAll(user)
             database.tokenDao().insertAll(SavedToken.fromToken(user.id, token))
             database.tokenDao().deleteByUserId(TEMP_USER_ID)
             tokenManager.setActiveTokenId(user.id)
             emit(Resource.Success(user))
-        } else {
-            emit(Resource.Error<User>(error = HttpException(response)))
+        } catch (e: HttpException) {
+            Log.e(TAG, e.message(), e)
+            emit(Resource.Error<User>(error = e))
         }
     }
 
@@ -67,5 +68,6 @@ class UserManagerImpl @Inject constructor(
 
     companion object {
         private const val TEMP_USER_ID = "temp_user_id"
+        private const val TAG = "UserManager"
     }
 }

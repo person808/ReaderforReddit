@@ -11,7 +11,6 @@ import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 class SubscriptionsViewModel @Inject constructor(
-    private val subscriptionRepository: SubscriptionRepository,
     private val userManager: UserManager
 ): ViewModel() {
 
@@ -35,6 +34,7 @@ class SubscriptionsViewModel @Inject constructor(
 
     fun getSubscriptions() {
         withUser { user ->
+            // TODO handle HttpExceptions when retrieving subscriptions
             _subscriptions.postValue(user.getSubscriptions().sortedBy { it.displayName.toLowerCase() })
         }
     }

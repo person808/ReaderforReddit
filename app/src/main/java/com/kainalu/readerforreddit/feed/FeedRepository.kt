@@ -22,29 +22,29 @@ class FeedRepository @Inject constructor(private val apiService: ApiService) {
     private val pagingConfig = Config(pageSize = 25, prefetchDistance = 50, enablePlaceholders = false)
 
     suspend fun getFeed(
-        subreddit: String = "",
+        subredditName: String = "",
         sort: SubredditSort,
         sortDuration: Duration,
         after: String = ""
     ): Resource<Listing<Link>> {
-        if (subreddit.isNotEmpty() && sort == SubredditSort.BEST) {
-            throw IllegalArgumentException("Subreddit subreddit_sort ${sort.name} is invalid for $subreddit")
+        if (subredditName.isNotEmpty() && sort == SubredditSort.BEST) {
+            throw IllegalArgumentException("Subreddit subreddit_sort ${sort.name} is invalid for $subredditName")
         }
 
         return try {
-            val response = if (subreddit.isNotEmpty()) {
-                apiService.getSubreddit(subreddit, sort.name.toLowerCase(), sortDuration.string, after)
+            val subreddit = if (subredditName.isNotEmpty()) {
+                apiService.getSubreddit(
+                    subredditName,
+                    sort.name.toLowerCase(),
+                    sortDuration.string,
+                    after
+                )
             } else {
                 apiService.getSubreddit(sort.name.toLowerCase(), sortDuration.string, after)
             }
-
-            if (response.isSuccessful) {
-                Resource.Success(response.body()!!)
-            } else {
-                Resource.Error(response.body(), null)
-            }
+            Resource.Success(subreddit)
         } catch (e: HttpException) {
-            Log.e(TAG, e.message ?: "Unknown error", e)
+            Log.e(TAG, e.message, e)
             Resource.Error(error = e)
         }
     }
