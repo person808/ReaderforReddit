@@ -1,13 +1,6 @@
 package com.kainalu.readerforreddit.models
 
-import android.content.Context
-import android.text.Spannable
-import android.text.SpannableString
-import android.text.Spanned
-import android.text.style.TextAppearanceSpan
-import com.kainalu.readerforreddit.R
 import com.kainalu.readerforreddit.network.models.PreviewInfo
-import com.kainalu.readerforreddit.util.getFormattedString
 import org.threeten.bp.LocalDateTime
 
 /**
@@ -31,14 +24,3 @@ interface LinkData {
     val url: String
 }
 
-fun LinkData.getFormattedTitle(context: Context): Spanned {
-    val span = SpannableString("${score.getFormattedString()} $title")
-    val firstSpaceIndex = span.indexOfFirst { it == ' ' }
-    span.setSpan(
-        TextAppearanceSpan(context, R.style.LinkScoreTextAppearance),
-        0,
-        firstSpaceIndex,
-        Spannable.SPAN_INCLUSIVE_EXCLUSIVE
-    )
-    return span
-}

@@ -15,6 +15,7 @@ import com.bumptech.glide.request.RequestListener
 import com.bumptech.glide.request.target.Target
 import com.google.android.material.card.MaterialCardView
 import com.kainalu.readerforreddit.R
+import com.kainalu.readerforreddit.network.models.PreviewInfo
 
 @EpoxyModelClass(layout = R.layout.submission_web_item)
 abstract class WebSubmissionModel : BaseSubmissionModel<WebSubmissionHolder>() {
@@ -48,18 +49,22 @@ abstract class WebSubmissionModel : BaseSubmissionModel<WebSubmissionHolder>() {
         }
     }
 
+    @EpoxyAttribute
+    lateinit var domain: String
+    @EpoxyAttribute
+    var preview: PreviewInfo? = null
     @EpoxyAttribute lateinit var onLinkClick: View.OnClickListener
 
     override fun bind(holder: WebSubmissionHolder) {
         super.bind(holder)
-        link.preview?.let {
+        preview?.let {
             Glide.with(holder.previewImageView)
                 .load(it.url)
                 .listener(PreviewRequestListener(holder))
                 .into(holder.previewImageView)
         }
         holder.previewContainer.setOnClickListener(onLinkClick)
-        holder.domainTextView.text = link.domain
+        holder.domainTextView.text = domain
     }
 }
 

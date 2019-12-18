@@ -3,20 +3,27 @@ package com.kainalu.readerforreddit.submission.viewholders
 import android.view.View
 import android.widget.ImageView
 import androidx.core.view.updateLayoutParams
+import com.airbnb.epoxy.EpoxyAttribute
 import com.airbnb.epoxy.EpoxyModelClass
 import com.bumptech.glide.request.RequestOptions
 import com.kainalu.readerforreddit.GlideApp
 import com.kainalu.readerforreddit.R
+import com.kainalu.readerforreddit.network.models.PreviewInfo
 import com.bumptech.glide.request.target.Target as GlideTarget
 
 
 @EpoxyModelClass(layout = R.layout.submission_image_item)
 abstract class ImageSubmissionModel : BaseSubmissionModel<ImageSubmissionHolder>() {
 
+    @EpoxyAttribute
+    var preview: PreviewInfo? = null
+    @EpoxyAttribute
+    lateinit var url: String
+
     override fun bind(holder: ImageSubmissionHolder) {
         super.bind(holder)
-        holder.imageView.visibility = if (link.preview == null) View.GONE else View.VISIBLE
-        link.preview?.let { previewInfo ->
+        holder.imageView.visibility = if (preview == null) View.GONE else View.VISIBLE
+        preview?.let { previewInfo ->
             // Make sure we measure the view's dimensions after layout by using view.post()
             // Otherwise we might receive a width of 0
             holder.imageView.post {
@@ -27,7 +34,7 @@ abstract class ImageSubmissionModel : BaseSubmissionModel<ImageSubmissionHolder>
                 holder.imageView.updateLayoutParams { height = imageViewHeightPx.toInt() }
             }
             GlideApp.with(holder.imageView)
-                .load(link.url)
+                .load(url)
                 .apply(RequestOptions().override(GlideTarget.SIZE_ORIGINAL))
                 .into(holder.imageView)
         }

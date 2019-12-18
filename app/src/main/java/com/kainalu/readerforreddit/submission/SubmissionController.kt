@@ -30,20 +30,50 @@ class SubmissionController(
         linkNode?.let {
             when (it.postHint) {
                 "image" -> imageSubmission {
-                    link(it)
+                    author(it.author)
+                    createdTime(it.createdUtc)
+                    numComments(it.numComments ?: 0)
+                    score(it.score)
+                    subreddit(it.subreddit)
+                    title(it.title)
+
+                    preview(it.preview)
+                    url(it.url)
                     id(it.id)
                 }
                 "link" -> webSubmission {
-                    link(it)
+                    author(it.author)
+                    createdTime(it.createdUtc)
+                    numComments(it.numComments ?: 0)
+                    score(it.score)
+                    subreddit(it.subreddit)
+                    title(it.title)
+
+                    domain(it.domain ?: "")
+                    preview(it.preview)
                     onLinkClick { _ -> linkClickListener.onLinkClicked(it) }
                     id(it.id)
                 }
                 "self" -> selfSubmission {
-                    link(it)
+                    author(it.author)
+                    createdTime(it.createdUtc)
+                    numComments(it.numComments ?: 0)
+                    score(it.score)
+                    subreddit(it.subreddit)
+                    title(it.title)
+
+                    selfText(it.selftext)
                     id(it.id)
                 }
                 else -> selfSubmission {
-                    link(it)
+                    author(it.author)
+                    createdTime(it.createdUtc)
+                    numComments(it.numComments ?: 0)
+                    score(it.score)
+                    subreddit(it.subreddit)
+                    title(it.title)
+
+                    selfText(it.selftext)
                     id(it.id)
                 }
             }
@@ -62,14 +92,23 @@ class SubmissionController(
             when (it) {
                 is CommentNode -> if (it.visibility == VisibilityState.VISIBLE || it.visibility == VisibilityState.COLLAPSED) {
                     comment {
-                        comment(it)
+                        author(it.author)
+                        body(it.body)
+                        createdTime(it.createdUtc)
+                        depth(it.depth)
+                        numChildren(it.countChildren())
+                        score(it.score)
+                        scoreHidden(it.scoreHidden)
+                        visibility(it.visibility)
                         onClick { _ -> commentClickListener.onCommentClicked(it) }
                         id(it.id)
                     }
                 }
                 is MoreNode -> if (it.visibility == VisibilityState.VISIBLE && it.childIds.isNotEmpty()) {
                     more {
-                        data(it)
+                        depth(it.depth)
+                        numChildren(it.childIds.size)
+                        isLoading(it.loading)
                         onClick { _ -> moreClickListener.onMoreClicked(it) }
                         id(it.id)
                     }
@@ -77,4 +116,5 @@ class SubmissionController(
             }
         }
     }
+
 }

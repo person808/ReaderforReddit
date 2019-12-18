@@ -6,33 +6,45 @@ import com.airbnb.epoxy.EpoxyAttribute
 import com.airbnb.epoxy.EpoxyModelWithHolder
 import com.google.android.material.card.MaterialCardView
 import com.kainalu.readerforreddit.R
-import com.kainalu.readerforreddit.models.LinkData
-import com.kainalu.readerforreddit.models.getFormattedTitle
+import com.kainalu.readerforreddit.ui.FormattingHelpers
 import com.kainalu.readerforreddit.util.KotlinEpoxyHolder
 import com.kainalu.readerforreddit.util.getFormattedString
 import com.kainalu.readerforreddit.util.getPostTime
+import org.threeten.bp.LocalDateTime
 
 abstract class BaseSubmissionModel<T : BaseHolder> : EpoxyModelWithHolder<T>() {
 
     @EpoxyAttribute
-    lateinit var link: LinkData
+    lateinit var author: String
+    @EpoxyAttribute
+    lateinit var createdTime: LocalDateTime
+    @EpoxyAttribute
+    var numComments: Int = 0
+    @EpoxyAttribute
+    var score: Int = 0
+    @EpoxyAttribute
+    lateinit var subreddit: String
+    @EpoxyAttribute
+    lateinit var title: String
 
     override fun bind(holder: T) {
         super.bind(holder)
-        with(link) {
-            with(holder.titleTextView) {
-                text = link.getFormattedTitle(context)
-            }
-            with(holder.authorTextView) {
-                text = context.getString(R.string.link_author_subtitle, author, createdUtc.getPostTime(context))
-            }
-            @SuppressLint("SetTextI18n")
-            holder.subredditTextView.text = "r/$subreddit"
-            with(numComments ?: 0) {
-                val context = holder.commentTextView.context
-                holder.commentTextView.text =
-                    context.resources.getQuantityString(R.plurals.comments, this, getFormattedString())
-            }
+        with(holder.titleTextView) {
+            text = FormattingHelpers.formatSubmissionTitle(context, title, score)
+        }
+        with(holder.authorTextView) {
+            text = context.getString(
+                R.string.link_author_subtitle,
+                author,
+                createdTime.getPostTime(context)
+            )
+        }
+        @SuppressLint("SetTextI18n")
+        holder.subredditTextView.text = "r/$subreddit"
+        with(numComments) {
+            val context = holder.commentTextView.context
+            holder.commentTextView.text =
+                context.resources.getQuantityString(R.plurals.comments, this, getFormattedString())
         }
     }
 }

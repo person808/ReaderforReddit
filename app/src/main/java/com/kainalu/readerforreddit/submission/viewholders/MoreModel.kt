@@ -8,13 +8,18 @@ import com.airbnb.epoxy.EpoxyModel
 import com.airbnb.epoxy.EpoxyModelClass
 import com.airbnb.epoxy.EpoxyModelWithHolder
 import com.kainalu.readerforreddit.R
-import com.kainalu.readerforreddit.tree.MoreNode
 import com.kainalu.readerforreddit.util.KotlinEpoxyHolder
 
 @EpoxyModelClass(layout = R.layout.view_more)
 abstract class MoreModel : EpoxyModelWithHolder<MoreHolder>() {
 
-    @EpoxyAttribute lateinit var data: MoreNode
+    @EpoxyAttribute
+    var depth: Int = 2
+    @EpoxyAttribute
+    var numChildren: Int = 0
+    // Needs to be marked open to avoid compilation error
+    @EpoxyAttribute
+    open var isLoading: Boolean = false
     @EpoxyAttribute lateinit var onClick: View.OnClickListener
 
     override fun bind(holder: MoreHolder) {
@@ -22,7 +27,7 @@ abstract class MoreModel : EpoxyModelWithHolder<MoreHolder>() {
         with(holder.container) {
             setOnClickListener(onClick)
             val indicatorWidth = context.resources.getDimensionPixelSize(R.dimen.comment_depth_indicator)
-            setPaddingRelative(indicatorWidth * (data.depth - 2), 0, 0, 0)
+            setPaddingRelative(indicatorWidth * (depth - 2), 0, 0, 0)
         }
         setText(holder.textView)
     }
@@ -34,10 +39,10 @@ abstract class MoreModel : EpoxyModelWithHolder<MoreHolder>() {
 
     private fun setText(textView: TextView) {
         with(textView) {
-            text = if (data.loading) {
+            text = if (isLoading) {
                 context.getString(R.string.loading)
             } else {
-                context.resources.getQuantityString(R.plurals.view_more, data.childIds.size, data.childIds.size)
+                context.resources.getQuantityString(R.plurals.view_more, numChildren, numChildren)
             }
         }
     }
