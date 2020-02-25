@@ -1,9 +1,7 @@
 package com.kainalu.readerforreddit.subreddit
 
 import android.os.Bundle
-import android.view.LayoutInflater
 import android.view.View
-import android.view.ViewGroup
 import androidx.appcompat.widget.PopupMenu
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
@@ -12,18 +10,19 @@ import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import androidx.recyclerview.widget.DividerItemDecoration
 import com.kainalu.readerforreddit.R
+import com.kainalu.readerforreddit.databinding.FragmentSubredditBinding
 import com.kainalu.readerforreddit.di.Injector
 import com.kainalu.readerforreddit.di.ViewModelFactory
 import com.kainalu.readerforreddit.feed.Duration
 import com.kainalu.readerforreddit.feed.LinkController
 import com.kainalu.readerforreddit.feed.SubredditSort
 import com.kainalu.readerforreddit.models.LinkData
+import com.kainalu.readerforreddit.util.viewBinding
 import kotlinx.android.synthetic.main.fragment_feed.recyclerView
-import kotlinx.android.synthetic.main.fragment_feed.swipeRefreshLayout
 import kotlinx.android.synthetic.main.fragment_subreddit.*
 import javax.inject.Inject
 
-class SubredditFragment : Fragment(), LinkController.LinkClickListener {
+class SubredditFragment : Fragment(R.layout.fragment_subreddit), LinkController.LinkClickListener {
 
     private val headerClickListener = View.OnClickListener { v ->
         PopupMenu(requireContext(), v).run {
@@ -94,6 +93,7 @@ class SubredditFragment : Fragment(), LinkController.LinkClickListener {
     }
     private val controller = LinkController(headerClickListener, this)
 
+    private val binding by viewBinding(FragmentSubredditBinding::bind)
     @Inject
     lateinit var viewModelFactory: ViewModelFactory
     private val viewModel by viewModels<SubredditViewModel> { viewModelFactory }
@@ -105,17 +105,13 @@ class SubredditFragment : Fragment(), LinkController.LinkClickListener {
         viewModel.init(args.subreddit)
     }
 
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
-        return inflater.inflate(R.layout.fragment_subreddit, container, false)
-    }
-
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         recyclerView.apply {
             setController(controller)
             addItemDecoration(DividerItemDecoration(context, DividerItemDecoration.VERTICAL))
         }
-        swipeRefreshLayout.setOnRefreshListener { viewModel.refresh() }
+        binding.swipeRefreshLayout.setOnRefreshListener { viewModel.refresh() }
         viewModel.feed.observe(viewLifecycleOwner, Observer { controller.submitList(it) })
         viewModel.viewState.observe(viewLifecycleOwner, Observer { render(it) })
     }
@@ -129,7 +125,7 @@ class SubredditFragment : Fragment(), LinkController.LinkClickListener {
         controller.headerLabel = headerLabel
 
         collapsingToolbarLayout.title = viewState.subreddit
-        swipeRefreshLayout.isRefreshing = viewState.loading
+        binding.swipeRefreshLayout.isRefreshing = viewState.loading
     }
 
     override fun onLinkClicked(link: LinkData) {

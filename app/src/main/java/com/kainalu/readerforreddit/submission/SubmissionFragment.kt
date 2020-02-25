@@ -2,9 +2,7 @@ package com.kainalu.readerforreddit.submission
 
 import android.net.Uri
 import android.os.Bundle
-import android.view.LayoutInflater
 import android.view.View
-import android.view.ViewGroup
 import androidx.appcompat.widget.PopupMenu
 import androidx.browser.customtabs.CustomTabsIntent
 import androidx.fragment.app.Fragment
@@ -12,20 +10,23 @@ import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
 import androidx.navigation.fragment.navArgs
 import com.kainalu.readerforreddit.R
+import com.kainalu.readerforreddit.databinding.FragmentSubmissionBinding
 import com.kainalu.readerforreddit.di.Injector
 import com.kainalu.readerforreddit.di.ViewModelFactory
 import com.kainalu.readerforreddit.models.LinkData
 import com.kainalu.readerforreddit.tree.CommentNode
 import com.kainalu.readerforreddit.tree.MoreNode
 import com.kainalu.readerforreddit.tree.VisibilityState
-import kotlinx.android.synthetic.main.fragment_submission.*
+import com.kainalu.readerforreddit.util.viewBinding
 import javax.inject.Inject
 
-class SubmissionFragment : Fragment(), SubmissionController.CommentClickListener,
+class SubmissionFragment : Fragment(R.layout.fragment_submission),
+    SubmissionController.CommentClickListener,
     SubmissionController.LinkClickListener, SubmissionController.MoreClickListener {
 
     private val args by navArgs<SubmissionFragmentArgs>()
 
+    private val binding by viewBinding(FragmentSubmissionBinding::bind)
     @Inject
     lateinit var viewModelFactory: ViewModelFactory
     private val viewModel by viewModels<SubmissionViewModel> { viewModelFactory }
@@ -73,17 +74,13 @@ class SubmissionFragment : Fragment(), SubmissionController.CommentClickListener
         viewModel.init(args.subreddit, args.threadId)
     }
 
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
-        return inflater.inflate(R.layout.fragment_submission, container, false)
-    }
-
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        recyclerView.apply {
+        binding.recyclerView.apply {
             setController(controller)
             addItemDecoration(CommentItemDecoration(context))
         }
-        swipeRefreshLayout.setOnRefreshListener { viewModel.refresh() }
+        binding.swipeRefreshLayout.setOnRefreshListener { viewModel.refresh() }
         viewModel.viewState.observe(viewLifecycleOwner, Observer { render(it) })
     }
 
@@ -106,6 +103,6 @@ class SubmissionFragment : Fragment(), SubmissionController.CommentClickListener
 
     private fun render(viewState: SubmissionViewState) {
         controller.setData(viewState.submissionTree, viewState.comments, viewState.sort)
-        swipeRefreshLayout.isRefreshing = viewState.loading
+        binding.swipeRefreshLayout.isRefreshing = viewState.loading
     }
 }

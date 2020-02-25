@@ -2,9 +2,7 @@ package com.kainalu.readerforreddit.feed
 
 
 import android.os.Bundle
-import android.view.LayoutInflater
 import android.view.View
-import android.view.ViewGroup
 import androidx.appcompat.widget.PopupMenu
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
@@ -12,13 +10,14 @@ import androidx.lifecycle.Observer
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.DividerItemDecoration
 import com.kainalu.readerforreddit.R
+import com.kainalu.readerforreddit.databinding.FragmentFeedBinding
 import com.kainalu.readerforreddit.di.Injector
 import com.kainalu.readerforreddit.di.ViewModelFactory
 import com.kainalu.readerforreddit.models.LinkData
-import kotlinx.android.synthetic.main.fragment_feed.*
+import com.kainalu.readerforreddit.util.viewBinding
 import javax.inject.Inject
 
-class FeedFragment : Fragment(), LinkController.LinkClickListener {
+class FeedFragment : Fragment(R.layout.fragment_feed), LinkController.LinkClickListener {
 
     private val headerClickListener = View.OnClickListener { v ->
         PopupMenu(requireContext(), v).run {
@@ -89,6 +88,7 @@ class FeedFragment : Fragment(), LinkController.LinkClickListener {
     }
     private val controller = LinkController(headerClickListener, this)
 
+    private val binding by viewBinding(FragmentFeedBinding::bind)
     @Inject
     lateinit var viewModelFactory: ViewModelFactory
     private val viewModel by viewModels<FeedViewModel> { viewModelFactory }
@@ -99,20 +99,13 @@ class FeedFragment : Fragment(), LinkController.LinkClickListener {
         viewModel.init()
     }
 
-    override fun onCreateView(
-        inflater: LayoutInflater, container: ViewGroup?,
-        savedInstanceState: Bundle?
-    ): View? {
-        return inflater.inflate(R.layout.fragment_feed, container, false)
-    }
-
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        recyclerView.apply {
+        binding.recyclerView.apply {
             setController(controller)
             addItemDecoration(DividerItemDecoration(context, DividerItemDecoration.VERTICAL))
         }
-        swipeRefreshLayout.setOnRefreshListener { viewModel.refresh() }
+        binding.swipeRefreshLayout.setOnRefreshListener { viewModel.refresh() }
         viewModel.feed.observe(viewLifecycleOwner, Observer { controller.submitList(it) })
         viewModel.viewState.observe(viewLifecycleOwner, Observer { render(it) })
     }
@@ -125,7 +118,7 @@ class FeedFragment : Fragment(), LinkController.LinkClickListener {
         }
         controller.headerLabel = headerLabel
 
-        swipeRefreshLayout.isRefreshing = viewState.loading
+        binding.swipeRefreshLayout.isRefreshing = viewState.loading
     }
 
     override fun onLinkClicked(link: LinkData) {

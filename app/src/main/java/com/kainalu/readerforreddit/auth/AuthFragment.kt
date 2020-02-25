@@ -2,9 +2,7 @@ package com.kainalu.readerforreddit.auth
 
 import android.content.Intent
 import android.os.Bundle
-import android.view.LayoutInflater
 import android.view.View
-import android.view.ViewGroup
 import android.webkit.CookieManager
 import android.webkit.WebResourceRequest
 import android.webkit.WebView
@@ -15,12 +13,13 @@ import androidx.lifecycle.Observer
 import androidx.navigation.fragment.findNavController
 import com.kainalu.readerforreddit.BuildConfig
 import com.kainalu.readerforreddit.R
+import com.kainalu.readerforreddit.databinding.FragmentAuthBinding
 import com.kainalu.readerforreddit.di.Injector
 import com.kainalu.readerforreddit.di.ViewModelFactory
-import kotlinx.android.synthetic.main.fragment_auth.*
+import com.kainalu.readerforreddit.util.viewBinding
 import javax.inject.Inject
 
-class AuthFragment : Fragment() {
+class AuthFragment : Fragment(R.layout.fragment_auth) {
 
     private inner class MyWebViewClient : WebViewClient() {
 
@@ -42,6 +41,7 @@ class AuthFragment : Fragment() {
         }
     }
 
+    private val binding by viewBinding(FragmentAuthBinding::bind)
     @Inject
     lateinit var viewModelFactory: ViewModelFactory
     private val viewModel by viewModels<AuthViewModel> { viewModelFactory }
@@ -53,13 +53,9 @@ class AuthFragment : Fragment() {
         CookieManager.getInstance().flush()
     }
 
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
-        return inflater.inflate(R.layout.fragment_auth, container, false)
-    }
-
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        webview.apply {
+        binding.webview.apply {
             webViewClient = MyWebViewClient()
             loadUrl("https://www.reddit.com/api/v1/authorize.compact?client_id=${BuildConfig.CLIENT_ID}&response_type=code&state=testing&redirect_uri=${BuildConfig.REDIRECT_URI}&duration=permanent&scope=*")
         }
